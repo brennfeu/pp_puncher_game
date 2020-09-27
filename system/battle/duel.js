@@ -319,7 +319,7 @@ class Duel {
             }
 
             this.mainFighter = this.getAllFighters(true)[this.currentFighterIndex];
-            if (this.mainFighter.isAlive() && this.currentFighterIndex > 0) this.addTextSeparator();
+            if (this.mainFighter.isAlive() && this.messageList.length > 0) this.addTextSeparator();
 
             if (this.getAllFighters(true)[this.currentFighterIndex].chosenMove.newInstance().autoPass ||
                     this.getAllFighters(true)[this.currentFighterIndex].rolledDEX + 10 >= oppDEX ||

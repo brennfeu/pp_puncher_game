@@ -11,6 +11,9 @@ class Quest {
         for (var i in _data.questSteps) {
             this.questSteps.push(new QuestSteps(_data.questSteps[i], i))
         }
+
+        this.ignoreMe = _data.ignoreMe;
+        if (this.ignoreMe == undefined) this.ignoreMe = false;
     }
 
     getName() {
@@ -116,7 +119,7 @@ class QuestManager {
     static getQuestsFromArea(_areaId) {
         var l = [];
         for (var i in this.QUEST_LIST) {
-            if (this.QUEST_LIST[i].areaId == _areaId) {
+            if (this.QUEST_LIST[i].areaId == _areaId && !this.QUEST_LIST[i].ignoreMe) {
                 l.push(this.QUEST_LIST[i]);
             }
         }

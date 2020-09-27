@@ -271,7 +271,7 @@ QuestManager.loadList([
             },
             { // 4
                 "name": "Sexual Confusion",
-                "description": "Now that you've learned to master helpful events, you've now to learw how to master unhelpful events, such as the sexual confusion!",
+                "description": "Now that you've learned to master helpful events, you've now to learn how to master unhelpful events, such as the sexual confusion!",
                 "encounter": "2tier3students",
                 "duelParam": { "forceEvent": 2, "forceEventLoop": 3 },
                 "unlockEvents": [ 2 ],
@@ -306,7 +306,8 @@ QuestManager.loadList([
             { // 1
                 "name": "Retarded Twin",
                 "description": "The childhood friend had a retarded twin. Unfortunately for you, she's a yandere, and she doesn't like the fact that PP Arbitrator shares his time with you.",
-                "encounter": "yandere"
+                "encounter": "yandere",
+                "unlockQuests": [ 13 ]
             },
             { // 2
                 "name": "Rich Girl",
@@ -474,6 +475,36 @@ QuestManager.loadList([
                     "arcadeMode": true,
                     "arcadeQuestStarter": 6
                 }
+            }
+        ]
+    },
+    { // 13
+        "name": "Dere Simulator",
+        "description": "A new game finally released after 23 years of development. It's so successful people are acting like the main character of this game.",
+        "isMain": false,
+        "areaId": 3,
+        "ignoreMe": true,
+
+        "questSteps": [
+            { // 0
+                "name": "Consume",
+                "description": "Now there are 2 schoolgirls acting like yanderes. They want your PP, don't let them win.",
+                "encounter": "2yanderes"
+            },
+            { // 1
+                "name": "The",
+                "description": "You're hearing rumors about a legendary item that can ???.",
+                "encounter": ""
+            },
+            { // 2
+                "name": "Cum",
+                "description": "a kawaii tree that’s definitely not yuki that says ‘I am twee :3’ w/ yandere vibes TODO.",
+                "encounter": "3yanderes"
+            },
+            { // 3
+                "name": "Chalice",
+                "description": ".",
+                "encounter": "yandereDev"
             }
         ]
     }

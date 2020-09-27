@@ -97,11 +97,11 @@ class Bullet extends Move {
 
         _user.DEXValue -= 5;
         _user.duel.addMessage(_user.getName() + " loses 5 DEX!");
-        _user.duel.addAnimation("debuff", 60, _user);
+        _user.duel.addAnimation("-5dex", 60, _user);
         if (r) {
             _target.DEXValue -= 5;
             _user.duel.addMessage(_target.getName() + " loses 5 DEX!");
-            _user.duel.addAnimation("debuff", 60, _user);
+            _user.duel.addAnimation("-5dex", 60, _user);
         }
 
         _user.duel.memorySoundEffects.push("gun");

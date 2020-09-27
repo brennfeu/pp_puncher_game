@@ -15,6 +15,7 @@ class Fighter {
 
         // styles
         this.fightingStyles = [];
+        this.relics = [];
 
         // effects
         this.resetStatus();
@@ -97,7 +98,7 @@ class Fighter {
         // One turn Buffs
         if (this.backFromDeath > 0) {
             var status = {};
-            status["display"] = " - Examination Buff";
+            status["display"] = " - Undeath Energy";
             status["icon"] = "special/death";
             list.push(status);
         }

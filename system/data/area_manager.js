@@ -49,7 +49,7 @@ class Area {
     isCompleted() {
         var l = QuestManager.getQuestsFromArea(this.id);
         for (var i in l) {
-            if (!l[i].isCompleted()) return false;
+            if (!l[i].isCompleted() && !l[i].ignoreMe) return false;
         }
         return true;
     }

@@ -231,6 +231,18 @@ class Encounter {
             this.addEnemy(new BoardGameClubStudent(), 100);
             this.addEnemy(new BoardGameClubStudent(), 450);
         }
+        else if (this.name == "2yanderes") {
+            this.addEnemy(new Yandere(), 190);
+            this.addEnemy(new Yandere(), 450);
+        }
+        else if (this.name == "3yanderes") {
+            this.addEnemy(new Yandere(), 76);
+            this.addEnemy(new Yandere());
+            this.addEnemy(new Yandere(), 561);
+        }
+        else if (this.name == "yandereDev") {
+            this.addEnemy(new YandereDev());
+        }
     }
 
     addEnemy(_enemy, _x = 320, _y = 75) {

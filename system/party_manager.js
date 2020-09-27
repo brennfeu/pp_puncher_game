@@ -4,6 +4,7 @@ class PartyMember {
         this.name = _name;
 
         this.fightingStyles = [];
+        this.relics = null;
         this.gods = [];
     }
 

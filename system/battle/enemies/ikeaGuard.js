@@ -248,7 +248,6 @@ class IkeaMonstruosity extends Machine {
         this.currentMovepool = [ Bullet, PunchingPP ];
 
         this.isBoss = true;
-
         this.nextPhase = IkeaMonstruosityPhaseTwo;
     }
 

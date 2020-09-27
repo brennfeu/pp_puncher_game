@@ -83,6 +83,7 @@ class ProgressManager {
                 var quests = steps[i].unlockQuests;
                 for (var j in quests) {
                     var q = QuestManager.getQuest(quests[j]);
+                    if (q.ignoreMe) continue;
 
                     if (_areaId != null && _areaId != q.areaId) continue;
                     l.push(q);

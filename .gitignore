@@ -1,6 +1,11 @@
 resources/
+
 phaser.js
+
 web2exe.json
+package.json
+
 favicon.ico
 favicon.png
-package.json
+
+steam_appid.txt
