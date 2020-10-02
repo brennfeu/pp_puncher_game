@@ -308,6 +308,10 @@ DialogueManager.loadList([
                 "text": " - Zapsplat\n - Kenney"
             },
             {
+                "speaker": "Dev Tools",
+                "text": " - Phaser (engine)\n - Web2Exe (game exports)"
+            },
+            {
                 "speaker": "Beta Testing",
                 "text": " - fear me pls\n - lolidk"
             },
