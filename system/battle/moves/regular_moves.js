@@ -238,6 +238,10 @@ class Kick extends Move {
 
         _user.duel.addAnimation("kick", 60, _target, true, false);
         _user.duel.memorySoundEffects.push("punchBig");
+
+        if (_user.isHero()) {
+            AchievementManager.unlockAchievement(2); // KICK_PP
+        }
     }
 }
 

@@ -101,6 +101,10 @@ class Fighter {
             status["display"] = " - Undeath Energy";
             status["icon"] = "special/death";
             list.push(status);
+
+            if (this.isHero() && this.isAlive()) {
+                AchievementManager.unlockAchievement(4); // FLEX
+            }
         }
         if (this.scoutBuff > 0) {
             var status = {};
@@ -437,6 +441,10 @@ class Fighter {
                         }
                         else {
                             this.duel.mainFighter.killerBlessing += this.getDangerLevel();
+
+                            if (this.duel.mainFighter.chosenMove == Hologram && this.duel.mainFighter.isHero()) {
+                                AchievementManager.unlockAchievement(1); // VITAL_POINT
+                            }
                         }
                     }
                 }

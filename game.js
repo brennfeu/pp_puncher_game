@@ -12,7 +12,7 @@ var GAME_CONFIG = {
 };
 
 const DEV_MODE = false;
-const GAME_VERSION = "Beta 1.0.4"; // Beta x.x --> Release x.x
+const GAME_VERSION = "Beta 1.0.5"; // Beta x.x --> Release x.x
 
 const DISABLE_MUSIC = DEV_MODE;
 const SCALE_GAME = !DEV_MODE;
@@ -22,6 +22,9 @@ if (SCALE_GAME) {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     }
+}
+if (DEV_MODE) {
+	win.showDevTools();
 }
 
 function getTextSpeed() {

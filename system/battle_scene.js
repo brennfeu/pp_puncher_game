@@ -407,6 +407,8 @@ class BattleScene extends Scene {
 
                 ProgressManager.unlockStep(parseInt(this.currentQuest[0]), parseInt(this.currentQuest[1]));
 
+                AchievementManager.unlockAchievement(0); // PUNCH_PP
+
                 var data = {};
                 data["areaId"] = this.duel.ogPlace.id;
                 data["currentQuest"] = this.currentQuest;
@@ -426,6 +428,12 @@ class BattleScene extends Scene {
             }
 
             if (this.justPressedControl("ENTER")) {
+                for (var i in this.duel.heroes) {
+                    if (this.duel.heroes[i].chosenMove == Yes) {
+                        AchievementManager.unlockAchievement(3); // TRUFFLE_CHAOS
+                    }
+                }
+
                 var data = {};
                 data["areaId"] = this.duel.ogPlace.id;
                 data["currentQuest"] = this.currentQuest;

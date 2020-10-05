@@ -288,20 +288,20 @@ DialogueManager.loadList([
     { // 15 - Credits
         "dialogueLines": [
             {
-                "speaker": "Art (Icon / Achievements)",
-                "text": " - Pudding"
+                "speaker": "Art",
+                "text": " - Pudding (Game Icon / Achievements)\n - Brenn (Status Icons)"
             },
             {
                 "speaker": "OG Bot Designer",
-                "text": " - Pudding\n - Soup Calhoun\n - Brofessional"
+                "text": " - Pudding\n - Soup Calhoun\n - Brofessional\n - Brenn"
             },
             {
                 "speaker": "Story",
-                "text": " - Pudding"
+                "text": " - Pudding\n - Brenn"
             },
             {
                 "speaker": "Ideas",
-                "text": " - Pudding\n - Pépin2Pom\n - Nota\n - Alexandwich"
+                "text": " - Pudding\n - Pépin2Pom\n - Nota\n - Alexandwich\n - Brenn"
             },
             {
                 "speaker": "Sounds",
@@ -309,15 +309,15 @@ DialogueManager.loadList([
             },
             {
                 "speaker": "Dev Tools",
-                "text": " - Phaser (engine)\n - Web2Exe (game exports)"
+                "text": " - Phaser (engine)\n - Web2Exe (game exports)\n - Greenworks (steam api for js)"
             },
             {
                 "speaker": "Beta Testing",
                 "text": " - fear me pls\n - lolidk"
             },
             {
-                "speaker": "Other Stuff",
-                "text": " - brennfeu"
+                "speaker": "Music / Programming",
+                "text": " - Brenn"
             },
             {
                 "speaker": "Cool Player",

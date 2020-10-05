@@ -1,6 +1,8 @@
 resources/
+lib/
 
 phaser.js
+greenworks.js
 
 web2exe.json
 package.json
@@ -9,3 +11,14 @@ favicon.ico
 favicon.png
 
 steam_appid.txt
+
+locales/
+pnacl/
+swiftshader/
+*.dll
+*.dat
+*.pak
+*.exe
+*.bin
+*.nexe
+credits.html
