@@ -19,6 +19,10 @@ QuestManager.loadList([
                 "name": "CHEATING",
                 "description": "FIRST TIME CHEATING CHECK",
                 "unlockQuests": [ 10 ]
+            },
+            { // 2
+                "name": "AREA SCENE DIALOGUE",
+                "description": "FIRST TIME SEEEING THE AREA SCENE"
             }
         ]
     },

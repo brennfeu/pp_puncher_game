@@ -462,5 +462,19 @@ DialogueManager.loadList([
                 "text": "I'm not your dad though, you can leave if you want to."
             }
         ]
+    },
+    { // 22 - PP Arbitrator explaining the area scene
+        "dialogueLines": [
+            {
+                "speaker": "PP Arbitrator",
+                "text": "First time here, huh? Lemme you show around."
+            },
+            {
+                "text": "Basically, there are a bunch of quests available to you. Each quest has one or many battles, that you have to go through to complete the quest."
+            },
+            {
+                "text": "When you see a quest that has an exclamation point, that means it is a main quest. Other quests are side quests. A completed quest appear on italic."
+            }
+        ]
     }
 ])

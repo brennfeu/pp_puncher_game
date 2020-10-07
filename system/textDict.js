@@ -68,6 +68,8 @@ class TextDict extends Phaser.GameObjects.Text {
 }
 TextDict.DICT = {};
 
+TextDict.addDict("69", "69 (lol)");
+
 TextDict.addDict("IKEA", "DIKEA");
 TextDict.addDict("Ikea", "Dikea");
 TextDict.addDict("Free Lives", "Free Loves");

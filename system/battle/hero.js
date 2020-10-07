@@ -33,7 +33,11 @@ class Hero extends Fighter {
                     if (getRandomPercent() <= 20) {
                         randomMove = commonMoves[i];
                     }
+                    if (i == 0 && getRandomPercent() <= 90) {
+                        randomMove = PunchingPP;
+                    }
 
+                    // Fightin Styles moves
                     if (ProgressManager.getUnlockedMoves().indexOf(randomMove) < 0 ||
                         (this.hasFightingStyle("fast") && randomMove == DeadBro) ||
                         (this.hasFightingStyle("big") && randomMove == PregnantBro) ||

@@ -115,6 +115,11 @@ class AreaScene extends Scene {
             this.checkDevTools();
         }
 
+        if (!ProgressManager.isStepCompleted(0, 2)) {
+            ProgressManager.unlockStep(0, 2);
+            return this.openDialogue(22);
+        }
+
         if (!this.selectsStep) {
             if (this.justPressedControl("DOWN")) {
                 this.questSelect += 1;

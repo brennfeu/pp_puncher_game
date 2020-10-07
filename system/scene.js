@@ -304,6 +304,8 @@ class Scene extends Phaser.Scene {
         this.mainObjTint = 0;
         this.forceTint = [];
 
+        GREENWORKS.initAPI();
+
         return this.scene.start(_sceneName, _data);
     }
     closeGame() {
