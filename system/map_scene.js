@@ -1,9 +1,9 @@
 class MapScene extends Scene {
-    constructor() {
+    constructor() { try {
         super({key:"Map"});
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    init(_data) {
+    init(_data) { try {
         this.cursor = null;
         this.currentSelect = 0;
         if (_data["areaSelect"] != undefined) this.currentSelect = parseInt(_data["areaSelect"]);
@@ -16,9 +16,9 @@ class MapScene extends Scene {
         this.areaTexts = [];
 
         this.speOptTexts = [];
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    preload() {
+    preload() { try {
         this.startLoadingScreen();
 
         this.loadOptionsResources();
@@ -33,9 +33,9 @@ class MapScene extends Scene {
         this.loadImage("ui/cursor.png");
 
         this.loadMusic("OutsideTheme.mp3");
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    create() {
+    create() { try {
         this.addImage("ui/map/log_frame", 792, 0); // divisé par 3 : 131+i*263
         this.addText("DESCRIPTION", 810, 13, {fontStyle: 'bold'});
         this.logTextObject = this.addText("", 810, 57, {fontSize: '21px', wordWrap: {width: 400, height: 550}});
@@ -74,9 +74,9 @@ class MapScene extends Scene {
             // init cutscene
             return this.openCutscene(1);
         }
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    update() {
+    update() { try {
         if (this.isInOptions) {
             return this.optionsUpdate();
         }
@@ -170,7 +170,7 @@ class MapScene extends Scene {
         if (this.justPressedControl("MENU")) {
             this.openOptions();
         }
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
     updateDesc() {
         try {

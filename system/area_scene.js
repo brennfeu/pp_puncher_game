@@ -1,9 +1,9 @@
 class AreaScene extends Scene {
-    constructor() {
+    constructor() { try {
         super({key:"Area"});
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    init(_data) {
+    init(_data) { try {
         this.area = AreaManager.getArea(_data["areaId"]);
         this.onLoadQuest = _data["currentQuest"];
 
@@ -25,9 +25,9 @@ class AreaScene extends Scene {
         this.readyForBattle = false;
 
         this.tutorialWarning = false;
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    preload() {
+    preload() { try {
         this.startLoadingScreen();
 
         this.loadOptionsResources();
@@ -40,9 +40,9 @@ class AreaScene extends Scene {
         this.loadImage("ui/area/quest_frame.png");
 
         this.loadMusic(this.area.getAreaTheme() + ".mp3");
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    create() {
+    create() { try {
         this.addImage("ui/area/log_frame", 792, 0);
         this.addText("DESCRIPTION", 810, 13, {fontStyle: 'bold'});
         this.logTextObject = this.addText("", 810, 57, {fontSize: '21px', wordWrap: {width: 400, height: 550}});
@@ -98,9 +98,9 @@ class AreaScene extends Scene {
         }
 
         this.stopLoadingScreen();
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    update() {
+    update() { try {
         if (this.isInOptions) {
             return this.optionsUpdate();
         }
@@ -211,7 +211,8 @@ class AreaScene extends Scene {
         if (this.justPressedControl("MENU")) {
             this.openOptions();
         }
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
+
     quitScene() {
         if (!ProgressManager.isStepCompleted(1, 3) && !this.tutorialWarning) {
             this.tutorialWarning = true;

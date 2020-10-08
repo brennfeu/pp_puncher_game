@@ -160,7 +160,7 @@ class FreeLivesHQ extends Machine {
 
         this.STRValue = 500;
         this.DEXValue = 30;
-        this.nbActions = 5;
+        this.nbActions = 2;
 
         this.currentMovepool = [ SawBlade ];
 

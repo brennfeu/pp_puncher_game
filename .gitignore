@@ -11,6 +11,7 @@ favicon.ico
 favicon.png
 
 steam_appid.txt
+crash_log.txt
 
 locales/
 pnacl/

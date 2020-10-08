@@ -392,7 +392,7 @@ class SawBlade extends Move {
 
     execute(_user, _target = null) {
         _user.duel.addMessage(_user.getName() + " cuts " + _target.getName() + "'s PP!");
-        _target.bleedDamage += Math.floor(this.STR/15);
+        _target.bleedDamage += Math.floor(_user.STR/15);
 
         _user.duel.addAnimation("cut", 60, _target, true, false);
         _user.duel.memorySoundEffects.push("cut");

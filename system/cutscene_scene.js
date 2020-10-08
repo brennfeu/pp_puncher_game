@@ -1,9 +1,9 @@
 class CutsceneScene extends Scene {
-    constructor() {
+    constructor() { try {
         super({key:"Cutscene"});
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    init(_data) {
+    init(_data) { try {
         this.dialogue = DialogueManager.getDialogue(_data["dialogueId"]);
         this.areaName = _data["areaName"];
         this.music = _data["music"];
@@ -13,9 +13,9 @@ class CutsceneScene extends Scene {
         this.nextSceneKey = _data["nextSceneKey"];
         this.nextSceneData = _data["nextSceneData"];
         if (this.nextSceneData == undefined) this.nextSceneData = {};
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    preload() {
+    preload() { try {
         this.startLoadingScreen();
 
         this.loadOptionsResources();
@@ -24,9 +24,9 @@ class CutsceneScene extends Scene {
 
         this.loadImage("ui/other/cutscene_frame.png");
         if (this.music != undefined) this.loadMusic(this.music + ".mp3");
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    create() {
+    create() { try {
         if (this.areaName != undefined) {
             this.addImage("ui/other/cutscene_frame", 0, 0);
             this.addText(this.areaName, 12, 10);
@@ -38,13 +38,13 @@ class CutsceneScene extends Scene {
 
         this.stopLoadingScreen();
         this.openDialogue(this.dialogue.id);
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    update() {
+    update() { try {
         if (this.isInDialogue) {
             return this.dialogueUpdate();
         }
 
         return this.switchScene(this.nextSceneKey, this.nextSceneData);
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 }

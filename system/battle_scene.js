@@ -1,9 +1,9 @@
 class BattleScene extends Scene {
-    constructor() {
+    constructor() { try {
         super({key:"Battle"});
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    init(_data) {
+    init(_data) { try {
         this.duel = _data["duel"];
         this.currentQuest = _data["quest"];
 
@@ -43,9 +43,9 @@ class BattleScene extends Scene {
         this.autoSkipSpeed = 60;
         this.autoSkipCountdown = this.autoSkipSpeed;
         this.autoSkipNb = 0;
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    preload() {
+    preload() { try {
         this.startLoadingScreen();
 
         this.loadOptionsResources();
@@ -68,9 +68,9 @@ class BattleScene extends Scene {
         this.loadMusic(this.duel.place.getBattleTheme() + ".mp3");
         this.loadMusic(this.duel.place.getBossTheme() + ".mp3");
         this.loadMusic(this.duel.place.getVictoryTheme() + ".mp3");
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    create() {
+    create() { try {
         this.moveFrame = this.addImage("ui/battle/move_frame", 488, -1000);
         this.addImage("ui/battle/log_frame", 792, 0);
 
@@ -114,9 +114,9 @@ class BattleScene extends Scene {
         if (!ProgressManager.isStepCompleted(q.id, s.id)) {
             if (s.inFightDialogue != undefined) this.openDialogue(s.inFightDialogue);
         }
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
-    update() {
+    update() { try {
         if (this.isInOptions) {
             return this.optionsUpdate();
         }
@@ -489,7 +489,7 @@ class BattleScene extends Scene {
         if (this.justPressedControl("MENU")) {
             this.openOptions();
         }
-    }
+    } catch(e) { TRIGGER_ERROR(e) } }
 
     updateMovepoolObjects(_reset = false) {
         for (var i in this.moveList) {
