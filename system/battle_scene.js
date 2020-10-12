@@ -51,6 +51,7 @@ class BattleScene extends Scene {
         this.loadOptionsResources();
         this.loadDialogueResources();
         this.loadBibleResources();
+        this.loadUnlockResources();
         this.loadUiSounds();
 
         this.loadImage("ui/cursor.png");
@@ -108,6 +109,7 @@ class BattleScene extends Scene {
         this.playMusic(this.duel.getTheme());
 
         this.stopLoadingScreen();
+        this.checkEnemiesObjects();
 
         var q = QuestManager.getQuest(this.currentQuest[0]);
         var s = q.getStep(this.currentQuest[1]);
@@ -125,6 +127,10 @@ class BattleScene extends Scene {
         }
         if (this.isInBible) {
             return this.bibleUpdate();
+        }
+        if (this.unlockList.length > 0) {
+            if (!this.isInUnlock) this.openUnlock();
+            return this.unlockUpdate();
         }
 
         this.checkEnemiesObjects();

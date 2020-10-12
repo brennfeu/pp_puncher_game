@@ -214,7 +214,7 @@ class AreaScene extends Scene {
     } catch(e) { TRIGGER_ERROR(e) } }
 
     quitScene() {
-        if (!ProgressManager.isStepCompleted(1, 3) && !this.tutorialWarning) {
+        if (!ProgressManager.isStepCompleted(1, 2) && !this.tutorialWarning) {
             this.tutorialWarning = true;
             return this.openDialogue(21);
         }

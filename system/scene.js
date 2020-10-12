@@ -502,8 +502,10 @@ class Scene extends Phaser.Scene {
         this.unlockTitle.setText(unlockType + " Unlocked");
         switch(unlockType) {
             case "Party Member":
+                this.unlockDesc.setText(unlock + "\n\n" + PartyManager.getHeroDescription(unlock));
+                break;
             case "Game Mechanic":
-                this.unlockDesc.setText(unlock);
+                this.unlockDesc.setText(unlock + "\n\n" + ProgressManager.getMechanicDescription(unlock));
                 break;
             case "Move":
                 this.unlockDesc.setText(unlock.newInstance().getDescription());
@@ -696,8 +698,7 @@ class Scene extends Phaser.Scene {
         this.bibleDescriptionTitle = this.addText("DESCRIPTION", 759, 84, {fontStyle: 'bold'});
         this.bibleDescription = this.addText("", 759, 130, {fontSize: '21px', wordWrap: {width: 400, height: 550}});
 
-        this.bibleTextsA.push(this.addText("Moves", 85, 84+22*this.bibleTextsA.length));
-        var l = ["Fighting Styles", "Events", "Gods", "Stånds"];
+        var l = ["Game Mechanics", "Moves", "Party Members", "Fighting Styles", "Events", "Gods", "Stånds"];
         var unlocks = ProgressManager.getUnlockedGameMechanics();
         for (var i in l) {
             if (unlocks.indexOf(l[i]) < 0) continue;
@@ -712,10 +713,10 @@ class Scene extends Phaser.Scene {
 
         this.bibleStep = 0;
 
-        this.bibleDescription.setText("All the different attacks you have access to!");
-        l = ProgressManager.getUnlockedMoves();
+        this.bibleDescription.setText("All the game mechanics you know about!");
+        l = ProgressManager.getUnlockedGameMechanics();
         for (var i in l) {
-            this.bibleTextsB.push(this.addText(l[i].newInstance().name, 400, 84+22*i))
+            this.bibleTextsB.push(this.addText(ProgressManager.getUnlockedGameMechanics()[i], 400, 84+22*i))
         }
     }
     closeBible() {
@@ -800,12 +801,13 @@ class Scene extends Phaser.Scene {
                 this.playSoundSelect();
             }
 
-            if (this.sceneName == "Battle" && this.duel.duelState == "moveChoice" && this.cursorASelect == 0 && this.justPressedControl("ENTER")) {
+            if (this.sceneName == "Battle" && this.duel.duelState == "moveChoice" && this.cursorASelect == 1 && this.justPressedControl("ENTER")) {
                 this.selectMove(ProgressManager.getUnlockedMoves()[this.cursorBSelect]);
                 this.closeBible();
                 if (!ProgressManager.isStepCompleted(0, 1)) {
                     this.openDialogue(18);
                     ProgressManager.unlockStep(0, 1);
+                    this.unlockList.push(["Game Mechanic", "Cheating"])
                 }
                 return;
             }
@@ -823,15 +825,25 @@ class Scene extends Phaser.Scene {
                 this.bibleDescription.setText("Every opponent you managed to beat.");
             }
             else if (this.cursorASelect == 0) {
+                this.bibleDescription.setText("All the game mechanics you know about!");
+                var a = ProgressManager.getUnlockedGameMechanics();
+                for (var i in a) l[i] = a[i];
+            }
+            else if (this.cursorASelect == 1) {
                 this.bibleDescription.setText("All the different attacks you have access to!");
                 var a = ProgressManager.getUnlockedMoves();
                 for (var i in a) l[i] = a[i].newInstance().name;
             }
-            else if (this.cursorASelect == 1) {
+            else if (this.cursorASelect == 2) {
+                this.bibleDescription.setText("All the people that makes your adventurers group!");
+                var a = ProgressManager.getUnlockedPartyMembers();
+                for (var i in a) l[i] = a[i].name;
+            }
+            else if (this.cursorASelect == 3) {
                 this.bibleDescription.setText("Effects you can acquire during battle, or start with for every battle.");
                 l = ProgressManager.getUnlockedFightingStyles();
             }
-            else if (this.cursorASelect == 2) {
+            else if (this.cursorASelect == 4) {
                 this.bibleDescription.setText("Random Events that have a chance to occur every turn.");
                 var a = ProgressManager.getUnlockedEvents();
                 for (var i in a) l[i] = EventManager.getEvent(a[i]).name;
@@ -849,20 +861,25 @@ class Scene extends Phaser.Scene {
                 this.bibleDescription.setText("");
             }
             else if (this.cursorASelect == 0) {
+                var gm = ProgressManager.getUnlockedGameMechanics()[this.cursorBSelect];
+                this.bibleDescription.setText(ProgressManager.getMechanicDescription(gm));
+            }
+            else if (this.cursorASelect == 1) {
                 var move = ProgressManager.getUnlockedMoves()[this.cursorBSelect].newInstance();
                 this.bibleDescription.setText(move.getDescription());
             }
-            else if (this.cursorASelect == 1) {
+            else if (this.cursorASelect == 2) {
+                var pm = ProgressManager.getUnlockedPartyMembers()[this.cursorBSelect];
+                this.bibleDescription.setText(PartyManager.getHeroDescription(pm.name));
+            }
+            else if (this.cursorASelect == 3) {
                 var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorBSelect];;
                 this.bibleDescription.setText(fs + "\n\n" +
                     FightingStyles.getDesc(fs));
             }
-            else if (this.cursorASelect == 2) {
+            else if (this.cursorASelect == 4) {
                 var ev = EventManager.getEvent(ProgressManager.getUnlockedEvents()[this.cursorBSelect]);
                 this.bibleDescription.setText(ev.getDescription());
-            }
-            else if (this.cursorASelect == 3) {
-                this.bibleDescription.setText("");
             }
         }
     }

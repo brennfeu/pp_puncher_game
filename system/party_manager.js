@@ -54,6 +54,16 @@ class PartyManager {
         return p;
     }
 
+    static getHeroDescription(_hero) {
+        switch(_hero) {
+            case "Brenn":
+                return "Main Character, and a scientist that managed to make waifus real, using body pillows. He also makes music under the name of “Brennfeu Cthulhu”, which angered Cthulhu.\n\nHis waifu is Kurisu.";
+            case "Pudding":
+                return "A swedish dude that happened to be very good friend with Brenn. He seems to know a lot about PP Punching, but even him doesn't know why he knows this much\n\nHis waifu is Mongo.";
+        }
+        return "No Description :("
+    }
+
     static updateLocalStorage() {
         var l = [];
         for (var i in PartyManager.HEROES_LIST) {

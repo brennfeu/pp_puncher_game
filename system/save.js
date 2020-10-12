@@ -281,7 +281,9 @@ class ProgressManager {
     static getTotalNbOfUnlocks() {
         // should be the amount of things displayed by the bible
         var nb = 0;
+        nb += ProgressManager.getUnlockedGameMechanics().length;
         nb += ProgressManager.getUnlockedMoves().length;
+        nb += ProgressManager.getUnlockedPartyMembers().length;
         nb += ProgressManager.getUnlockedFightingStyles().length;
         nb += ProgressManager.getUnlockedEvents().length;
         return nb;
@@ -299,6 +301,24 @@ class ProgressManager {
         ProgressManager.EventsCache = null;
 
         ProgressManager.SavedWaifusCache = null;
+    }
+
+    static getMechanicDescription(_mec) {
+        switch(_mec) {
+            case "Game Mechanics":
+                return "Well, isn't learning new game mechanics, a game mechanic itself?"
+            case "Party Members":
+                return "Going on an adventure is better with friends. You can have up to 4 party members at the same time.\n\nAny party member unlocked after that will only be available when a party member on the front has been killed.";
+            case "Moves":
+                return "Each turn, you can use one of 5 moves. Those 5 moves are chosen randomly between all of your known moves.\n\nMoves that aren't against a specific target test their DEX against the average DEX of your opponents. Missing a move grants 5 temporary bonus DEX."
+            case "Cheating":
+                return "When selecting a move, you can open the bible and select the move you want. PP Arbitrator doesn't always notices this, but when he does, he makes sure you get a penalty (-20 DEX and -10 STR).";
+            case "Fighting Styles":
+                return "Fighting styles are permanent effects you can obtain in battle or start with. Equipping one grants a starting advantage, but getting one in battle grants a +10 DEX bonus.\n\nYou can have as many as you wants.\nYou can equip the fighting styles in the world map, in the 'PARTY' tab.";
+            case "Events":
+                return "Events have a random chance to occur every turn, and unleash their randomness. Some of them cannot appear before a specific amount of moves have been played.";
+        }
+        return "No Description :("
     }
 
     static updateLocalStorage() {

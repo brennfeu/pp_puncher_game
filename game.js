@@ -15,7 +15,7 @@ const DEV_MODE = true;
 const GAME_VERSION = "Beta 1.1.0"; // Beta x.x --> Release x.x
 
 const DISABLE_MUSIC = DEV_MODE;
-const SCALE_GAME = !DEV_MODE;
+const SCALE_GAME = true;
 
 if (SCALE_GAME) {
 	GAME_CONFIG["scale"] = {

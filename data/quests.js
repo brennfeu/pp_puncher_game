@@ -13,12 +13,14 @@ QuestManager.loadList([
                 "unlockPartyMembers": [ "Brenn" ],
                 "unlockMoves": [ PunchingPP, PunchingPPReallyHard, Hologram, FlexBro, HighFiveBro ],
                 "unlockAreas": [ 0 ],
-                "unlockQuests": [ 1 ]
+                "unlockQuests": [ 1 ],
+                "unlockGameMechanics": [ "Game Mechanics", "Moves" ]
             },
             { // 1
                 "name": "CHEATING",
                 "description": "FIRST TIME CHEATING CHECK",
-                "unlockQuests": [ 10 ]
+                "unlockQuests": [ 10 ],
+                "unlockGameMechanics": [ "Cheating" ]
             },
             { // 2
                 "name": "AREA SCENE DIALOGUE",
@@ -37,6 +39,7 @@ QuestManager.loadList([
                 "name": "Weeb",
                 "description": "Just a poor weeb in the wild. He immediately attacked you for your waifus.",
                 "encounter": "weeb",
+                "unlockGameMechanics": [ "Party Members" ],
                 "unlockPartyMembers": [ "Pudding" ],
                 "duelParam": { "autoPunch": true },
                 "postFightDialogue": 2
