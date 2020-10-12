@@ -41,7 +41,8 @@ class Hero extends Fighter {
                     if (ProgressManager.getUnlockedMoves().indexOf(randomMove) < 0 ||
                         (this.hasFightingStyle("fast") && randomMove == DeadBro) ||
                         (this.hasFightingStyle("big") && randomMove == PregnantBro) ||
-                        (this.hasFightingStyle("versatile") && randomMove == AdaptPP)) {
+                        (this.hasFightingStyle("versatile") && randomMove == AdaptPP) ||
+                        ((this.hasFightingStyle("diamond") || this.hasFightingStyle("crystal")) && randomMove == EncrustPP)) {
                         continue;
                     }
 

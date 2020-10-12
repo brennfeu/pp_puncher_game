@@ -224,6 +224,16 @@ class ProgressManager {
                 }
             }
         }
+
+        l = l.sort(
+            function (a, b) {
+                var na = a.toUpperCase();
+                var nb = b.toUpperCase();
+                if (na < nb) return -1;
+                else if (na > nb) return 1;
+                return 0;
+            }
+        );
         ProgressManager.FightingStylesCache = l;
         return l;
     }
@@ -267,6 +277,15 @@ class ProgressManager {
         return l;
     }
     // TODO moves, fs, etc...
+
+    static getTotalNbOfUnlocks() {
+        // should be the amount of things displayed by the bible
+        var nb = 0;
+        nb += ProgressManager.getUnlockedMoves().length;
+        nb += ProgressManager.getUnlockedFightingStyles().length;
+        nb += ProgressManager.getUnlockedEvents().length;
+        return nb;
+    }
 
     static resetCache() {
         ProgressManager.CompletedStepsCache = null;

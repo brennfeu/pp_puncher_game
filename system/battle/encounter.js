@@ -31,6 +31,19 @@ class Encounter {
             this.addEnemy(new Deredere(), 300);
             this.addEnemy(new Weeb(), 561);
         }
+        else if (this.name == "crystalWeebs") {
+            this.addEnemy(new CrystalWeeb(), 198);
+            this.addEnemy(new CrystalWeeb(), 442);
+        }
+        else if (this.name == "diamondWeebs") {
+            this.addEnemy(new DiamondWeeb(), 198);
+            this.addEnemy(new DiamondWeeb(), 442);
+        }
+        else if (this.name == "blingBlingWeebs") {
+            this.addEnemy(new DiamondWeeb(), 76);
+            this.addEnemy(new BossWeeb(), 300);
+            this.addEnemy(new CrystalWeeb(), 561);
+        }
 
         // IKEA
         else if (this.name == "ikeaGuards") {

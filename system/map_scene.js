@@ -176,7 +176,7 @@ class MapScene extends Scene {
         try {
             if (this.isOnArea) this.logTextObject.setText(this.loadedAreas[this.currentSelect].getDescription());
             else if (this.currentSelect == 0) this.logTextObject.setText("Customize your party members' PP !");
-            else if (this.currentSelect == 1) this.logTextObject.setText("The Holy Book of PP Punching!\nHere you can find all kind of useful informations.");
+            else if (this.currentSelect == 1) this.logTextObject.setText("The Holy Book of PP Punching!\nHere you can find all kind of useful informations.\n\nTotal Number of Unlocked Things: " + ProgressManager.getTotalNbOfUnlocks());
             else if (this.currentSelect == 2) this.logTextObject.setText("Exit to the menu");
         }
         catch(e) {} // out of bounds

@@ -134,6 +134,36 @@ class DeadBro extends Move {
     }
 }
 
+class EncrustPP extends Move {
+    constructor() {
+        super();
+        this.name = "PP Encrustation";
+        this.description = "Grants randomly either Crystal PP or Diamond PP. If fighter already has one of them, the other one is chosen.";
+        this.autoPass = true;
+        this.needsTarget = false;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " encrusts his PP...");
+        var hasCrystal = _user.hasFightingStyle("crystal");
+        var hasDiamond = _user.hasFightingStyle("diamond");
+
+        if (hasCrystal && hasDiamond) {
+            _user.duel.addMessage("...with nothing!");
+        }
+        else if (hasCrystal || getRandomPercent() <= 50) {
+            _user.duel.addMessage("...with diamond!");
+            _user.addFightingStyle("diamond");
+            _user.DEXValue += 10;
+        }
+        else {
+            _user.duel.addMessage("...with crystal!");
+            _user.addFightingStyle("crystal");
+            _user.DEXValue += 10;
+        }
+    }
+}
+
 class FlexBro extends Move {
     constructor() {
         super();
@@ -387,12 +417,17 @@ class SawBlade extends Move {
     constructor() {
         super();
         this.name = "Sawblade";
-        this.description = "Target gets a stackable effect that inflicts this.STR/15 damages per turn.";
+        this.description = "Target gets a stackable effect that inflicts this.STR/15 damages per turn. Has 10% chance granting scarred PP to the opponent.";
     }
 
     execute(_user, _target = null) {
         _user.duel.addMessage(_user.getName() + " cuts " + _target.getName() + "'s PP!");
         _target.bleedDamage += Math.floor(_user.STR/15);
+        if (getRandomPercent() <= 10 && !_target.hasFightingStyle("scarred")) {
+            _user.duel.addMessage(_target.getName() + " gets a scarred PP!");
+            _opponent.addFightingStyle("scarred");
+            _opponent.DEXValue += 10;
+        }
 
         _user.duel.addAnimation("cut", 60, _target, true, false);
         _user.duel.memorySoundEffects.push("cut");
@@ -516,6 +551,6 @@ class Yes extends Move {
     }
 }
 
-const REGULAR_MOVE_LIST = [AdaptPP, Boomerang, BrocketeerDive, BronanSlam, Bullet, DeadBro, FlexBro, HighFiveBro,
+const REGULAR_MOVE_LIST = [AdaptPP, Boomerang, BrocketeerDive, BronanSlam, Bullet, DeadBro, EncrustPP, FlexBro, HighFiveBro,
     Hologram, InterrogationPoint, Kick, Pig, PregnantBro, PunchingPP, PunchingPPReallyHard,
     RedPill, Save, SawBlade, Scout, Steel, TurkeyBomb, Yes];

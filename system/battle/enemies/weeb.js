@@ -33,3 +33,18 @@ class BossWeeb extends Weeb {
         this.isBoss = true;
     }
 }
+
+class CrystalWeeb extends Weeb {
+    constructor(_name = "Crystal Weeb") {
+        super(_name);
+
+        this.addFightingStyle("crystal");
+    }
+}
+class DiamondWeeb extends Weeb {
+    constructor(_name = "Diamond Weeb") {
+        super(_name);
+
+        this.addFightingStyle("diamond");
+    }
+}

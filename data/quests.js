@@ -54,7 +54,8 @@ QuestManager.loadList([
                 "unlockGameMechanics": [ "Fighting Styles" ],
                 "unlockMoves": [ PregnantBro, DeadBro ],
                 "unlockFightingStyles": [ "Big PP", "Fast PP" ],
-                "postFightDialogue": 4
+                "postFightDialogue": 4,
+                "unlockQuests": [ 14 ]
             },
             { // 3
                 "name": "Weeb King",
@@ -107,6 +108,7 @@ QuestManager.loadList([
                 "description": "Who doesn't know about IKEA's famous sawblades security against invaders, that cut their enemies in half, and rip their organs?",
                 "encounter": "ikeaBlades",
                 "unlockMoves": [ SawBlade ],
+                "unlockFightingStyles": [ "Scarred PP" ],
                 "unlockQuests": [ 5 ]
             },
             { // 3
@@ -509,6 +511,32 @@ QuestManager.loadList([
                 "name": "Chalice",
                 "description": ".",
                 "encounter": "yandereDev"
+            }
+        ]
+    },
+    { // 14
+        "name": "Bling Bling Weebs",
+        "description": "A bunch of rich people joined the convention. You don't know if they are here for the weeb shit, or to make fun of weebs, but you do know you can punch their PP.",
+        "isMain": false,
+        "areaId": 0,
+
+        "questSteps": [
+            { // 0
+                "name": "Crystal Style",
+                "description": "So the rumors about enchented crystals that make your PP faster, but more fragile were true after all...",
+                "encounter": "crystalWeebs"
+            },
+            { // 1
+                "name": "Shine on you...",
+                "description": "Not only does diamond grants a lot of charisma, those weebs also gain additional protection from it.",
+                "encounter": "diamondWeebs"
+            },
+            { // 2
+                "name": "Another Weeb King",
+                "description": "This anime convention has more than one weeb king. This usually only occurs once every 112 years. This is your chance!",
+                "encounter": "blingBlingWeebs",
+                "unlockFightingStyles": [ "Crystal PP", "Diamond PP" ],
+                "unlockMoves": [ EncrustPP ]
             }
         ]
     }

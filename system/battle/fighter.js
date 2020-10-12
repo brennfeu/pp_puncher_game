@@ -402,11 +402,21 @@ class Fighter {
         }
     }
     rollDEX() {
+        var maxRoll = 50;
+
+        // max roll modifiers
+        if (this.hasFightingStyle("crystal")) {
+            maxRoll += 20;
+        }
+        if (this.hasFightingStyle("diamond")) {
+            maxRoll -= 10;
+        }
+
         if (this.chosenMove == null) {
             this.rolledDEX = 0;
         }
         else {
-            this.rolledDEX = this.DEX + Math.floor(Math.random() * 50 + 1);
+            this.rolledDEX = this.DEX + Math.floor(Math.random() * maxRoll + 1);
             if (!this.duel.noDexModifier) {
                 this.rolledDEX += this.chosenMove.newInstance().dexChange;
             }
@@ -465,6 +475,13 @@ class Fighter {
             return this.damage(_value, "auto");
         }
         else if (_type == "attack") {
+            // critical hit
+            var criticalChance = 5; // %
+            if (getRandomPercent() <= criticalChance) {
+                this.duel.addMessage("Critical Hit!");
+                _value = _value*2;
+            }
+
             // opponent's effects
             if (_opponent.damageBuildUp > 0 && _value > 0) {
                 _value = _value*_opponent.damageBuildUp;
@@ -472,6 +489,18 @@ class Fighter {
             }
             if (_opponent.backFromDeath > 0 && _value > 0) {
                 _value = _value*2;
+            }
+            if (_opponent.hasFightingStyle("scarred") > 0 && _value > 0 && getRandomPercent() <= 10) {
+                this.duel.addMessage(_opponent.getName() + "'s PP scar scares " + this.getName() + "!");
+                this.noDex = 2;
+            }
+
+            // self effects
+            if (this.hasFightingStyle("crystal")) {
+                _value = Math.floor(_value*1.2);
+            }
+            if (this.hasFightingStyle("diamond")) {
+                _value = Math.floor(_value*0.5);
             }
         }
         else {
