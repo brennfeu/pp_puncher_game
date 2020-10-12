@@ -33,6 +33,9 @@ class Hero extends Fighter {
                     if (getRandomPercent() <= 20) {
                         randomMove = commonMoves[i];
                     }
+                    if (getRandomPercent() <= 20 && ProgressManager.getMovesLikely().length > 0) {
+                        randomMove = randomFromList(ProgressManager.getMovesLikely());
+                    }
                     if (i == 0 && getRandomPercent() <= 90) {
                         randomMove = PunchingPP;
                     }
@@ -43,6 +46,11 @@ class Hero extends Fighter {
                         (this.hasFightingStyle("big") && randomMove == PregnantBro) ||
                         (this.hasFightingStyle("versatile") && randomMove == AdaptPP) ||
                         ((this.hasFightingStyle("diamond") || this.hasFightingStyle("crystal")) && randomMove == EncrustPP)) {
+                        continue;
+                    }
+
+                    // Unliked MovesCache
+                    if (getRandomPercent() <= 50 && ProgressManager.getMovesUnlikely().indexOf(randomMove.getClassName()) > -1) {
                         continue;
                     }
 

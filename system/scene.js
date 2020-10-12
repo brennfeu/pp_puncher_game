@@ -446,6 +446,12 @@ class Scene extends Phaser.Scene {
                 this.unlockList.push(["Waifu", s.saveWaifu]);
             }
 
+            var totalUnlock = ProgressManager.getTotalNbOfUnlocks();
+            if (totalUnlock >= 25 && totalUnlock - this.unlockList.length < 25) {
+                this.unlockList.push(["Game Mechanic", "Move Preferences"]);
+                ProgressManager.unlockStep(0, 3)
+            }
+
             GlobalVars.set("unlocksNext", []);
         }
     }
@@ -811,6 +817,22 @@ class Scene extends Phaser.Scene {
                 }
                 return;
             }
+            else if (this.justPressedControl("ENTER") && ProgressManager.isStepCompleted(0, 3)) {
+                var move = ProgressManager.getUnlockedMoves()[this.cursorBSelect]
+                var pref = move.getPreference();
+                if (pref == 0 && ProgressManager.canAddNewMovePref()) {
+                    move.setPreference(1);
+                    this.bibleTextsB[this.cursorBSelect].setText(move.newInstance().name + " (+)");
+                }
+                else if (pref == 1) {
+                    move.setPreference(-1);
+                    this.bibleTextsB[this.cursorBSelect].setText(move.newInstance().name + " (-)");
+                }
+                else {
+                    move.setPreference(0);
+                    this.bibleTextsB[this.cursorBSelect].setText(move.newInstance().name);
+                }
+            }
         }
 
         if (this.justPressedControl("MENU") || (this.justPressedControl("BACK") && this.bibleStep == 0)) {
@@ -832,7 +854,11 @@ class Scene extends Phaser.Scene {
             else if (this.cursorASelect == 1) {
                 this.bibleDescription.setText("All the different attacks you have access to!");
                 var a = ProgressManager.getUnlockedMoves();
-                for (var i in a) l[i] = a[i].newInstance().name;
+                for (var i in a) {
+                    l[i] = a[i].newInstance().name;
+                    if (a[i].getPreference() == 1) l[i] += " (+)";
+                    else if (a[i].getPreference() == -1) l[i] += " (-)";
+                }
             }
             else if (this.cursorASelect == 2) {
                 this.bibleDescription.setText("All the people that makes your adventurers group!");

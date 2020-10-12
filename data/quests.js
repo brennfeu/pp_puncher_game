@@ -1,6 +1,6 @@
 QuestManager.loadList([
     { // 0
-        "name": "BASE UNLOCKS",
+        "name": "SPECIAL UNLOCKS",
         "description": "Shouldn't appear in the final game",
         "isMain": false,
         "areaId": -1,
@@ -25,6 +25,11 @@ QuestManager.loadList([
             { // 2
                 "name": "AREA SCENE DIALOGUE",
                 "description": "FIRST TIME SEEEING THE AREA SCENE"
+            },
+            { // 3
+                "name": "MOVE PREFERENCES",
+                "description": "ONCE x THINGS HAVE BEEN UNLOCKED",
+                "unlockGameMechanics": [ "Move Preferences" ]
             }
         ]
     },

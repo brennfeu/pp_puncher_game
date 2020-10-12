@@ -278,17 +278,6 @@ class ProgressManager {
     }
     // TODO moves, fs, etc...
 
-    static getTotalNbOfUnlocks() {
-        // should be the amount of things displayed by the bible
-        var nb = 0;
-        nb += ProgressManager.getUnlockedGameMechanics().length;
-        nb += ProgressManager.getUnlockedMoves().length;
-        nb += ProgressManager.getUnlockedPartyMembers().length;
-        nb += ProgressManager.getUnlockedFightingStyles().length;
-        nb += ProgressManager.getUnlockedEvents().length;
-        return nb;
-    }
-
     static resetCache() {
         ProgressManager.CompletedStepsCache = null;
         ProgressManager.StepsCache = null;
@@ -303,6 +292,41 @@ class ProgressManager {
         ProgressManager.SavedWaifusCache = null;
     }
 
+    static getTotalNbOfUnlocks() {
+        // should be the amount of things displayed by the bible
+        var nb = 0;
+        nb += ProgressManager.getUnlockedGameMechanics().length;
+        nb += ProgressManager.getUnlockedMoves().length;
+        nb += ProgressManager.getUnlockedPartyMembers().length;
+        nb += ProgressManager.getUnlockedFightingStyles().length;
+        nb += ProgressManager.getUnlockedEvents().length;
+        return nb;
+    }
+    static canAddNewMovePref() {
+        return Math.floor(ProgressManager.getTotalNbOfUnlocks()/10) >  ProgressManager.SAVE_FILES["movePreferences"].length;
+    }
+
+    static getMovesLikely() {
+        var l = [];
+        for (var i in ProgressManager.SAVE_FILES["movePreferences"]) {
+            if (ProgressManager.SAVE_FILES["movePreferences"][i][1] == 1) {
+                l.push(ProgressManager.SAVE_FILES["movePreferences"][i][0]);
+            }
+        }
+        console.log(l)
+        return l;
+    }
+    static getMovesUnlikely() {
+        var l = [];
+        for (var i in ProgressManager.SAVE_FILES["movePreferences"]) {
+            if (ProgressManager.SAVE_FILES["movePreferences"][i][1] == -1) {
+                l.push(ProgressManager.SAVE_FILES["movePreferences"][i][0]);
+            }
+        }
+        console.log(l)
+        return l;
+    }
+
     static getMechanicDescription(_mec) {
         switch(_mec) {
             case "Game Mechanics":
@@ -311,6 +335,8 @@ class ProgressManager {
                 return "Going on an adventure is better with friends. You can have up to 4 party members at the same time.\n\nAny party member unlocked after that will only be available when a party member on the front has been killed.";
             case "Moves":
                 return "Each turn, you can use one of 5 moves. Those 5 moves are chosen randomly between all of your known moves.\n\nMoves that aren't against a specific target test their DEX against the average DEX of your opponents. Missing a move grants 5 temporary bonus DEX."
+            case "Move Preferences":
+                return "Once you unlock 25 things in your PP Bible, you can select up to <nb_of_unlocked_items>/10 moves that you want to appear either more, or less often.\n\nTo do so, open the bible, and select the move you want to appear more. Select it again for it to appear less often. Select it again to reset."
             case "Cheating":
                 return "When selecting a move, you can open the bible and select the move you want. PP Arbitrator doesn't always notices this, but when he does, he makes sure you get a penalty (-20 DEX and -10 STR).";
             case "Fighting Styles":
@@ -334,7 +360,7 @@ if (ProgressManager.SAVE_FILES == null) {
     console.log("Savefile Initialisation");
     ProgressManager.SAVE_FILES = {
         "completedSteps": [],
-        "partyMembers": []
+        "movePreferences": []
     };
     ProgressManager.updateLocalStorage();
 }

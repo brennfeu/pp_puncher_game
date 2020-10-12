@@ -62,6 +62,30 @@ class Move {
         return 100;
     }
 
+    static getPreference() {
+        for (var i in ProgressManager.SAVE_FILES["movePreferences"]) {
+            if (ProgressManager.SAVE_FILES["movePreferences"][i][0] == this.getClassName()) {
+                return ProgressManager.SAVE_FILES["movePreferences"][i][1];
+            }
+        }
+        return 0;
+    }
+    static setPreference(_pref = 0) {
+        for (var i in ProgressManager.SAVE_FILES["movePreferences"]) {
+            if (ProgressManager.SAVE_FILES["movePreferences"][i][0] == this.getClassName()) {
+                ProgressManager.SAVE_FILES["movePreferences"].splice(i, 1);
+            }
+        }
+        if (_pref != 0) {
+            ProgressManager.SAVE_FILES["movePreferences"].push([this.getClassName(), _pref]);
+        }
+
+        ProgressManager.updateLocalStorage();
+    }
+    static getClassName() {
+        return this.name;
+    }
+
     static newInstance() {
         return new this();
     }
