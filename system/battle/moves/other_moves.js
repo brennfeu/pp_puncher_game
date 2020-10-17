@@ -1,3 +1,72 @@
+class RegularPriestMove extends Move {
+    constructor() {
+        super();
+        this.name = "PP Pray";
+        this.description = "Calls for the regular power of the gods you worship.";
+        this.type = "faith";
+
+        this.specialCheatProbabilty = 0;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " calls for divine powers!");
+
+        if (_user.godsList.length == 0 || _user.regularCharges <= 0) {
+            _user.duel.addMessage("...but no one answers.");
+            return;
+        }
+
+        _user.regularCharges -= 1;
+        for (var i in _user.godsList) {
+            var storedMove = {};
+            var move = MoveManager.createMove(function(_user, _target = null, _godIndex = this.__proto__.constructor.godIndex) {
+                _user.duel.addMessage(_user.godsList[_godIndex].name + " answers his calls!");
+                _user.godsList[_godIndex].normalMove(_user, _target);
+            });
+            move.godIndex = i;
+
+            storedMove["user"] = _user;
+            storedMove["move"] = move
+            storedMove["target"] = _target;
+            _user.duel.memoryMoves.push(storedMove);
+        }
+    }
+}
+class SpecialPriestMove extends Move {
+    constructor() {
+        super();
+        this.name = "PP Ritual";
+        this.description = "Calls for the regular power of the gods you worship.";
+        this.type = "faith";
+
+        this.specialCheatProbabilty = 0;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " calls for superior divine powers!");
+
+        if (_user.godsList.length == 0 || _user.specialCharges <= 0) {
+            _user.duel.addMessage("...but no one answers.");
+            return;
+        }
+
+        _user.specialCharges -= 1;
+        for (var i in _user.godsList) {
+            var storedMove = {};
+            var move = MoveManager.createMove(function(_user, _target = null, _godIndex = this.__proto__.constructor.godIndex) {
+                _user.duel.addMessage(_user.godsList[_godIndex].name + " answers his calls!");
+                _user.godsList[_godIndex].specialMove(_user, _target);
+            });
+            move.godIndex = i;
+
+            storedMove["user"] = _user;
+            storedMove["move"] = move
+            storedMove["target"] = _target;
+            _user.duel.memoryMoves.push(storedMove);
+        }
+    }
+}
+
 class InstaKill extends Move {
     constructor() {
         super();
@@ -61,4 +130,5 @@ class Wait extends Move {
 
 var l = [];
 if (DEV_MODE) l=l.concat([ InstaKill, MegaBuff, Wait ]);
-const OTHER_MOVE_LIST = [].concat(l);
+
+const OTHER_MOVE_LIST = [ RegularPriestMove, SpecialPriestMove ].concat(l);

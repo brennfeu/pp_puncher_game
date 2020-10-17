@@ -19,7 +19,7 @@ QuestManager.loadList([
             { // 1
                 "name": "CHEATING",
                 "description": "FIRST TIME CHEATING CHECK",
-                "unlockQuests": [ 10 ],
+                "unlockQuests": [ 10, 15 ],
                 "unlockGameMechanics": [ "Cheating" ]
             },
             { // 2
@@ -391,7 +391,9 @@ QuestManager.loadList([
                 "description": "Ryuko is indeed in this room, but the remaing of the student council won't let you take her.",
                 "encounter": "studentCouncil",
                 "duelParam": { "waifuDetermination": true },
-                "unlockQuestSteps": [[12, 2]],
+                "unlockQuestSteps": [ [12, 2] ],
+                "unlockQuests": [ 16 ],
+                "unlockAreas": [ 3 ],
                 "saveWaifu": "Ryuko",
                 "postFightCutscene": 5
             },
@@ -493,7 +495,7 @@ QuestManager.loadList([
         ]
     },
     { // 13
-        "name": "Dere Simulator",
+        "name": "TODO",
         "description": "A new game finally released after 23 years of development. It's so successful people are acting like the main character of this game.",
         "isMain": false,
         "areaId": 3,
@@ -545,6 +547,36 @@ QuestManager.loadList([
                 "encounter": "blingBlingWeebs",
                 "unlockFightingStyles": [ "Crystal PP", "Diamond PP" ],
                 "unlockMoves": [ EncrustPP ]
+            }
+        ]
+    },
+    { // 15
+        "name": "Lumberjack Job",
+        "description": "Just in case you wanted to max out the lumberjack job instead of punching pp, well you can do that here.",
+        "isMain": false,
+        "areaId": 1,
+
+        "questSteps": [
+            { // 0
+                "name": "The Wood Gatherer",
+                "description": "The best lumberjack of the whole world is visiting the IKEA. This is the perfect moment to learn his latest wood cutting techniques.",
+                "encounter": "edimo",
+                "preFightDialogue": 23,
+                "unlockMoves": [ WoodCutting ]
+            }
+        ]
+    },
+    { // 16
+        "name": "idk",
+        "description": ".",
+        "isMain": false,
+        "areaId": 3,
+
+        "questSteps": [
+            { // 0
+                "name": "priest test",
+                "description": "idk lol.",
+                "encounter": "2randomPriests"
             }
         ]
     }

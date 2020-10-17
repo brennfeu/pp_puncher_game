@@ -195,7 +195,7 @@ class ProgressManager {
         }
         l = l.sort(
             function (a, b) {
-                var l = ["Regular", "Infernal", "Armageddon", "Stand", "Other", "Dev Test"];
+                var l = ["regular", "infernal", "armageddon", "faith", "stand", "rare", "other", "Dev Test"];
                 var ta = l.indexOf(a.newInstance().type);
                 var tb = l.indexOf(b.newInstance().type);
                 if (ta < tb) return -1;
@@ -313,7 +313,6 @@ class ProgressManager {
                 l.push(ProgressManager.SAVE_FILES["movePreferences"][i][0]);
             }
         }
-        console.log(l)
         return l;
     }
     static getMovesUnlikely() {
@@ -323,7 +322,6 @@ class ProgressManager {
                 l.push(ProgressManager.SAVE_FILES["movePreferences"][i][0]);
             }
         }
-        console.log(l)
         return l;
     }
 

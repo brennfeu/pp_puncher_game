@@ -6,6 +6,7 @@ class MapScene extends Scene {
     init(_data) { try {
         this.cursor = null;
         this.currentSelect = 0;
+        this.currentSelectOffset = 0;
         if (_data["areaSelect"] != undefined) this.currentSelect = parseInt(_data["areaSelect"]);
 
         this.logTextObject = null;
@@ -42,6 +43,8 @@ class MapScene extends Scene {
 
         this.loadedAreas = ProgressManager.getUnlockedAreas();
         for (var i in this.loadedAreas) {
+            if (i > 2) continue; // only 3 shown areas
+
             var area = this.loadedAreas[i];
 
             var data = {align: "center", wordWrap: {width: 40, height: 100}};
@@ -115,12 +118,32 @@ class MapScene extends Scene {
         }
 
         if (this.isOnArea) {
-            if (this.currentSelect >= this.loadedAreas.length) {
-                this.currentSelect -= this.loadedAreas.length;
+            //console.log(this.currentSelect + " / " + this.currentSelectOffset + " / " + this.loadedAreas.length);
+
+            if (this.currentSelect + this.currentSelectOffset >= this.loadedAreas.length) {
+                this.currentSelect = 0;
+                this.currentSelectOffset = 0;
+                this.updateTexts();
                 this.updateDesc();
             }
             else if (this.currentSelect < 0) {
-                this.currentSelect += this.loadedAreas.length;
+                this.currentSelect = 2;
+                if (this.loadedAreas.length > 2) this.currentSelectOffset = this.loadedAreas.length-3;
+                this.updateTexts();
+                this.updateDesc();
+            }
+
+            if ((this.currentSelect > 1 && this.currentSelect + this.currentSelectOffset < this.loadedAreas.length-1)
+            || this.currentSelect > 2) {
+                this.currentSelect -= 1;
+                this.currentSelectOffset += 1;
+                this.updateTexts();
+                this.updateDesc();
+            }
+            else if (this.currentSelect < 1 && this.currentSelectOffset > 0) {
+                this.currentSelect += 1;
+                this.currentSelectOffset -= 1;
+                this.updateTexts();
                 this.updateDesc();
             }
 
@@ -146,7 +169,7 @@ class MapScene extends Scene {
 
             if (this.isOnArea) {
                 var data = {};
-                data["areaId"] = this.currentSelect;
+                data["areaId"] = this.currentSelect + this.currentSelectOffset;
                 return this.switchScene("Area", data);
             }
             else if (this.currentSelect == 0) {
@@ -172,9 +195,18 @@ class MapScene extends Scene {
         }
     } catch(e) { TRIGGER_ERROR(e) } }
 
+    updateTexts() {
+        for (var i in this.areaTexts) {
+            var data = {};
+            var area = this.loadedAreas[parseInt(i) + parseInt(this.currentSelectOffset)];
+            this.areaTexts[i].setText(area.getName());
+            if (area.isCompleted()) this.areaTexts[i].setFontStyle("italic");
+            else this.areaTexts[i].setFontStyle("");
+        }
+    }
     updateDesc() {
         try {
-            if (this.isOnArea) this.logTextObject.setText(this.loadedAreas[this.currentSelect].getDescription());
+            if (this.isOnArea) this.logTextObject.setText(this.loadedAreas[this.currentSelect + this.currentSelectOffset].getDescription());
             else if (this.currentSelect == 0) this.logTextObject.setText("Customize your party members' PP !");
             else if (this.currentSelect == 1) this.logTextObject.setText("The Holy Book of PP Punching!\nHere you can find all kind of useful informations.\n\nTotal Number of Unlocked Things: " + ProgressManager.getTotalNbOfUnlocks());
             else if (this.currentSelect == 2) this.logTextObject.setText("Exit to the menu");

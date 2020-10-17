@@ -10,5 +10,13 @@ AreaManager.loadList([
     { // 2
         "name": "High School",
         "description": "It's more like a chaotic academy where people just punch each other to the death than a classic high school. Nobody seems to think of it as bad, so this violent behaviour never stopped."
+    },
+    { // 3
+        "name": "Allfaiths Temple",
+        "description": "An old temple in which you can pray for every existing god. TODO."
+    },
+    { // 4
+        "name": "Christian Church",
+        "description": "."
     }
 ]);

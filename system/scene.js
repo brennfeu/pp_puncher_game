@@ -406,6 +406,8 @@ class Scene extends Phaser.Scene {
         this.loadSound("ui/unlock.mp3")
     }
     checkUnlock() {
+        this.checkSpecialUnlocks();
+
         if (GlobalVars.get("unlocksNext").length > 0) {
             var q = QuestManager.getQuest(GlobalVars.get("unlocksNext")[0]);
             var s = q.getStep(GlobalVars.get("unlocksNext")[1]);
@@ -446,13 +448,13 @@ class Scene extends Phaser.Scene {
                 this.unlockList.push(["Waifu", s.saveWaifu]);
             }
 
-            var totalUnlock = ProgressManager.getTotalNbOfUnlocks();
-            if (totalUnlock >= 25 && totalUnlock - this.unlockList.length < 25) {
-                this.unlockList.push(["Game Mechanic", "Move Preferences"]);
-                ProgressManager.unlockStep(0, 3)
-            }
-
             GlobalVars.set("unlocksNext", []);
+        }
+    }
+    checkSpecialUnlocks() {
+        if (ProgressManager.getTotalNbOfUnlocks() >= 25 && !ProgressManager.isStepCompleted(0, 3)) {
+            ProgressManager.unlockStep(0, 3);
+            this.unlockList.push(["Game Mechanic", "Move Preferences"]);
         }
     }
     openUnlock() {
@@ -1121,15 +1123,7 @@ class Scene extends Phaser.Scene {
                 this.musicPlayer.setVolume(this.volumeCounter/100);
             }
 
-            if (this.justPressedControl("BACK")) {
-                this.playSoundOK();
-                this.optionCurrentSelect = 0;
-                if (this.musicPlayer != null) {
-                    this.musicPlayer.setVolume(GlobalVars.get("settings")["musicVolume"]/100);
-                }
-                return this.optionArea = "audio";
-            }
-            else if (this.justPressedControl("ENTER")) {
+            if (this.justPressedControl("ENTER") || this.justPressedControl("BACK")) {
                 this.playSoundSelect();
                 this.optionCurrentSelect = 0;
                 GlobalVars.get("settings")["musicVolume"] = this.volumeCounter;
@@ -1174,13 +1168,7 @@ class Scene extends Phaser.Scene {
                 this.playSoundOK();
             }
 
-            if (this.justPressedControl("BACK")) {
-                this.playSoundOK();
-                this.optionCurrentSelect = 1;
-                GlobalVars.loadSettings();
-                return this.optionArea = "audio";
-            }
-            else if (this.justPressedControl("ENTER")) {
+            if (this.justPressedControl("ENTER") || this.justPressedControl("BACK")) {
                 this.playSoundSelect();
                 this.optionCurrentSelect = 1;
                 GlobalVars.get("settings")["soundsVolume"] = this.volumeCounter;

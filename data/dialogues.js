@@ -432,7 +432,7 @@ DialogueManager.loadList([
                 "text": "We did it!"
             },
             {
-                "text": "I mean, you did it!"
+                "text": "I mean, YOU did it!"
             },
             {
                 "speaker": "PP Arbitrator",
@@ -442,10 +442,10 @@ DialogueManager.loadList([
                 "text": "If you haven't done it yet, there are side quests you can complete, to unlock additional stuff."
             },
             {
-                "text": "Also, here's an hint for the secret game mechanic: there's a way to play the move you want instead of being limited to the 5 random moves."
+                "text": "Also, here's a hint for a secret game mechanic: there's a way to play the move you want instead of being limited to the 5 random ones."
             },
             {
-                "text": "Also, if you have some free time, please send your feedback to the dev so he can make the game better for every player."
+                "text": "Also, if you have some free time, please send your feedback to the dev so he can make the game better for everyone."
             },
             {
                 "text": "Stay tuned for the next updates!"
@@ -474,6 +474,22 @@ DialogueManager.loadList([
             },
             {
                 "text": "When you see a quest that has an exclamation point, that means it is a main quest. Other quests are side quests. A completed quest appear on italic."
+            }
+        ]
+    },
+    { // 23 - Edimo talks about cutting wood
+        "dialogueLines": [
+            {
+                "speaker": "Edimo",
+                "text": "Hey! Wanna learn about how to gather wood efficiently?."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Uh, not really to be honest, I don't usually do the side-jobs in games."
+            },
+            {
+                "speaker": "Edimo",
+                "text": "All you have to do is take your axe and cut through trees with it. If you beat me in a fight, you'll understand it."
             }
         ]
     }

@@ -37,6 +37,19 @@ class GodManager {
         return null;
     }
 
+    static getAllGods(_category = null) {
+        if (_category == null) return GodManager.GOD_LIST;
+
+        var l = [];
+        for (var i in GodManager.GOD_LIST) {
+            if (GodManager.GOD_LIST[i].type == _category) l.push(GodManager.GOD_LIST[i]);
+        }
+        return l;
+    }
+    static getRandomGod(_category = "regular") {
+        return randomFromList(GodManager.getAllGods(_category));
+    }
+
     static loadList(_list) {
         for (var i in _list) {
             GodManager.addGod(_list[i]);

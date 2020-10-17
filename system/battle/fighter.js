@@ -16,6 +16,7 @@ class Fighter {
         // styles
         this.fightingStyles = [];
         this.relics = [];
+        this.godsList = []; this.regularCharges = 0; this.specialCharges = 0;
 
         // effects
         this.resetStatus();
@@ -76,6 +77,31 @@ class Fighter {
         }
         else {
             txt += statusTxt
+        }
+
+        if (this.regularCharges > 0 || this.specialCharges > 0) {
+            txt += "\n\nFaith:\n";
+            var godsTxt = "";
+
+            for (var i in this.godsList) {
+                godsTxt += " - " + this.godsList[i].name + "\n";
+            }
+
+            if (godsTxt == "") {
+                txt += "No God\n";
+            }
+            else if (this.hasUltimatePP()) {
+                txt += " - Ultimate PP";
+            }
+            else {
+                txt += godsTxt
+            }
+
+            txt += "Regular Charges: " + this.regularCharges + "\n";
+            txt += "Special Charges: " + this.specialCharges + "\n";
+        }
+        else {
+            txt += "\n"
         }
 
         return txt;
@@ -532,6 +558,20 @@ class Fighter {
         // add effects
         // check reverse damage
         return this.heal(_value, "auto");
+    }
+
+    addRandomGod(_category = "regular") {
+        var god = GodManager.getRandomGod(_category);
+        var nbTries = 0;
+        while (nbTries <= 10000) {
+            if (this.godsList.indexOf(god) < 0) {
+                this.godsList.push(god);
+                return true;
+            }
+            god = GodManager.getRandomGod(_category);
+            nbTries += 1;
+        }
+        return false;
     }
 
     updateTextObjects() {

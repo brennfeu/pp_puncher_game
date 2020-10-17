@@ -8,11 +8,24 @@ class Enemy extends Fighter {
     }
 
     getCurrentListOfMoves() {
-        return this.randomMovepool;
+        var l = this.randomMovepool;
+
+        // gods moves
+        if (this.regularCharges > 0) l.push(RegularPriestMove);
+        if (this.specialCharges > 0) l.push(SpecialPriestMove);
+
+        return l;
     }
 
     selectMove() {
-        this.chosenMove = randomFromList(this.currentMovepool);
+        if (this.getCurrentListOfMoves().indexOf(SpecialPriestMove) > -1) {
+            return this.chosenMove = SpecialPriestMove;
+        }
+        else if (this.getCurrentListOfMoves().indexOf(RegularPriestMove) > -1) {
+            return this.chosenMove = RegularPriestMove;
+        }
+
+        this.chosenMove = randomFromList(this.getCurrentListOfMoves());
     }
 
     selectTarget() {

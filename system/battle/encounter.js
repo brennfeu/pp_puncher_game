@@ -140,6 +140,10 @@ class Encounter {
             this.addEnemy(new IkeaManager(), 561);
         }
 
+        else if (this.name == "edimo") {
+            this.addEnemy(new Edimo());
+        }
+
         // high school
         else if (this.name == "2tier4students") {
             this.addEnemy(new Tier4Student(), 190);
@@ -241,7 +245,7 @@ class Encounter {
             this.enemyList[1].damageBuildUp = 5;
         }
         else if (this.name == "boardGameClubStudents") {
-            this.addEnemy(new BoardGameClubStudent(), 100);
+            this.addEnemy(new BoardGameClubStudent(), 80);
             this.addEnemy(new BoardGameClubStudent(), 450);
         }
         else if (this.name == "2yanderes") {
@@ -255,6 +259,12 @@ class Encounter {
         }
         else if (this.name == "yandereDev") {
             this.addEnemy(new YandereDev());
+        }
+
+        // allfaiths temple
+        else if (this.name == "2randomPriests") {
+            this.addEnemy(new PriestEnemy(), 190);
+            this.addEnemy(new PriestEnemy(), 450);
         }
     }
 

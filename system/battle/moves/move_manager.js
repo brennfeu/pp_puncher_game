@@ -47,3 +47,4 @@ const nameSort = function (a, b) {
 }
 MoveManager.MOVE_LIST = MoveManager.MOVE_LIST.concat(REGULAR_MOVE_LIST.sort(nameSort));
 MoveManager.MOVE_LIST = MoveManager.MOVE_LIST.concat(OTHER_MOVE_LIST.sort(nameSort));
+MoveManager.MOVE_LIST = MoveManager.MOVE_LIST.concat(RARE_MOVE_LIST.sort(nameSort));

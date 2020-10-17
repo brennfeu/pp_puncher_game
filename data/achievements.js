@@ -23,5 +23,10 @@ AchievementManager.loadList([
         "name": "Unkillable",
         "description": "Get the Undeath Energy status",
         "steamName": "FLEX"
+    },
+    { // 5
+        "name": "Saved the World? Nop, but I’m a great Lumberjack",
+        "description": "Get 1 000 000 000 wood planks",
+        "steamName": "WOOD_CUTTER"
     }
 ]);
