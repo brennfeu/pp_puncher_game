@@ -145,16 +145,22 @@ class Fighter {
             list.push(status);
         }
         // Value Buffs
-        if (this.bleedDamage > 0) {
-            var status = {};
-            status["display"] = " - Haemorrhage: " + this.bleedDamage;
-            status["icon"] = "bleedDamage";
-            list.push(status);
-        }
         if (this.damageBuildUp > 0) {
             var status = {};
             status["display"] = " - Damage Build-Up: " + this.damageBuildUp;
             status["icon"] = "muscle";
+            list.push(status);
+        }
+        if (this.extraLife > 0) {
+            var status = {};
+            status["display"] = " - Extra Lives: " + this.extraLife;
+            status["icon"] = "extraLife";
+            list.push(status);
+        }
+        if (this.bleedDamage > 0) {
+            var status = {};
+            status["display"] = " - Haemorrhage: " + this.bleedDamage;
+            status["icon"] = "bleedDamage";
             list.push(status);
         }
         if (this.pigHeal > 0) {
@@ -216,6 +222,30 @@ class Fighter {
             list.push(status);
         }
         // Permanent Buffs
+        if (this.hasBoner) {
+            var status = {};
+            status["display"] = " - Big Boner Mmmmmmh...";
+            status["icon"] = "boner";
+            list.push(status);
+        }
+        if (this.isCowboy) {
+            var status = {};
+            status["display"] = " - Cowboy";
+            status["icon"] = "cowboy";
+            list.push(status);
+        }
+        if (this.eldritchFriendly) {
+            var status = {};
+            status["display"] = " - Eldritch Friendly";
+            status["icon"] = "eldritch";
+            list.push(status);
+        }
+        if (this.saltyWounds) {
+            var status = {};
+            status["display"] = " - Salty Wounds";
+            status["icon"] = "salt";
+            list.push(status);
+        }
         if (this.truffleFriendly) {
             var status = {};
             status["display"] = " - Touched by the Ancient Fungus";
@@ -239,6 +269,12 @@ class Fighter {
         this.waifuDetermination = 0;
         this.depression = 0;
         this.damageBuildUp = 0;
+        this.extraLife = 0;
+        this.isCowboy = false;
+        this.eldritchFriendly = false;
+        this.hasBoner = false;
+        this.saltyWounds = false;
+        this.isFurry = false; // TODO: icon+status text
     }
 
     get STR() {
@@ -250,6 +286,9 @@ class Fighter {
         if (this.hasFightingStyle("fast")) {
             a -= 10;
         }
+        if (this.hasFightingStyle("hockey puck")) {
+            a -= 45;
+        }
         if (this.hasUltimatePP()) {
             a += 50;
         }
@@ -259,6 +298,9 @@ class Fighter {
         }
         if (this.waifuDetermination > 0) {
             a += this.waifuDetermination*10;
+        }
+        if (this.hasBoner) {
+            a += 50;
         }
 
         return a;
@@ -285,6 +327,9 @@ class Fighter {
         if (this.hasFightingStyle("versatile")) {
             a -= 20;
         }
+        if (this.hasFightingStyle("hockey puck")) {
+            a -= 45;
+        }
         if (this.hasUltimatePP()) {
             a += 50;
         }
@@ -297,6 +342,9 @@ class Fighter {
         }
         if (this.waifuDetermination > 0) {
             a += this.waifuDetermination*5;
+        }
+        if (this.hasBoner) {
+            a -= 20;
         }
 
         return a;
@@ -359,8 +407,11 @@ class Fighter {
         }
         if (this.pigHeal > 0) {
             this.duel.memoryTurnChange.push(function(_fighter) {
+                var heal = _fighter.pigHeal;
+                if (_fighter.isCowboy) heal = heal*3;
+
                 _fighter.duel.addMessage(_fighter.getName() + " squeezes hog!");
-                _fighter.heal(_fighter.pigHeal, "inner");
+                _fighter.heal(heal, "inner");
 
                 _fighter.duel.memorySoundEffects.push("mmh");
             });
@@ -489,6 +540,18 @@ class Fighter {
                 }
                 this.STRValue -= _value;
                 this.duel.addMessage(this.getName() + " takes " + _value + " damages.");
+
+                if (this.STR <= 0 && this.extraLife > 0) {
+                    this.duel.mainFighter.killerBlessing += 1;
+
+                    var resetFighter = eval("new " + this.constructor.name + "(\"\")");
+                    resetFighter.duel = this.duel;
+                    this.STRValue = resetFighter.STRValue;
+                    this.extraLife -= 1;
+
+                    this.duel.addMessage(this.getName() + " uses an extra life!");
+                    this.duel.memorySoundEffects.push("extraLife");
+                }
                 return true;
             }
             else {

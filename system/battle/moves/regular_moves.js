@@ -28,6 +28,54 @@ class AdaptPP extends Move {
     }
 }
 
+class BigGuy extends Move {
+    constructor() {
+        super();
+        this.name = "Big Guy";
+        this.description = "Remove your opponent's DEX for next turn.";
+        this.autoPass = true;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " intimidates " + _target.getName() + "!");
+        _target.noDex = 2;
+
+        _user.duel.memorySoundEffects.push("flex");
+    }
+}
+
+class BigSatan extends Move {
+    constructor() {
+        super();
+        this.name = "Big Satan";
+        this.description = "Each fighter plays 5 random moves.";
+        this.dexChange = -20;
+        this.needsTarget = false;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " summons Satan's chaotic powers!");
+
+        var l = _user.duel.getAllFighters();
+        for (var i in l) {
+            if (l[i].isDead()) continue;
+            for (var j = 0; j < 5; j++) {
+                var storedMove = {};
+                storedMove["user"] = l[i];
+                storedMove["move"] = l[i].getRandomMove();
+                while (storedMove["move"] == BigSatan) {
+                    storedMove["move"] = l[i].getRandomMove();
+                }
+                storedMove["target"] = _user.duel.getRandomFighter();
+                _user.duel.memoryMoves.push(storedMove);
+            }
+        }
+
+        _user.duel.memorySoundEffects.push("darkMagic");
+        _user.duel.addAnimation("boomerang", 60, _user);
+    }
+}
+
 class Boomerang extends Move {
     constructor() {
         super();
@@ -425,8 +473,8 @@ class SawBlade extends Move {
         _target.bleedDamage += Math.floor(_user.STR/15);
         if (getRandomPercent() <= 10 && !_target.hasFightingStyle("scarred")) {
             _user.duel.addMessage(_target.getName() + " gets a scarred PP!");
-            _opponent.addFightingStyle("scarred");
-            _opponent.DEXValue += 10;
+            _target.addFightingStyle("scarred");
+            _target.DEXValue += 10;
         }
 
         _user.duel.addAnimation("cut", 60, _target, true, false);
@@ -523,13 +571,15 @@ class Yes extends Move {
 
         var all = _user.duel.getAllFighters();
         for (var i in all) {
-            if (all[i].truffleFriendly) {
+            if (all[i].truffleFriendly || (getRandomPercent() <= 20 && all[i].eldritchFriendly)) {
                 random = all[i];
             }
         }
-        if (_user.truffleFriendly) {
+        if (_user.truffleFriendly || (getRandomPercent() <= 20 && _user.eldritchFriendly)) {
             random = _user;
         }
+
+        if (_user.eldritchFriendly) nb += 20;
 
         _user.duel.addMessage(_user.getName() + " calls the Ancient Fungus!");
         _user.duel.addMessage("He will use " + nb + "% of his power in " + random.getName() + "!");
@@ -551,6 +601,7 @@ class Yes extends Move {
     }
 }
 
-const REGULAR_MOVE_LIST = [AdaptPP, Boomerang, BrocketeerDive, BronanSlam, Bullet, DeadBro, EncrustPP, FlexBro, HighFiveBro,
+const REGULAR_MOVE_LIST = [AdaptPP, BigGuy, BigSatan, Boomerang, BrocketeerDive, BronanSlam,
+    Bullet, DeadBro, EncrustPP, FlexBro, HighFiveBro,
     Hologram, InterrogationPoint, Kick, Pig, PregnantBro, PunchingPP, PunchingPPReallyHard,
     RedPill, Save, SawBlade, Scout, Steel, TurkeyBomb, Yes];

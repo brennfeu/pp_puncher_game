@@ -576,7 +576,7 @@ QuestManager.loadList([
             { // 0
                 "name": "priest test",
                 "description": "idk lol.",
-                "encounter": "2randomPriests"
+                "encounter": "2tutorialPriests"
             }
         ]
     }

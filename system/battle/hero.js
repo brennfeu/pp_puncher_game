@@ -21,6 +21,10 @@ class Hero extends Fighter {
             this.currentMovepool = [ InterrogationPoint ];
             return;
         }
+        else if (this.duel.forceSatan) {
+            this.currentMovepool = [ BigSatan ];
+            return;
+        }
         else {
             var commonMoves = [PunchingPP, PunchingPPReallyHard, Hologram, FlexBro, HighFiveBro];
             if (this.hasFightingStyle("versatile")) {

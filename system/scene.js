@@ -163,6 +163,11 @@ class Scene extends Phaser.Scene {
         this.loadImage("status/boomerang.png");
         this.loadImage("status/turkeyA.png");
         this.loadImage("status/turkeyB.png");
+        this.loadImage("status/extraLife.png");
+        this.loadImage("status/cowboy.png");
+        this.loadImage("status/eldritch.png");
+        this.loadImage("status/boner.png");
+        this.loadImage("status/salt.png");
 
         this.loadImage("status/other/depression.png");
         this.loadImage("status/other/fungus.png");
@@ -188,6 +193,7 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/heal.mp3");
         this.loadSound("battle/hurtA.mp3");
         this.loadSound("battle/hurtB.mp3");
+        this.loadSound("battle/extraLife.mp3");
 
         this.loadSound("battle/punchA.mp3");
         this.loadSound("battle/punchB.mp3");
@@ -202,9 +208,10 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/explosion.mp3");
         this.loadSound("battle/gun.mp3");
         this.loadSound("battle/woohoo.mp3");
+        this.loadSound("battle/jesus.mp3");
+        this.loadSound("battle/yeehaw.mp3");
 
         this.loadSound("battle/thisSucks.mp3");
-        this.loadSound("battle/yeehaw.mp3");
         this.loadSound("battle/uuh.mp3");
         this.loadSound("battle/ohYeah.mp3");
     }

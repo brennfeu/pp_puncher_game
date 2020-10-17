@@ -37,6 +37,7 @@ class Duel {
         this.illegalLegal = false;
         this.forceConfusion = false;
         this.allowCheating = false;
+        this.forceSatan = false;
 
         // parameters
         this.parameters = {};
@@ -206,6 +207,7 @@ class Duel {
         this.illegalLegal = false;
         this.forceConfusion = false;
         this.allowCheating = false;
+        if (getRandomPercent() <= 25) this.forceSatan = false;
 
         if (this.checkParam("turnCountdown", this.turnCount)) {
             this.duelState = "defeat";
@@ -486,6 +488,9 @@ class Duel {
         }
         if (this.allowCheating) {
             txt += "- Cheating can be used freely.\n"
+        }
+        if (this.forceSatan) {
+            txt += "- Hell on Earth!\n"
         }
         if (this.hasParam("turnCountdown")) {
             txt += "- Turns Left: " + (this.getParam("turnCountdown") - this.turnCount) + "\n";
