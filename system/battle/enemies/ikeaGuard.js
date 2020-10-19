@@ -2,7 +2,7 @@ class IkeaGuard extends Enemy {
     constructor(_name = "Ikea Guard") {
         super(_name);
 
-        this.STRValue = 70;
+        this.STRValue = 60;
 
         this.currentMovepool = [ PunchingPP, SawBlade ];
     }
@@ -24,7 +24,7 @@ class LostHermit extends IkeaGuard {
         this.STRValue = 30;
         this.DEXValue = 30;
 
-        this.pigHeal = 20;
+        this.pigHeal = 15;
 
         this.currentMovepool = [ PunchingPP ];
     }
@@ -33,7 +33,7 @@ class IkeaManager extends IkeaGuard {
     constructor(_name = "Ikea Manager") {
         super(_name);
 
-        this.STRValue = 200;
+        this.STRValue = 150;
 
         this.currentMovepool = [ PunchingPP, Save ];
     }
@@ -53,7 +53,7 @@ class EliteGuard extends IkeaGuard {
         super(_name);
 
         this.STRValue = 80;
-        this.boomerang = 3;
+        this.boomerang = 2;
 
         this.currentMovepool = this.currentMovepool.concat([ Pig ]);
     }
@@ -78,7 +78,7 @@ class IkeaKicker extends IkeaGuard {
     constructor(_name = "Kicker Guard") {
         super(_name);
 
-        this.STRValue = 100;
+        this.STRValue = 80;
 
         this.currentMovepool = [ Kick ];
     }
@@ -87,7 +87,7 @@ class IkeaDiver extends IkeaGuard {
     constructor(_name = "Jetpack Guard") {
         super(_name);
 
-        this.STRValue = 100;
+        this.STRValue = 80;
 
         this.currentMovepool = [ BrocketeerDive ];
     }
@@ -148,7 +148,7 @@ class IkeaPig extends Enemy {
     constructor(_name = "Ikea Pig") {
         super(_name);
 
-        this.STRValue = 80;
+        this.STRValue = 70;
 
         this.currentMovepool = [ Pig, PunchingPP ];
     }
@@ -182,7 +182,7 @@ class IkeaSawblade extends Machine {
     constructor(_name = "Ikea Sawblade") {
         super(_name);
 
-        this.STRValue = 100;
+        this.STRValue = 80;
         this.DEXValue = 0;
 
         this.attackMode = false;
@@ -231,7 +231,7 @@ class IkeaTurret extends Machine {
     constructor(_name = "Ikea Turret") {
         super(_name);
 
-        this.STRValue = 100;
+        this.STRValue = 80;
         this.DEXValue = 35;
 
         this.currentMovepool = [ Bullet ];
