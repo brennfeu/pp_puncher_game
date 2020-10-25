@@ -3,7 +3,7 @@ class Hero extends Fighter {
         super(_partyMember.name);
 
         var waifuSaved = ProgressManager.getSavedWaifus().length;
-        this.STRValue = 70 + waifuSaved*10;
+        this.STRValue = 80 + waifuSaved*10;
         this.DEXValue = 20 + waifuSaved*5;
 
         this.moveFrameObject = null;
@@ -11,6 +11,9 @@ class Hero extends Fighter {
 
         for (var i in _partyMember.fightingStyles) {
             this.addFightingStyle(_partyMember.fightingStyles[i]);
+        }
+        for (var i in _partyMember.gods) {
+            this.godsList.push(GodManager.getGod(_partyMember.gods[i]));
         }
     }
 
@@ -44,7 +47,7 @@ class Hero extends Fighter {
                         randomMove = randomFromList(ProgressManager.getMovesLikely());
                     }
                     // rare move
-                    else if (getRandomPercent() <= 2) {
+                    else if (getRandomPercent() <= 1 && getRandomPercent() <= 10) {
                         randomMove = this.getRandomMoveFromList(RARE_MOVE_LIST);
                     }
                     // the game is about punching pp, so you're going to punch pp. it's very unlikely not to get this move in the movepool
@@ -52,7 +55,7 @@ class Hero extends Fighter {
                         randomMove = PunchingPP;
                     }
 
-                    // we don't ccept null moves here, sorry
+                    // we don't accept null moves here, sorry
                     if (randomMove == null) {
                         continue;
                     }
@@ -77,6 +80,10 @@ class Hero extends Fighter {
             }
         }
 
+        // adds gods moves if has charges and gods
+        if (this.regularCharges > 0 && this.godsList.length > 0) this.currentMovepool.push(RegularPriestMove);
+        if (this.specialCharges > 0 && this.godsList.length > 0) this.currentMovepool.push(SpecialPriestMove);
+
         this.currentMovepool = shuffleArray(this.currentMovepool);
         this.hasNewMovepool = true; // scene reloads moves
     }
@@ -90,8 +97,17 @@ class Hero extends Fighter {
             if (_list.indexOf(move) > -1) {
                 return move;
             }
+
+            tries += 1;
         }
+        console.log("Warning: Could not find an unlocked move from the following list.");
+        console.log(_list);
         return null;
+    }
+
+    hasSynergy(_synergy) {
+        if (ProgressManager.getUnlockedGameMechanics().indexOf("Synergies") < 0) return false;
+        return super.hasSynergy(_synergy);
     }
 
     updateTextObjects() {

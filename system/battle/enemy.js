@@ -2,13 +2,15 @@ class Enemy extends Fighter {
     constructor(_name) {
         super(_name);
         this.currentMovepool = [ PunchingPP ];
-        this.randomMovepool = [ FlexBro, Hologram, Kick, InterrogationPoint, PunchingPP, PunchingPPReallyHard, SawBlade, Steel, Yes ];
+        this.randomMovepool = [ BigGuy, Bullet, Boomerang, BrocketeerDive,
+            FlexBro, Hologram, Kick, InterrogationPoint, PunchingPP, PunchingPPReallyHard, Pig,
+            SawBlade, Steel, Yes, ShieldMove ];
 
         this.isBoss = false;
     }
 
     getCurrentListOfMoves() {
-        var l = this.randomMovepool;
+        var l = this.currentMovepool.slice();
 
         // gods moves
         if (this.regularCharges > 0) l.push(RegularPriestMove);
@@ -16,12 +18,15 @@ class Enemy extends Fighter {
 
         return l;
     }
+    getRandomMove() {
+        return randomFromList(this.randomMovepool);
+    }
 
     selectMove() {
-        if (this.getCurrentListOfMoves().indexOf(SpecialPriestMove) > -1) {
+        if (this.getCurrentListOfMoves().indexOf(SpecialPriestMove) > -1 && this.godsList.length > 0) {
             return this.chosenMove = SpecialPriestMove;
         }
-        else if (this.getCurrentListOfMoves().indexOf(RegularPriestMove) > -1) {
+        else if (this.getCurrentListOfMoves().indexOf(RegularPriestMove) > -1 && this.godsList.length > 0) {
             return this.chosenMove = RegularPriestMove;
         }
 
@@ -45,6 +50,9 @@ class Enemy extends Fighter {
         this.spriteObject.destroy();
         this.STRTextObject.destroy();
         this.DEXTextObject.destroy();
+        for (var j in this.statusIconObjects) {
+            this.statusIconObjects[j].destroy();
+        }
     }
 
     static newInstance() {
