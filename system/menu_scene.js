@@ -1,7 +1,7 @@
 class MenuScene extends Scene {
     constructor() { try {
         super({key:"Menu"});
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     init(_data) { try {
         this.cursor = null;
@@ -9,7 +9,7 @@ class MenuScene extends Scene {
 
         this.textObjects = [];
         this.title = null;
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     preload() { try {
         this.startLoadingScreen();
@@ -20,7 +20,7 @@ class MenuScene extends Scene {
 
         this.loadImage("ui/menu/frame.png");
         this.loadMusic("TitleScreen.mp3");
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     create() { try {
         this.title = this.addText('PP PUNCHER ', 180, 40, {fontStyle: 'bold italic', fontSize: '60px'});
@@ -45,7 +45,7 @@ class MenuScene extends Scene {
         }
 
         this.playMusic("TitleScreen");
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     update() { try {
         if (this.isInOptions) {
@@ -96,7 +96,7 @@ class MenuScene extends Scene {
         if (this.justPressedControl("MENU")) {
             this.openOptions();
         }
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     getMainObj() {
         return this.textObjects[this.currentSelect];

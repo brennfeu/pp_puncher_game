@@ -1,7 +1,7 @@
 class BattleScene extends Scene {
     constructor() { try {
         super({key:"Battle"});
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     init(_data) { try {
         this.duel = _data["duel"];
@@ -43,7 +43,7 @@ class BattleScene extends Scene {
         this.autoSkipSpeed = 60;
         this.autoSkipCountdown = this.autoSkipSpeed;
         this.autoSkipNb = 0;
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     preload() { try {
         this.startLoadingScreen();
@@ -69,7 +69,7 @@ class BattleScene extends Scene {
         this.loadMusic(this.duel.place.getBattleTheme() + ".mp3");
         this.loadMusic(this.duel.place.getBossTheme() + ".mp3");
         this.loadMusic(this.duel.place.getVictoryTheme() + ".mp3");
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     create() { try {
         this.moveFrame = this.addImage("ui/battle/move_frame", 488, -1000);
@@ -99,7 +99,7 @@ class BattleScene extends Scene {
             this.blockedHeroFrames.push(bf);
         }
 
-        this.duel.logTitleObject = this.addText(this.duel.messageTitle, 810, 13, {fontStyle: 'bold'});
+        this.duel.logTitleObject = this.addText(this.duel.messageTitle, 810, 13, {fontStyle: 'bold', backgroundColor: "#000"});
         this.duel.logTextObject = this.addText(this.duel.getAllMessages(), 810, 57, {fontSize: '21px', wordWrap: {width: 400, height: 550}}, getTextSpeed());
 
         this.cursorHero = this.addImage("ui/cursor", -1000, -1000);
@@ -116,7 +116,7 @@ class BattleScene extends Scene {
         if (!ProgressManager.isStepCompleted(q.id, s.id)) {
             if (s.inFightDialogue != undefined) this.openDialogue(s.inFightDialogue);
         }
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     update() { try {
         if (this.isInOptions) {
@@ -131,6 +131,10 @@ class BattleScene extends Scene {
         if (this.unlockList.length > 0) {
             if (!this.isInUnlock) this.openUnlock();
             return this.unlockUpdate();
+        }
+        if (this.duel.memoryDialogues.length > 0) {
+            this.openDialogue(this.duel.memoryDialogues[0]);
+            this.duel.memoryDialogues.splice(0, 1);
         }
 
         this.checkEnemiesObjects();
@@ -155,6 +159,7 @@ class BattleScene extends Scene {
         else if (this.duel.duelState == "heroChoice") {
             this.autoSkipCountdown = this.autoSkipSpeed;
             this.autoSkipNb = 0;
+            this.duel.logTextObject.speed = getTextSpeed();
 
             this.duel.setTitle("FIGHTER CHOICE");
             this.cursorHero.setX(this.duel.heroes[this.currentSelectHero].spriteX + 20);
@@ -293,6 +298,7 @@ class BattleScene extends Scene {
                 this.resetStatusIcons();
                 this.autoSkipNb += 1;
                 this.autoSkipCountdown = Math.max(1, this.autoSkipSpeed - this.autoSkipNb);
+                this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/5);
             }
 
             while (this.duel.logTextObject.height > Math.min(500, this.duelStatusFrame.y-60)) {
@@ -318,6 +324,7 @@ class BattleScene extends Scene {
                 this.resetStatusIcons();
                 this.autoSkipNb += 1;
                 this.autoSkipCountdown = Math.max(1, this.autoSkipSpeed - this.autoSkipNb);
+                this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/5);
             }
 
             while (this.duel.logTextObject.height > Math.min(500, this.duelStatusFrame.y-60)) {
@@ -472,6 +479,7 @@ class BattleScene extends Scene {
         }
         this.duel.memoryAnimations = this.duel.memoryAnimations.filter(anim => anim.duration >= 0);
         for (var i in this.duel.memorySoundEffects) {
+            if (this.duel.memorySoundEffects[i] == null) continue;
             this.playSound("battle/" + this.duel.memorySoundEffects[i]);
         }
         this.duel.memorySoundEffects = [];
@@ -495,7 +503,7 @@ class BattleScene extends Scene {
         if (this.justPressedControl("MENU")) {
             this.openOptions();
         }
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     updateMovepoolObjects(_reset = false) {
         for (var i in this.moveList) {

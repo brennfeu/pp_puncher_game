@@ -1,7 +1,7 @@
 class AreaScene extends Scene {
     constructor() { try {
         super({key:"Area"});
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     init(_data) { try {
         this.area = AreaManager.getArea(_data["areaId"]);
@@ -25,7 +25,7 @@ class AreaScene extends Scene {
         this.readyForBattle = false;
 
         this.tutorialWarning = false;
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     preload() { try {
         this.startLoadingScreen();
@@ -40,7 +40,7 @@ class AreaScene extends Scene {
         this.loadImage("ui/area/quest_frame.png");
 
         this.loadMusic(this.area.getAreaTheme() + ".mp3");
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     create() { try {
         this.addImage("ui/area/log_frame", 792, 0);
@@ -56,7 +56,7 @@ class AreaScene extends Scene {
         for (var i in l) {
             var data = {};
             if (l[i].isCompleted()) data["fontStyle"] = "italic";
-            this.questTexts.push(this.addText(l[i].getName(), 30, 10 + i*22, data));
+            this.questTexts.push(this.addText(l[i].getName() + " ", 30, 10 + i*22, data));
         }
         this.addText("Exit Area", 30, 10 + (l.length+1)*22);
         this.questCursor = this.addText(">", 5, 10);
@@ -98,7 +98,7 @@ class AreaScene extends Scene {
         }
 
         this.stopLoadingScreen();
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     update() { try {
         if (this.isInOptions) {
@@ -211,7 +211,7 @@ class AreaScene extends Scene {
         if (this.justPressedControl("MENU")) {
             this.openOptions();
         }
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     quitScene() {
         if (!ProgressManager.isStepCompleted(1, 2) && !this.tutorialWarning) {

@@ -1,7 +1,7 @@
 class MapScene extends Scene {
     constructor() { try {
         super({key:"Map"});
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     init(_data) { try {
         this.cursor = null;
@@ -17,7 +17,7 @@ class MapScene extends Scene {
         this.areaTexts = [];
 
         this.speOptTexts = [];
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     preload() { try {
         this.startLoadingScreen();
@@ -34,7 +34,7 @@ class MapScene extends Scene {
         this.loadImage("ui/cursor.png");
 
         this.loadMusic("OutsideTheme.mp3");
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     create() { try {
         this.addImage("ui/map/log_frame", 792, 0); // divisé par 3 : 131+i*263
@@ -77,7 +77,7 @@ class MapScene extends Scene {
             // init cutscene
             return this.openCutscene(1);
         }
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     update() { try {
         if (this.isInOptions) {
@@ -193,7 +193,7 @@ class MapScene extends Scene {
         if (this.justPressedControl("MENU")) {
             this.openOptions();
         }
-    } catch(e) { TRIGGER_ERROR(e) } }
+    } catch(e) { TRIGGER_ERROR(this, e) } }
 
     updateTexts() {
         for (var i in this.areaTexts) {
