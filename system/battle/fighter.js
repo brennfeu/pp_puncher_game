@@ -386,10 +386,6 @@ class Fighter {
 
         var a = this.DEXValue + this.DEXBonus;
 
-        if (this.damageBuildUp > 0) {
-            a = this.DEXBonus;
-        }
-
         if (this.hasFightingStyle("big")) {
             a -= 5;
         }
@@ -423,6 +419,9 @@ class Fighter {
         }
         if (this.scoutBuff > 0) {
             a += 20;
+        }
+        if (this.damageBuildUp > 0) {
+            a -= 30;
         }
         if (this.waifuDetermination > 0) {
             a += this.waifuDetermination*5;

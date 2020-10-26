@@ -1,4 +1,7 @@
 GodManager.loadList([
+    // IMPORTANT NOTE:
+    // when adding new gods, gotta go through older enemies to see if they could use it
+
     // Regular Gods
     new RegularGod(
         "Brenn",

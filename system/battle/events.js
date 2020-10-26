@@ -37,7 +37,7 @@ EventManager.addEvent(
         _duel.addMessage("There is no DEX modifier for moves for this turn!");
         _duel.noDexModifier = true;
     }
-);
+); // 1 (random numbers associated to the event, gotta make sure it doesn't go higher than 100)
 EventManager.addEvent(
     "PP Purge", // 1
     "Illegal moves can be used freely for this turn.",
@@ -46,7 +46,7 @@ EventManager.addEvent(
         _duel.addMessage("Illegal moves can now be used freely for this turn.");
         _duel.illegalLegal = true;
     }
-);
+); // 2
 EventManager.addEvent(
     "Sexual Confusion", // 2
     "Movepool only consists of (?) for this turn.",
@@ -54,7 +54,7 @@ EventManager.addEvent(
         _duel.addMessage("Your PPs are confused for this turn.");
         _duel.forceConfusion = true;
     }
-);
+); // 3
 EventManager.addEvent(
     "PP Enlightenment", // 3
     "Makes cheating (using the PP Bible) allowed. Illegal moves are still illegal.",
@@ -63,7 +63,7 @@ EventManager.addEvent(
         _duel.addMessage("Illegal moves are still illegal.");
         _duel.allowCheating = true;
     }
-);
+); // 4
 EventManager.addEvent(
     "Gods Birthday Gift", // 4
     "Grants a regular priest move charge to all fighters.",
@@ -78,7 +78,7 @@ EventManager.addEvent(
     },
     10,
     10
-);
+); // 5 - 14
 EventManager.addEvent(
     "Gods Christmas Gift", // 5
     "Grants a special priest move charge to all fighters.",
@@ -93,4 +93,4 @@ EventManager.addEvent(
     },
     3,
     25
-);
+); // 15 - 17

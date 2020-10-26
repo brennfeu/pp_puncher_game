@@ -3,6 +3,7 @@ class Weeb extends Enemy {
         super(_name);
 
         this.STRValue = 15;
+        this.addRandomGod("waifu");
     }
 }
 

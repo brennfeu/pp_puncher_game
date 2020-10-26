@@ -1,6 +1,8 @@
 class Machine extends Enemy {
     constructor(_name = "Machine") {
         super(_name);
+
+        // TODO God = Man Who Made A Monster
     }
 
     turnChange() {

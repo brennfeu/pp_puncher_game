@@ -21,6 +21,7 @@ class WoodCutting extends Move {
         try {
             var nb = Math.floor(getRandomPercent()/10)+1;
             var total = GREENWORKS.getStatInt("WOOD");
+            nb += Math.floor((_user.STR+total)/19);
             GREENWORKS.setStat("WOOD", total + nb);
             GREENWORKS.storeStats(function(_idk) { if(GREENWORKS.getStatInt("WOOD") > 1000000000) { AchievementManager.unlockAchievement(5); } }, function(_err) {});
             _user.duel.addMessage(_user.getName() + " gets " + nb + " wood.");

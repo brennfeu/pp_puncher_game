@@ -5,6 +5,13 @@ class Student extends Enemy {
         this.currentMovepool = [Boomerang, BrocketeerDive, Bullet, FlexBro,
             Hologram, Kick, Pig, PunchingPP, PunchingPPReallyHard,
             RedPill, Save, SawBlade, Scout, Steel];
+
+        if (getRandomPercent() <= 80) {
+            this.addRandomGod("waifu");
+        }
+        else {
+            this.addRandomGod("regular");
+        }
     }
 }
 

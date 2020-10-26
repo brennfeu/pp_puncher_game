@@ -118,13 +118,13 @@ class BronanSlam extends Move {
     constructor() {
         super();
         this.name = "Build-Up";
-        this.description = "The next attack will deal 5 times the damages, but the user has no natural DEX until the damages are unleashed. The multiplicator stacks if used multiple times.";
+        this.description = "The next attack will deal 5 times the damages, but the user has -30 DEX until the damages are unleashed. The multiplicator stacks if used multiple times.";
         this.needsTarget = false;
     }
 
     execute(_user, _target = null) {
         _user.duel.addMessage(_user.getName() + " builds up!");
-        _user.damageBuildUp =+ 5;
+        _user.damageBuildUp += 5;
 
         _user.duel.memorySoundEffects.push("flex");
         _user.duel.addAnimation("build-up", 60, _user);

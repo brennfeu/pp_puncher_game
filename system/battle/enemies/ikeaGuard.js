@@ -5,6 +5,9 @@ class IkeaGuard extends Enemy {
         this.STRValue = 60;
 
         this.currentMovepool = [ PunchingPP, SawBlade ];
+
+        this.godsList = [ GodManager.getGod(randomFromList([ "DickDickSon666", "Hello There Puds", "UREGonnaGetRAPED" ])) ];
+        // TODO add leprepuds to random list
     }
 }
 class EvilMaintainer extends IkeaGuard {
@@ -258,6 +261,10 @@ class IkeaMonstruosity extends Machine {
         else {
             this.chosenMove = PunchingPP;
         }
+    }
+
+    getNextPhaseText() {
+        return this.getName() + "'s furniture floats around and creates a new, more powerful Monstruosity!";
     }
 }
 class IkeaMonstruosityPhaseTwo extends Machine {

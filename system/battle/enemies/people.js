@@ -8,6 +8,8 @@ class VonTruffle extends Enemy {
         this.currentMovepool = [ Yes ];
 
         this.truffleFriendly = true;
+
+        this.godsList = [ GodManager.getGod("DickDickSon666") ]
     }
 }
 
@@ -36,6 +38,8 @@ class ShadowAphro extends Enemy {
         super(_name);
 
         this.STRValue = 300;
+
+        // TODO GOD
     }
 }
 
@@ -47,6 +51,8 @@ class YandereDev extends Enemy {
 
         this.isBoss = true;
         this.nextPhase = ChaliceYandereDev;
+
+        // TODO GOD
     }
 }
 class ChaliceYandereDev extends Enemy {
@@ -57,5 +63,7 @@ class ChaliceYandereDev extends Enemy {
         this.DEXValue = 50;
 
         this.isBoss = true;
+
+        // TODO GOD
     }
 }

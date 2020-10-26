@@ -8,6 +8,8 @@ class EnergyCreature extends Enemy {
     getHurtSound() {
         return "soul_hurt";
     }
+
+    // TODO god = Hermit
 }
 
 class SpiritGuardian extends EnergyCreature {

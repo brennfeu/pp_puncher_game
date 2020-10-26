@@ -257,7 +257,9 @@ class Duel {
         for (var i in events) {
             randomRoll -= EventManager.getEvent(events[i]).likeness;
             if (randomRoll <= 0) {
-                return this.triggerEvent(EventManager.getEvent(events[i]).id);
+                var ev = EventManager.getEvent(events[i]);
+                if (ev.nbMoveRequired > this.moveCount) return;
+                return this.triggerEvent(ev.id);
             }
         }
     }

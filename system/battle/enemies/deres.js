@@ -7,6 +7,8 @@ class Dere extends Student {
     }
 }
 
+// TODO always keep this up to date with new waifus if they fit the criteria
+
 class Dandere extends Dere {
     constructor(_name = "Dandere") {
         super(_name);
@@ -44,6 +46,8 @@ class Tsundere extends Dere {
         this.currentMovepool = [ PunchingPP ];
 
         this.favOpp = null;
+
+        this.godsList = [ GodManager.getGod(randomFromList([ "Senjougahara" ])) ];
     }
 
     selectTarget() {
