@@ -395,7 +395,7 @@ QuestManager.loadList([
                 "unlockQuests": [ 16 ],
                 "unlockAreas": [ 3 ],
                 "saveWaifu": "Ryuko",
-                "postFightCutscene": 5
+                "postFightCutscene": 6
             },
         ]
     },
@@ -491,6 +491,15 @@ QuestManager.loadList([
                     "arcadeMode": true,
                     "arcadeQuestStarter": 6
                 }
+            },
+            { // 3
+                "name": AreaManager.getArea(3).name,
+                "description": AreaManager.getArea(3).description,
+                "unlockNextStep": false,
+                "duelParam": {
+                    "arcadeMode": true,
+                    "arcadeQuestStarter": 16
+                }
             }
         ]
     },
@@ -567,16 +576,266 @@ QuestManager.loadList([
         ]
     },
     { // 16
-        "name": "idk",
-        "description": ".",
+        "name": "Temple Gates",
+        "description": "This is the entry of the Allfaiths Temple. Your goal is to reach the center of the building, where Eldon usually is.",
+        "isMain": true,
+        "areaId": 3,
+
+        "questSteps": [
+            { // 0
+                "name": "Hehe",
+                "description": "The temple has lots of magic protections placed by the different priests. You can't even approach it, without triggering a bunch of spirits, summoned here by divine powers.",
+                "encounter": "spiritGuardians"
+            },
+            { // 1
+                "name": "The Blind Guardian",
+                "description": "As you open the entry door, a spirit materializes before you. A large spectral guardian appears, with a gleaming sword in one hand, and a giant shield in the other.",
+                "encounter": "guardiansOfFaith"
+            },
+            { // 2
+                "name": "In the Name Of",
+                "description": "You enter the temple, and are then attacked by 2 clerics that were passing by. You don't even need excuses to punch their PPs, they all start to fight before you trigger them.",
+                "encounter": "2tutorialClerics"
+            },
+            { // 3
+                "name": "Worldwide Cleaners",
+                "description": "What would be the world without maintainers? Probably would end up a dirty place. It's a good thing maintainers are there to keep thing clean.",
+                "encounter": "clericMaintainers"
+            },
+            { // 4
+                "name": "The Summoner",
+                "description": "You finally found the cleric that summoned the guardians at the entrance. Punching the guy's PP should prevent any more guardian to appear.",
+                "encounter": "clericAndSpirits"
+            },
+            { // 5
+                "name": "Forcefield",
+                "description": "An energy barrier is preventing you to go further. Destroy it, and you'll be able to enter the center of the temple!",
+                "encounter": "energyBarrier",
+                "unlockQuests": [ 17 ],
+                "postFightDialogue": 25,
+                "unlockPartyMembers": [ "Eldon" ]
+            }
+        ]
+    },
+    { // 17
+        "name": "Trials of Faith",
+        "description": "The next waifu, Priestess, is in this temple. She is at the end of this corridor.",
+        "isMain": true,
+        "areaId": 3,
+
+        "questSteps": [
+            { // 0
+                "name": "Faith",
+                "description": "Everything around you turns white. As you try to continue to walk, you hurt yourself against an invisible wall. Behold, the faith you hold onto the Gods of this world.",
+                "encounter": "faith",
+                "unlockQuests": [ 18, 19, 20, 21, 22 ],
+                "inFightDialogue": 26,
+                "unlockGameMechanics": [ "Gods" ],
+                "unlockMoves": [ RegularPriestMove, SpecialPriestMove ],
+                "unlockEvents": [ 4, 5 ],
+                "unlockNextStep": false
+            },
+            { // 1
+                "name": "Trial of Brenn",
+                "description": "Now that you have proven your faith toward the Holy Brenn Trinity, you may now pass the trial of Brenn.",
+                "encounter": "trialBrenn",
+                "unlockNextStep": false
+            },
+            { // 2
+                "name": "Trial of Pudding",
+                "description": "Now that you have proven your faith toward the Unholy Pudding Trinity, you may now pass the trial of Pudding.",
+                "encounter": "trialPudding",
+                "unlockNextStep": false
+            },
+            { // 3
+                "name": "Trial of Eldon",
+                "description": "Now that you have proven your faith toward the Eldon Duality, you may now pass the trial of Eldon",
+                "encounter": "trialEldon",
+                "unlockQuests": [ 23 ],
+                "unlockNextStep": false
+            },
+            { // 4
+                "name": "Trial of Energy",
+                "description": "An energy barrier is preventing you to reach Priestess! This one seems to be different, it seems to have some kind of... intellect?",
+                "encounter": "energyBarrier2"
+            },
+            { // 5
+                "name": "Trial of Faith",
+                "description": "Did you think it would be that easy? Here comes the last trial. Prove your faith, and you shall be rewareded.",
+                "encounter": "faithForReal",
+                "saveWaifu": "Priestess",
+                "unlockQuestSteps": [ [12, 3] ]
+            }
+        ]
+    },
+    { // 18
+        "name": "Altars of B",
+        "description": "This area of the temple is dedicated to the Holy Brenn Trinity.",
+        "isMain": true,
+        "areaId": 3,
+
+        "questSteps": [
+            { // 0
+                "name": "Brenn",
+                "description": "To truly understand Brenn, you must fight clerics that worship Brenn.",
+                "encounter": "brennClerics",
+                "unlockGods" : [ "Brenn" ]
+            },
+            { // 1
+                "name": "Country Music Brenn",
+                "description": "To truly understand Country Music Brenn, you must fight clerics that worship Country Music Brenn.",
+                "encounter": "countryBrennClerics",
+                "unlockGods" : [ "Country Music Brenn" ]
+            },
+            { // 2
+                "name": "Chad Brenn",
+                "description": "To truly understand Chad Brenn, you must fight clerics that worship Chad Brenn.",
+                "encounter": "chadBrennClerics",
+                "unlockGods" : [ "Chad Brenn" ]
+            },
+            { // 3
+                "name": "Holy Trinity",
+                "description": "Here comes the High Priest of the Holy Brenn Trinity. Defeat him, and you'll be ready for the Trial of Brenn.",
+                "encounter": "highClericBrenn",
+                "unlockQuestSteps": [ [ 17, 1 ] ]
+            }
+        ]
+    },
+    { // 19
+        "name": "Altars of P",
+        "description": "This area of the temple is dedicated to the Unholy Pudding Trinity.",
+        "isMain": true,
+        "areaId": 3,
+
+        "questSteps": [
+            { // 0
+                "name": "Hello There Puds",
+                "description": "To truly understand Hello There Puds, you must fight clerics that worship Hello There Puds.",
+                "encounter": "helloThereClerics",
+                "unlockGods" : [ "Hello There Puds" ]
+            },
+            { // 1
+                "name": "DickDickSon666",
+                "description": "To truly understand DickDickSon666, you must fight clerics that worship DickDickSon666.",
+                "encounter": "dickDickSonClerics",
+                "unlockGods" : [ "DickDickSon666" ]
+            },
+            { // 2
+                "name": "UREGonnaGetRAPED",
+                "description": "To truly understand UREGonnaGetRAPED, you must fight clerics that worship UREGonnaGetRAPED.",
+                "encounter": "rapistClerics",
+                "unlockGods" : [ "UREGonnaGetRAPED" ]
+            },
+            { // 3
+                "name": "Unholy Trinity",
+                "description": "Here comes the High Priest of the Unholy Pudding Trinity. Defeat him, and you'll be ready for the Trial of Pudding.",
+                "encounter": "highClericPuds",
+                "unlockQuestSteps": [ [ 17, 2 ] ]
+            }
+        ]
+    },
+    { // 20
+        "name": "Altars of E",
+        "description": "This area of the temple is dedicated to the Eldon Duality.",
+        "isMain": true,
+        "areaId": 3,
+
+        "questSteps": [
+            { // 0
+                "name": "Salt King",
+                "description": "To truly understand Salt King, you must fight clerics that worship Salt King.",
+                "encounter": "saltKingClerics",
+                "unlockGods" : [ "Salt King" ]
+            },
+            { // 1
+                "name": "Ranger",
+                "description": "To truly understand Ranger, you must fight clerics that worship Ranger.",
+                "encounter": "rangerClerics",
+                "unlockGods" : [ "Ranger" ]
+            },
+            { // 2
+                "name": "Eldon Duality",
+                "description": "Here comes the High Priest of the Eldon Duality. Defeat him, and you'll be ready for the Trial of Eldon.",
+                "encounter": "highClericEldon",
+                "unlockQuestSteps": [ [ 17, 3 ] ]
+            }
+        ]
+    },
+    { // 21
+        "name": "Another Way",
+        "description": "What if there was a way to worship waifus as gods? The answer probably lies somewhere in this temple.",
         "isMain": false,
         "areaId": 3,
 
         "questSteps": [
             { // 0
-                "name": "priest test",
-                "description": "idk lol.",
-                "encounter": "2tutorialPriests"
+                "name": "Pray the Waifus",
+                "description": "You've started praying to your waifus, but the people here aren't happy with that. Kill their PP to reduce world unhappiness.",
+                "encounter": "3clerics"
+            },
+            { // 1
+                "name": "Weeb Clerics",
+                "description": "Let's see if you can bring an ultimate weeb in here to see what happens. Nothing would go wrong.",
+                "encounter": "clericsAndWeeb",
+                "postFightDialogue": 27
+            }
+        ]
+    },
+    { // 22
+        "name": "True Clerics",
+        "description": "Being able to pray one god is useful, but not enough. You must learn to have multiple gods by your side.",
+        "isMain": true,
+        "areaId": 3,
+
+        "questSteps": [
+            { // 0
+                "name": "2",
+                "description": "2 clerics are guarding the area, this shouldn't be much an issue.",
+                "encounter": "2clerics"
+            },
+            { // 1
+                "name": "2x2",
+                "description": "2 waves of clerics to see if you can handle 2 times the powers of gods.",
+                "encounter": "2clerics",
+                "duelParam": { "nextEncounters": [ "2clerics" ] },
+                "postFightDialogue": 30
+            },
+            { // 2
+                "name": "3",
+                "description": "3 clerics are guarding the area, you can do it! Don't forget to use your newfound powers!",
+                "encounter": "3clerics"
+            },
+            { // 3
+                "name": "3x3",
+                "description": "Okay, I think you got the point, you're going to fight 9 clerics in total.",
+                "encounter": "3clerics",
+                "duelParam": { "nextEncounters": [ "3clerics", "3clerics" ] },
+                "postFightDialogue": 31,
+                "unlockQuestSteps": [ [ 23, 1 ] ]
+            }
+        ]
+    },
+    { // 23
+        "name": "Synergies",
+        "description": "Learn to combine Gods effectively.",
+        "isMain": true,
+        "areaId": 3,
+
+        "questSteps": [
+            { // 0
+                "name": "Spirits... Again",
+                "description": "As you enter yet another area of this huge temple, you stumble upon sprits. Defeat all 3 of them to gain access to the real challenge.",
+                "encounter": "synergySpirits",
+                "unlockNextStep": false
+            },
+            { // 1
+                "name": "High Cleric Waves",
+                "description": "Defeat all 3 High Clerics, respectively of the Eldon Duality, the Holy Brenn Trinity and the Unholy Pudding Trinity, one after another.",
+                "encounter": "highClericEldon",
+                "duelParam": { "nextEncounters": [ "highClericBrenn", "highClericPuds" ] },
+                "unlockNextStep": false,
+                "unlockGameMechanics": [ "Synergies" ],
+                "unlockQuestSteps": [ [17, 4] ]
             }
         ]
     }

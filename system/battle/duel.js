@@ -6,16 +6,17 @@ class Duel {
         this.place = _place;
 
         this.duelState = ""; // "heroChoice", "moveChoice", "targetChoice", "movePlaying", "turnChange", "victory", "defeat"
+        this.forcedState = "";
 
         this.memoryMoves = []; // {"user":(fighterObject), "target":(fighterObject), "move":(moveObject)}
         this.memoryAnimations = []; // {"duration":(nbFrames), "image":(linkOfAnimationImage), "fighter":(fighterObject), "randomized":(bool), "isAbove":(bool)}
         this.memorySoundEffects = [];
+        this.memoryDialogues = [];
+        this.memoryTurnChange = []; // functions
 
         this.eventMemory = [];
         this.lastEvent = null;
         this.forceEventLoop = 0;
-
-        this.memoryTurnChange = []; // functions
 
         this.currentFighterIndex = 0;
         this.mainFighter = null; // just for looks
@@ -56,6 +57,11 @@ class Duel {
             this.changeEncounter(encounter);
         }
 
+        // next encounters
+        this.nextEncounters = [];
+        if (this.hasParam("nextEncounters")) {
+            this.nextEncounters = this.getParam("nextEncounters");
+        }
 
         // Objects on screen --> instantiated by battle scene
         this.logTitleObject = null;
@@ -87,6 +93,9 @@ class Duel {
             this.getAllFighters()[i].duel = this; // can't do it in constructor cause not instantiated yet :(
         }
 
+        this.setTitle("DUEL START");
+        this.addMessage("TIME FOR A DUEL");
+
         // when saving waifus
         if (this.checkParam("waifuDetermination", true)) {
             for (var i in this.heroes) {
@@ -94,14 +103,18 @@ class Duel {
             }
         }
 
-        this.setTitle("DUEL START");
-        this.addMessage("TIME FOR A DUEL");
+        // special area effects
+        if (this.place.id == 3 && ProgressManager.getUnlockedGods().length > 0) {
+            // allfaiths temple forces charges
+            this.triggerEvent(4);
+        }
 
         this.startNewTurn(true);
     }
 
     startNewTurn(_skipTurnChange = false) {
         if (["victory", "defeat"].indexOf(this.duelState) > -1) return;
+        if (["victory", "defeat"].indexOf(this.forcedState) > -1) return this.duelState = this.forcedState;
 
         this.selectedHero = null;
         this.selectedMove = null;
@@ -128,11 +141,20 @@ class Duel {
 
         nb = 0;
         for (var i in this.enemies) {
-            if (this.enemies[i].isAlive()) {
+            if (this.enemies[i].isAlive() || this.enemies[i].nextPhase != null) {
                 nb += 1;
             }
         }
         if (nb == 0) {
+            // next encounter
+            if (this.nextEncounters.length > 0) {
+                var encounter = new Encounter(this.nextEncounters[0]);
+                this.nextEncounters.splice(0, 1);
+
+                this.changeEncounter(encounter);
+                return this.startNewTurn(true);
+            }
+
             // arcade mode next
             if (this.checkParam("arcadeMode", true)) {
                 this.arcadeModeCounter += 1;
@@ -195,6 +217,12 @@ class Duel {
                     this.memoryTurnChange[0](l[this.currentFighterIndex-1]);
                     return this.memoryTurnChange.splice(0, 1);
                 }
+                if (this.memoryMoves.length > 0) {
+                    this.mainFighter = this.memoryMoves[0]["user"];
+                    this.memoryMoves[0]["user"].executeMove(this.memoryMoves[0]["move"], this.memoryMoves[0]["target"], true);
+                    this.memoryMoves.shift();
+                    return;
+                }
             }
         }
         return this.startNewTurn(true);
@@ -207,7 +235,7 @@ class Duel {
         this.illegalLegal = false;
         this.forceConfusion = false;
         this.allowCheating = false;
-        if (getRandomPercent() <= 25) this.forceSatan = false;
+        if (getRandomPercent() <= 50) this.forceSatan = false;
 
         if (this.checkParam("turnCountdown", this.turnCount)) {
             this.duelState = "defeat";
@@ -351,8 +379,11 @@ class Duel {
         }
 
         // cheating
-        if (_fighter.currentMovepool.indexOf(_fighter.chosenMove) < 0 && getRandomPercent() <= _fighter.chosenMove.newInstance().getCheatProb() &&
-          !(this.forceConfusion && _fighter.chosenMove == InterrogationPoint) && !this.allowCheating) {
+        if (_fighter.getCurrentListOfMoves().indexOf(_fighter.chosenMove) < 0 &&
+          getRandomPercent() <= _fighter.chosenMove.newInstance().getCheatProb() &&
+          !(this.forceConfusion && _fighter.chosenMove == InterrogationPoint) &&
+          !(this.forceSatan && _fighter.chosenMove == BigSatan) &&
+          !this.allowCheating) {
             illegal = true;
         }
 
@@ -362,7 +393,7 @@ class Duel {
         }
 
         if (illegal) {
-            this.addMessage(_fighter.getName() + " is doing illegal stuff ! He looses 20 DEX and 10 STR.");
+            this.addMessage(_fighter.getName() + " is doing illegal stuff! He looses 20 DEX and 10 STR.");
             this.addAnimation("illegal", 60, _fighter);
             this.memorySoundEffects.push("lightning");
             _fighter.DEXValue -= 20;
@@ -500,5 +531,15 @@ class Duel {
             txt = txt.slice(0, -1);
         }
         return txt;
+    }
+
+    triggerVictory() {
+        this.forcedState = "victory";
+        this.duelState = "victory";
+        this.memoryMoves = [];
+        this.memoryAnimations = [];
+        this.memorySoundEffects = [];
+        this.memoryDialogues = [];
+        this.memoryTurnChange = [];
     }
 }

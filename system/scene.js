@@ -168,15 +168,23 @@ class Scene extends Phaser.Scene {
         this.loadImage("status/eldritch.png");
         this.loadImage("status/boner.png");
         this.loadImage("status/salt.png");
+        this.loadImage("status/shield.png");
+        this.loadImage("status/silence.png");
+        this.loadImage("status/kamui.png");
+        this.loadImage("status/lifeFiber.png");
 
         this.loadImage("status/other/depression.png");
         this.loadImage("status/other/fungus.png");
         this.loadImage("status/other/offensive.png");
         this.loadImage("status/other/defensive.png");
+        this.loadImage("status/other/scary.png");
+        this.loadImage("status/other/faithShield.png");
 
         this.loadImage("status/special/killerBlessing.png");
         this.loadImage("status/special/waifuDetermination.png");
         this.loadImage("status/special/death.png");
+        this.loadImage("status/special/regularCharge.png");
+        this.loadImage("status/special/specialCharge.png");
     }
 
     loadUiSounds() {
@@ -194,6 +202,7 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/hurtA.mp3");
         this.loadSound("battle/hurtB.mp3");
         this.loadSound("battle/extraLife.mp3");
+        this.loadSound("battle/soul_hurt.mp3");
 
         this.loadSound("battle/punchA.mp3");
         this.loadSound("battle/punchB.mp3");
@@ -210,6 +219,7 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/woohoo.mp3");
         this.loadSound("battle/jesus.mp3");
         this.loadSound("battle/yeehaw.mp3");
+        this.loadSound("battle/ghostSound.mp3");
 
         this.loadSound("battle/thisSucks.mp3");
         this.loadSound("battle/uuh.mp3");
@@ -312,7 +322,7 @@ class Scene extends Phaser.Scene {
         this.forceTint = [];
 
         try {
-            GREENWORKS.initAPI();
+            if (!GREENWORKS.initAPI()) GREENWORKS = null;
         }
         catch(e) {}
 
@@ -450,6 +460,11 @@ class Scene extends Phaser.Scene {
                     this.unlockList.push(["Event", s.unlockEvents[i]])
                 }
             }
+            if (s.unlockGods != undefined) {
+                for (var i in s.unlockGods) {
+                    this.unlockList.push(["God", s.unlockGods[i]])
+                }
+            }
 
             if (s.saveWaifu != undefined) {
                 this.unlockList.push(["Waifu", s.saveWaifu]);
@@ -510,7 +525,7 @@ class Scene extends Phaser.Scene {
 
         if (unlockType == "Waifu") {
             this.unlockTitle.setText(unlockType + " Saved");
-            this.unlockDesc.setText(GodManager.getGod(unlock).name);
+            this.unlockDesc.setText(GodManager.getGod(unlock).name + "\n\n" + GodManager.getGod(unlock).description[0]);
             return;
         }
 
@@ -533,6 +548,9 @@ class Scene extends Phaser.Scene {
                 break;
             case "Event":
                 this.unlockDesc.setText(EventManager.getEvent(unlock).getDescription());
+                break;
+            case "God":
+                this.unlockDesc.setText(GodManager.getGod(unlock).name + "\n" + GodManager.getGod(unlock).getDescription());
                 break;
         }
     }
@@ -569,14 +587,7 @@ class Scene extends Phaser.Scene {
 
         // base description
         this.bibleDescription.setText(ProgressManager.getUnlockedPartyMembers()[this.cursorASelect].getDescription());
-
-        var l = [];
-        if (ProgressManager.getUnlockedGameMechanics().indexOf("Fighting Styles") > -1) {
-            l = l.concat(ProgressManager.getUnlockedFightingStyles());
-        }
-        for (var i in l) {
-            this.bibleTextsB.push(this.addText(l[i], 400, 84+22*i))
-        }
+        this.partyUpdateDesc();
     }
     closeParty() {
         this.isInParty = false;
@@ -656,13 +667,26 @@ class Scene extends Phaser.Scene {
 
             if (this.justPressedControl("ENTER")) {
                 var pm = ProgressManager.getUnlockedPartyMembers()[this.cursorASelect];
-                var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorBSelect];
 
-                if (pm.fightingStyles.indexOf(fs) > -1) {
-                    pm.fightingStyles.splice(pm.fightingStyles.indexOf(fs), 1);
+                if (this.partyIsOnFightingStyles()) {
+                    var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorBSelect];
+
+                    if (pm.fightingStyles.indexOf(fs) > -1) {
+                        pm.fightingStyles.splice(pm.fightingStyles.indexOf(fs), 1);
+                    }
+                    else {
+                        pm.fightingStyles.push(fs);
+                    }
                 }
-                else {
-                    pm.fightingStyles.push(fs);
+                else if (this.partyIsOnGods()) {
+                    var god = ProgressManager.getUnlockedGods()[this.cursorBSelect - ProgressManager.getUnlockedFightingStyles().length-1].name;
+
+                    if (pm.gods.indexOf(god) > -1) {
+                        pm.gods.splice(pm.gods.indexOf(god), 1);
+                    }
+                    else if (pm.gods.length < ProgressManager.getNbGodSlots()) {
+                        pm.gods.push(god);
+                    }
                 }
 
                 PartyManager.updateLocalStorage();
@@ -684,21 +708,46 @@ class Scene extends Phaser.Scene {
     partyUpdateDesc() {
         var desc = ProgressManager.getUnlockedPartyMembers()[this.cursorASelect].getDescription();
         if (this.bibleStep != 0) {
-            var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorBSelect];
-            desc += "\n\n\n" + fs + ":\n" + FightingStyles.getDesc(fs);
+            if (this.partyIsOnFightingStyles()) {
+                var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorBSelect];
+                desc = ProgressManager.getUnlockedPartyMembers()[this.cursorASelect].getDescription("fs");
+                desc += "\n\n" + fs + ":\n" + FightingStyles.getDesc(fs);
+            }
+            else if (this.partyIsOnGods()) {
+                var god = ProgressManager.getUnlockedGods()[this.cursorBSelect - ProgressManager.getUnlockedFightingStyles().length-1];
+                desc = ProgressManager.getUnlockedPartyMembers()[this.cursorASelect].getDescription("gods");
+                desc += "\n\n" + god.name + "\n" + god.getDescription();
+            }
         }
         this.bibleDescription.setText(desc);
 
         for (var i in this.bibleTextsB) this.bibleTextsB[i].destroy();
         this.bibleTextsB = [];
+
         var l = [];
         if (ProgressManager.getUnlockedGameMechanics().indexOf("Fighting Styles") > -1) {
             l = l.concat(ProgressManager.getUnlockedFightingStyles());
+        }
+        var gods = ProgressManager.getUnlockedGods();
+        if (gods.length > 0) {
+            l.push(""); // visual space
+            for (var i in gods) {
+                l.push(gods[i].name);
+            }
         }
         for (var i in l) {
             this.bibleTextsB.push(this.addText(l[i], 400, 84+22*i))
         }
     }
+    partyIsOnFightingStyles() {
+        if (this.bibleStep == 0) return false;
+        return this.cursorBSelect >= 0 && this.cursorBSelect < ProgressManager.getUnlockedFightingStyles().length;
+    }
+    partyIsOnGods() {
+        if (this.bibleStep == 0) return false;
+        return this.cursorBSelect > ProgressManager.getUnlockedFightingStyles().length && this.cursorBSelect <= ProgressManager.getUnlockedFightingStyles().length + ProgressManager.getUnlockedGods().length;
+    }
+
     loadBibleResources() {
         this.loadImage("ui/other/bible_frame.png");
     }
@@ -713,7 +762,7 @@ class Scene extends Phaser.Scene {
         this.bibleDescriptionTitle = this.addText("DESCRIPTION", 759, 84, {fontStyle: 'bold'});
         this.bibleDescription = this.addText("", 759, 130, {fontSize: '21px', wordWrap: {width: 400, height: 550}});
 
-        var l = ["Game Mechanics", "Moves", "Party Members", "Fighting Styles", "Events", "Gods", "Stånds"];
+        var l = ["Game Mechanics", "Moves", "Party Members", "Fighting Styles", "Events", "Gods", "Synergies", "Stånds"];
         var unlocks = ProgressManager.getUnlockedGameMechanics();
         for (var i in l) {
             if (unlocks.indexOf(l[i]) < 0) continue;
@@ -883,6 +932,16 @@ class Scene extends Phaser.Scene {
                 var a = ProgressManager.getUnlockedEvents();
                 for (var i in a) l[i] = EventManager.getEvent(a[i]).name;
             }
+            else if (this.cursorASelect == 5) {
+                this.bibleDescription.setText("All the Gods you know you can worship.");
+                var a = ProgressManager.getUnlockedGods();
+                for (var i in a) l[i] = a[i].name;
+            }
+            else if (this.cursorASelect == 6) {
+                this.bibleDescription.setText("All the Synergies between the Gods you have access to.");
+                var a = ProgressManager.getUnlockedSynergies();
+                for (var i in a) l[i] = a[i].name;
+            }
 
             for (var i in this.bibleTextsB) this.bibleTextsB[i].destroy();
             this.bibleTextsB = [];
@@ -915,6 +974,14 @@ class Scene extends Phaser.Scene {
             else if (this.cursorASelect == 4) {
                 var ev = EventManager.getEvent(ProgressManager.getUnlockedEvents()[this.cursorBSelect]);
                 this.bibleDescription.setText(ev.getDescription());
+            }
+            else if (this.cursorASelect == 5) {
+                var god = ProgressManager.getUnlockedGods()[this.cursorBSelect];
+                this.bibleDescription.setText(god.getDescription());
+            }
+            else if (this.cursorASelect == 6) {
+                var synergy = ProgressManager.getUnlockedSynergies()[this.cursorBSelect];
+                this.bibleDescription.setText(synergy.getDescription());
             }
         }
     }

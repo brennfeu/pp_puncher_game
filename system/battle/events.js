@@ -13,7 +13,7 @@ class Event {
         txt += this.description + "\n\n";
         txt += "Chance to appear: " + this.likeness + "%";
         if (this.nbMoveRequired > 0) {
-            txt += "\nMove Required: " + this.nbMoveRequired;
+            txt += "\nRequired Moves: " + this.nbMoveRequired;
         }
         return txt;
     }
@@ -63,4 +63,34 @@ EventManager.addEvent(
         _duel.addMessage("Illegal moves are still illegal.");
         _duel.allowCheating = true;
     }
+);
+EventManager.addEvent(
+    "Gods Birthday Gift", // 4
+    "Grants a regular priest move charge to all fighters.",
+    function(_duel) {
+        _duel.addMessage("Gods have decided to bless this fight.");
+        var l = _duel.getAllFighters();
+        for (var i in l) {
+            if (l[i].isDead()) continue;
+            _duel.addMessage(l[i].getName() + " gets a regular charge!");
+            l[i].regularCharges += 1;
+        }
+    },
+    10,
+    10
+);
+EventManager.addEvent(
+    "Gods Christmas Gift", // 5
+    "Grants a special priest move charge to all fighters.",
+    function(_duel) {
+        _duel.addMessage("Gods have decided to bless this fight.");
+        var l = _duel.getAllFighters();
+        for (var i in l) {
+            if (l[i].isDead()) continue;
+            _duel.addMessage(l[i].getName() + " gets a special charge!");
+            l[i].specialCharges += 1;
+        }
+    },
+    3,
+    25
 );

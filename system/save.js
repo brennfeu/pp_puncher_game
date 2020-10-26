@@ -262,6 +262,46 @@ class ProgressManager {
         ProgressManager.EventsCache = l;
         return l;
     }
+    static getUnlockedGods() {
+        if (ProgressManager.GodsCache != null) return ProgressManager.GodsCache;
+
+        var l = [];
+        var steps = ProgressManager.getCompletedSteps();
+        for (var i in steps) {
+            if (steps[i].unlockGods != undefined) {
+                var god = steps[i].unlockGods;
+                for (var j in god) {
+                    l.push(GodManager.getGod(god[j]));
+                }
+            }
+        }
+
+        // waifus
+        if (ProgressManager.isStepCompleted(21, 1)) {
+            var waifus = ProgressManager.getSavedWaifus();
+            for (var i in waifus) {
+                l.push(GodManager.getGod(waifus[i]));
+            }
+        }
+
+        l = l.sort(
+            function (a, b) {
+                var l = ["regular", "waifu", "eldritch"];
+                var ta = l.indexOf(a.type);
+                var tb = l.indexOf(b.type);
+                if (ta < tb) return -1;
+                else if (ta > tb) return 1;
+
+                var na = a.name.toUpperCase();
+                var nb = b.name.toUpperCase();
+                if (na < nb) return -1;
+                else if (na > nb) return 1;
+                return 0;
+            }
+        );
+        ProgressManager.GodsCache = l;
+        return l;
+    }
 
     static getSavedWaifus() {
         if (ProgressManager.SavedWaifusCache != null) return ProgressManager.SavedWaifusCache;
@@ -288,6 +328,7 @@ class ProgressManager {
         ProgressManager.MovesCache = null;
         ProgressManager.FightingStylesCache = null;
         ProgressManager.EventsCache = null;
+        ProgressManager.GodsCache = null;
 
         ProgressManager.SavedWaifusCache = null;
     }
@@ -300,6 +341,7 @@ class ProgressManager {
         nb += ProgressManager.getUnlockedPartyMembers().length;
         nb += ProgressManager.getUnlockedFightingStyles().length;
         nb += ProgressManager.getUnlockedEvents().length;
+        nb += ProgressManager.getUnlockedGods().length;
         return nb;
     }
     static canAddNewMovePref() {
@@ -325,6 +367,35 @@ class ProgressManager {
         return l;
     }
 
+    static getNbGodSlots() {
+        var nb = 0;
+        if (ProgressManager.getUnlockedGameMechanics().indexOf("Gods") > -1) nb += 1;
+        if (ProgressManager.isStepCompleted(22, 1)) nb += 1;
+        if (ProgressManager.isStepCompleted(22, 3)) nb += 1;
+        return nb;
+    }
+    static getUnlockedSynergies() {
+        if (this.getUnlockedGameMechanics().indexOf("Synergies") < 0) return [];
+        var l = [];
+        var unlockedTypes = [];
+        for (var i in ProgressManager.getUnlockedGods()) {
+            unlockedTypes.push(ProgressManager.getUnlockedGods()[i].type);
+        }
+        for (var i in GodManager.SYNERGY_LIST) {
+            var isUnlocked = true;
+            for (var j in GodManager.SYNERGY_LIST[i].requiredGods) {
+                if (ProgressManager.getUnlockedGods().indexOf(GodManager.SYNERGY_LIST[i].requiredGods[j]) < 0 &&
+                  unlockedTypes.indexOf(GodManager.SYNERGY_LIST[i].requiredGods[j]) < 0) {
+                    isUnlocked = false;
+                }
+            }
+            if (isUnlocked) {
+                l.push(GodManager.SYNERGY_LIST[i]);
+            }
+        }
+        return l;
+    }
+
     static getMechanicDescription(_mec) {
         switch(_mec) {
             case "Game Mechanics":
@@ -341,6 +412,10 @@ class ProgressManager {
                 return "Fighting styles are permanent effects you can obtain in battle or start with. Equipping one grants a starting advantage, but getting one in battle grants a +10 DEX bonus.\n\nYou can have as many as you wants.\nYou can equip the fighting styles in the world map, in the 'PARTY' tab.";
             case "Events":
                 return "Events have a random chance to occur every turn, and unleash their randomness. Some of them cannot appear before a specific amount of moves have been played.";
+            case "Gods":
+                return "Divine creatures that managed to ascend and keep their divine status for a long period of time, Gods are so powerful they transcend space and time. You can worship them, in exchange for powers they grant to you.\n\nYou can select which god to worship in the world map, in the 'PARTY' tab."
+            case "Synergies":
+                return "Some Gods work pretty well when combined with each other. If all the required Gods of a synergy are worshipped by someone, that person will immediately get the effect of the synergy."
         }
         return "No Description :("
     }

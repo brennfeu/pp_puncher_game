@@ -49,5 +49,15 @@ const CUTSCENE_LIST = [
         "nextSceneData": {
             "areaSelect": 2
         }
-    }
+    },
+    { // 6 - Out of High School
+        "dialogueId": 24,
+        "areaName": "High School's Outside",
+        "music": "HighSchool_area",
+        "distantMusic": true,
+        "nextSceneKey": "Map",
+        "nextSceneData": {
+            "areaSelect": 2
+        }
+    },
 ];

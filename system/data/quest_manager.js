@@ -82,6 +82,7 @@ class QuestSteps {
         this.unlockMoves = _data.unlockMoves;
         this.unlockFightingStyles = _data.unlockFightingStyles;
         this.unlockEvents = _data.unlockEvents;
+        this.unlockGods = _data.unlockGods;
 
         this.saveWaifu = _data.saveWaifu;
 

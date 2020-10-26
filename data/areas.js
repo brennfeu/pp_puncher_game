@@ -13,10 +13,10 @@ AreaManager.loadList([
     },
     { // 3
         "name": "Allfaiths Temple",
-        "description": "An old temple in which you can pray for every existing god. TODO."
+        "description": "An old temple in which you can pray for every existing god. There's either an incredible amount of people LARPing here, either some strange magical effect that makes everything look like it was from the medievial times."
     },
     { // 4
         "name": "Christian Church",
-        "description": "."
+        "description": "TODO"
     }
 ]);

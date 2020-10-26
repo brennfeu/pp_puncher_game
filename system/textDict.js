@@ -23,7 +23,7 @@ class TextDict extends Phaser.GameObjects.Text {
     }
 
     nextFrame() {
-        if (this.speed == null);
+        if (this.speed == null) return;
         var txt = this.memoryText;
 
         if (!this.isShowingFullText()) {
@@ -77,5 +77,6 @@ TextDict.addDict("Free Lives", "Free Loves");
 TextDict.addDict("Senjougahara", "Senjouhagara");
 TextDict.addDict("Ryuko", "Myuko");
 TextDict.addDict("Kurisu", "Rukisu");
+TextDict.addDict("Astolfo", "Astalfo");
 
 TextDict.addDict("Mongo", "Bongo");

@@ -1,3 +1,4 @@
+// faith moves
 class RegularPriestMove extends Move {
     constructor() {
         super();
@@ -5,18 +6,19 @@ class RegularPriestMove extends Move {
         this.description = "Calls for the regular power of the gods you worship.";
         this.type = "faith";
 
-        this.specialCheatProbabilty = 0;
+        this.specialCheatProbabilty = 80;
     }
 
     execute(_user, _target = null) {
         _user.duel.addMessage(_user.getName() + " calls for divine powers!");
 
-        if (_user.godsList.length == 0 || _user.regularCharges <= 0) {
+        if (_user.godsList.length == 0 ||
+          _user.isSilenced) {
             _user.duel.addMessage("...but no one answers.");
             return;
         }
 
-        _user.regularCharges -= 1;
+        _user.regularCharges = Math.max(0, _user.regularCharges-1);
         for (var i in _user.godsList) {
             var storedMove = {};
             var move = MoveManager.createMove(function(_user, _target = null, _godIndex = this.__proto__.constructor.godIndex) {
@@ -30,27 +32,30 @@ class RegularPriestMove extends Move {
             storedMove["target"] = _target;
             _user.duel.memoryMoves.push(storedMove);
         }
+
+        _user.duel.memorySoundEffects.push("extraLife");
     }
 }
 class SpecialPriestMove extends Move {
     constructor() {
         super();
         this.name = "PP Ritual";
-        this.description = "Calls for the regular power of the gods you worship.";
+        this.description = "Calls for the special power of the gods you worship.";
         this.type = "faith";
 
-        this.specialCheatProbabilty = 0;
+        this.specialCheatProbabilty = 95;
     }
 
     execute(_user, _target = null) {
         _user.duel.addMessage(_user.getName() + " calls for superior divine powers!");
 
-        if (_user.godsList.length == 0 || _user.specialCharges <= 0) {
+        if (_user.godsList.length == 0 ||
+          _user.isSilenced) {
             _user.duel.addMessage("...but no one answers.");
             return;
         }
 
-        _user.specialCharges -= 1;
+        _user.specialCharges = Math.max(0, _user.specialCharges-1);
         for (var i in _user.godsList) {
             var storedMove = {};
             var move = MoveManager.createMove(function(_user, _target = null, _godIndex = this.__proto__.constructor.godIndex) {
@@ -64,9 +69,12 @@ class SpecialPriestMove extends Move {
             storedMove["target"] = _target;
             _user.duel.memoryMoves.push(storedMove);
         }
+
+        _user.duel.memorySoundEffects.push("extraLife");
     }
 }
 
+// dev test moves
 class InstaKill extends Move {
     constructor() {
         super();
@@ -125,6 +133,36 @@ class Wait extends Move {
 
     execute(_user, _target = null) {
         _user.duel.addMessage(_user.getName() + " does nothing...");
+    }
+}
+
+// special moves that shouldn't appear in game
+class TriggerNextPhase extends Move {
+    execute(_user, _target = null) {
+        for (var i in _user.duel.enemies) {
+            if (_user.duel.enemies[i].id == _user.id) {
+                // create a new instance of the next phase
+                var next = _user.nextPhase.newInstance();
+                var obj = ["spriteObject", "spriteX", "spriteY", "STRTextObject", "DEXTextObject", "duel"];
+                for (var j in obj) {
+                    next[obj[j]] = _user[obj[j]];
+                }
+
+                // message and sound effect
+                _user.duel.addMessage(_user.getNextPhaseText());
+                if (_user.getNextPhaseSound() != null) _user.duel.memorySoundEffects.push(_user.getNextPhaseSound());
+
+                // change in memory
+                for (var j in _user.duel.heroes) {
+                    if (_user.duel.heroes[j].chosenTarget != null && _user.duel.heroes[j].chosenTarget.id == _user.id) _user.duel.heroes[j].chosenTarget = next;
+                }
+                _user.duel.enemies[i] = next;
+
+                // make sure the existing object does not trigger next phase again
+                _user.nextPhase = null;
+                return;
+            }
+        }
     }
 }
 

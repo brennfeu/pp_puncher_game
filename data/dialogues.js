@@ -492,5 +492,138 @@ DialogueManager.loadList([
                 "text": "All you have to do is take your axe and cut through trees with it. If you beat me in a fight, you'll understand it."
             }
         ]
+    },
+    { // 24 - High School OUT
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "We got a waifu back, and we know more about PP Punching. I think it's time to pay a visit to an old friend."
+            },
+            {
+                "speaker": "Pudding",
+                "text": "You have friends other than me?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Yeah, he sent me a text 2 years ago saying he was trapped in a temple. I guess we could go there."
+            },
+            {
+                "speaker": "Pudding",
+                "text": "Why didn't you go earlier?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "I was working on the waifu device. I've got my priorities you know."
+            },
+            {
+                "text": "And, to be honest, I'm not going there to help him. It's because there's a waifu stuck in the temple that I want to save."
+            }
+        ]
+    },
+    { // 25 - Meet the Eldon
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "Oh hey, there are you are!"
+            },
+            {
+                "speaker": "Eldon",
+                "text": "Where were you? I've been trapped in here for months!"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "I have more important matters to discuss. If you don't complain and come with us, I'll make you meet your waifu."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "..."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "Uh okay, sure."
+            }
+        ]
+    },
+    { // 26 - Priests Warning
+        "dialogueLines": [
+            {
+                "speaker": "Faith",
+                "text": "You won't be able to pass through this corridor if you don't have inner faith."
+            }
+        ]
+    },
+    { // 27 - Pray the Waifus
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "Hey, do you feel that?"
+            },
+            {
+                "speaker": "Eldon",
+                "text": "No...?"
+            },
+            {
+                "speaker": "Pudding",
+                "text": "Nop."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "We now can pray waifus as we do with gods! I knew we sould get there."
+            },
+            {
+                "speaker": "Pudding",
+                "text": "That was quick lmao."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "I'm not gonna complain about that."
+            }
+        ]
+    },
+    { // 28 - Priestess Regular Move
+        "dialogueLines": [
+            {
+                "speaker": "Priestess",
+                "text": "O Earth Mother, abounding in mercy, lay your revered hand upon your child’s wounds."
+            }
+        ]
+    },
+    { // 29 - Priestess Special Move
+        "dialogueLines": [
+            {
+                "speaker": "Priestess",
+                "text": "O Earth Mother, abounding in mercy, grant us peace to accept all things..."
+            }
+        ]
+    },
+    { // 30 - 2 God Slots!
+        "dialogueLines": [
+            {
+                "speaker": "Pudding",
+                "text": "Heck yeah, we can now have 2 gods each!"
+            }
+        ]
+    },
+    { // 31 - 3 God Slots!
+        "dialogueLines": [
+            {
+                "speaker": "Pudding",
+                "text": "HECK YEAH, we can now have 3 gods each! Ain't that wacky?"
+            }
+        ]
+    },
+    { // 32 - Faith 1st Battle End
+        "dialogueLines": [
+            {
+                "speaker": "Faith",
+                "text": "Behold, the Trials of Faith."
+            },
+            {
+                "text": "Only those who accepted themselves, and found faith can attempt them."
+            },
+            {
+                "text": "You may attempt the last trial, only when you've proven yourself."
+            }
+        ]
     }
 ])

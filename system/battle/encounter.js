@@ -263,9 +263,109 @@ class Encounter {
                 break;
 
             // allfaiths temple
-            case("2tutorialPriests"):
+            case("spiritGuardians"):
+                this.addEnemy(new SpiritGuardian(), 190);
+                this.addEnemy(new SpiritGuardian(), 450);
+                break;
+            case("guardiansOfFaith"):
+                this.addEnemy(new GuardianOfFaith(), 180);
+                this.addEnemy(new GuardianOfFaith(), 460);
+                break;
+            case("2tutorialClerics"):
                 this.addEnemy(new TutorialPriest(), 190);
                 this.addEnemy(new TutorialPriest(), 450);
+                break;
+            case("clericMaintainers"):
+                this.addEnemy(new ClericMaintainers());
+                break;
+            case("clericAndSpirits"):
+                this.addEnemy(new SpiritGuardian(), 76);
+                this.addEnemy(new TutorialPriest(), 330);
+                this.addEnemy(new GuardianOfFaith(), 521);
+                break;
+            case("energyBarrier"):
+                this.addEnemy(new SpiritGuardian(), 36);
+                this.addEnemy(new EnergyBarrier(), 290);
+                this.addEnemy(new GuardianOfFaith(), 521);
+                break;
+            case("faith"):
+                this.addEnemy(new FaithFirstBattle());
+                break;
+            case("brennClerics"):
+                this.addEnemy(new OneGodCleric("Brenn"), 190);
+                this.addEnemy(new OneGodCleric("Brenn"), 450);
+                break;
+            case("countryBrennClerics"):
+                this.addEnemy(new OneGodCleric("Country Music Brenn"), 190);
+                this.addEnemy(new OneGodCleric("Country Music Brenn"), 450);
+                break;
+            case("chadBrennClerics"):
+                this.addEnemy(new OneGodCleric("Chad Brenn"), 190);
+                this.addEnemy(new OneGodCleric("Chad Brenn"), 450);
+                break;
+            case("highClericBrenn"):
+                this.addEnemy(new HighCleric(undefined, ["Brenn", "Country Music Brenn", "Chad Brenn"]));
+                break;
+            case("helloThereClerics"):
+                this.addEnemy(new OneGodCleric("Hello There Puds"), 190);
+                this.addEnemy(new OneGodCleric("Hello There Puds"), 450);
+                break;
+            case("dickDickSonClerics"):
+                this.addEnemy(new OneGodCleric("DickDickSon666"), 190);
+                this.addEnemy(new OneGodCleric("DickDickSon666"), 450);
+                break;
+            case("rapistClerics"):
+                this.addEnemy(new OneGodCleric("UREGonnaGetRAPED"), 190);
+                this.addEnemy(new OneGodCleric("UREGonnaGetRAPED"), 450);
+                break;
+            case("highClericPuds"):
+                this.addEnemy(new HighCleric(undefined, ["Hello There Puds", "DickDickSon666", "UREGonnaGetRAPED"]));
+                break;
+            case("saltKingClerics"):
+                this.addEnemy(new OneGodCleric("Salt King"), 190);
+                this.addEnemy(new OneGodCleric("Salt King"), 450);
+                break;
+            case("rangerClerics"):
+                this.addEnemy(new OneGodCleric("Ranger"), 190);
+                this.addEnemy(new OneGodCleric("Ranger"), 450);
+                break;
+            case("highClericEldon"):
+                this.addEnemy(new HighCleric(undefined, ["Salt King", "Ranger"]));
+                break;
+            case("trialBrenn"):
+                this.addEnemy(new TempleTrial("Holy Brenn Trinity"))
+                break;
+            case("trialPudding"):
+                this.addEnemy(new TempleTrial("Unholy Pudding Trinity"))
+                break;
+            case("trialEldon"):
+                this.addEnemy(new TempleTrial("Eldon Duality"))
+                break;
+            case("energyBarrier2"):
+                this.addEnemy(new EnergyBarrier2(), 290);
+                break;
+            case("faithForReal"):
+                this.addEnemy(new Faith());
+                break;
+            case("synergySpirits"):
+                this.addEnemy(new SynergySpirit(undefined, "Holy Brenn Trinity"), 76);
+                this.addEnemy(new SynergySpirit(undefined, "Eldon Duality"));
+                this.addEnemy(new SynergySpirit(undefined, "Unholy Pudding Trinity"), 561);
+                break;
+
+            case("3clerics"):
+                this.addEnemy(new PriestEnemy(), 76);
+                this.addEnemy(new PriestEnemy());
+                this.addEnemy(new PriestEnemy(), 561);
+                break;
+            case("2clerics"):
+                this.addEnemy(new PriestEnemy(), 190);
+                this.addEnemy(new PriestEnemy(), 450);
+                break;
+            case("clericsAndWeeb"):
+                this.addEnemy(new PriestEnemy(), 56);
+                this.addEnemy(new BossWeeb(), 290);
+                this.addEnemy(new PriestEnemy(), 561);
                 break;
         }
     }

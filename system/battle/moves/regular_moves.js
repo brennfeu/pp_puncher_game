@@ -72,7 +72,7 @@ class BigSatan extends Move {
         }
 
         _user.duel.memorySoundEffects.push("darkMagic");
-        _user.duel.addAnimation("boomerang", 60, _user);
+        _user.duel.addAnimation("summon", 60, _user);
     }
 }
 
@@ -511,6 +511,28 @@ class Scout extends Move {
     }
 }
 
+class ShieldMove extends Move {
+    constructor() {
+        super();
+        this.name = "Riot Shield";
+        this.description = "Gets a shield that will reflect the next attack on the opponent.";
+        this.dexChange = -20;
+    }
+
+    execute(_user, _target = null) {
+        if (_user.riotShield) {
+            _user.duel.addMessage(_user.getName() + " gets a brand new shield!");
+        }
+        else {
+            _user.duel.addMessage(_user.getName() + " gets a shield!");
+            _user.riotShield = true;
+        }
+
+        _user.duel.addAnimation("shield", 60, _user);
+        _user.duel.memorySoundEffects.push("protect");
+    }
+}
+
 class Steel extends Move {
     constructor() {
         super();
@@ -604,4 +626,4 @@ class Yes extends Move {
 const REGULAR_MOVE_LIST = [AdaptPP, BigGuy, BigSatan, Boomerang, BrocketeerDive, BronanSlam,
     Bullet, DeadBro, EncrustPP, FlexBro, HighFiveBro,
     Hologram, InterrogationPoint, Kick, Pig, PregnantBro, PunchingPP, PunchingPPReallyHard,
-    RedPill, Save, SawBlade, Scout, Steel, TurkeyBomb, Yes];
+    RedPill, Save, SawBlade, Scout, ShieldMove, Steel, TurkeyBomb, Yes];
