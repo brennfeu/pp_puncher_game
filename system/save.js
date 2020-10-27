@@ -342,6 +342,7 @@ class ProgressManager {
         nb += ProgressManager.getUnlockedFightingStyles().length;
         nb += ProgressManager.getUnlockedEvents().length;
         nb += ProgressManager.getUnlockedGods().length;
+        nb += ProgressManager.getUnlockedSynergies().length;
         return nb;
     }
     static canAddNewMovePref() {
@@ -425,6 +426,9 @@ class ProgressManager {
     }
     static loadLocalStorage() {
         ProgressManager.SAVE_FILES = JSON.parse(localStorage.getItem("savefile"));
+        if (ProgressManager.SAVE_FILES["movePreferences"] == undefined) {
+            ProgressManager.SAVE_FILES["movePreferences"] = [];
+        }
     }
 }
 

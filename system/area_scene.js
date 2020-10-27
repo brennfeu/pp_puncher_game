@@ -58,11 +58,10 @@ class AreaScene extends Scene {
             if (l[i].isCompleted()) data["fontStyle"] = "italic";
             this.questTexts.push(this.addText(l[i].getName() + " ", 30, 10 + i*22, data));
         }
-        this.addText("Exit Area", 30, 10 + (l.length+1)*22);
-        this.questCursor = this.addText(">", 5, 10);
+        this.questTexts.push(this.addText("", 30, 10 + l.length*22));
+        this.questTexts.push(this.addText("Exit Area", 30, 10 + l.length*22));
 
         this.questStepFrame = this.addImage("ui/area/quest_frame", 300-10, 675-1000);
-        this.stepCursor = this.addText(">", 300+5, -10000);
 
         if (this.onLoadQuest != undefined) {
             this.questSelect = this.loadedQuests.indexOf(QuestManager.getQuest(parseInt(this.onLoadQuest[0])));
@@ -70,16 +69,20 @@ class AreaScene extends Scene {
 
         this.playMusic(this.area.getAreaTheme());
 
-        // init text
-        var q = this.loadedQuests[this.questSelect];
-        var l = ProgressManager.getUnlockedSteps(q.id);
-        this.logTextObject.setText(q.getDescription());
-        for (var i in l) {
-            var data = {};
-            if (ProgressManager.isStepCompleted(q.id, l[i].id)) data["fontStyle"] = "italic";
-            this.questStepTexts.push(this.addText(l[i].getName(), 300+30, 10 + i*22, data));
-        }
-        this.questStepFrame.setY(30 + l.length*22 - 675);
+        // cursors
+        this.questCursor = new CustomCursor(
+            this.addText(">", 5, 10),
+            "vertical",
+            this.questTexts
+        );
+        this.questCursor.setFormula(10, 22, 10);
+        this.updateDesc();
+        this.stepCursor = new CustomCursor(
+            this.addText(">", 300+5, -10000),
+            "vertical",
+            this.questStepTexts
+        );
+        this.stepCursor.setFormula(10, 22, 10);
 
         // cutscene
         var d = GlobalVars.get("cutsceneNext");
@@ -122,77 +125,53 @@ class AreaScene extends Scene {
 
         if (!this.selectsStep) {
             if (this.justPressedControl("DOWN")) {
-                this.questSelect += 1;
+                this.questCursor.goDown();
                 this.playSoundOK();
-                this.updateDesc();
             }
             else if (this.justPressedControl("UP")) {
-                this.questSelect -= 1;
+                this.questCursor.goUp();
                 this.playSoundOK();
-                this.updateDesc();
             }
             else if (this.justPressedControl("BACK")) {
                 this.playSoundSelect();
                 return this.quitScene();
             }
 
-            if (this.questSelect >= this.questTexts.length+1) {
-                this.questSelect -= this.questTexts.length+1;
+            if (this.questCursor.update()) {
                 this.updateDesc();
             }
-            else if (this.questSelect < 0) {
-                this.questSelect += this.questTexts.length+1;
-                this.updateDesc();
-            }
-
-            if (this.questSelect == this.questTexts.length) {
-                this.questCursor.setY(10 + (this.questSelect+1)*22);
-            }
-            else {
-                this.questCursor.setY(10 + this.questSelect*22);
-            }
-            this.stepCursor.setY(-100000);
 
             if (this.justPressedControl("ENTER") || this.justPressedControl("RIGHT")) {
                 this.playSoundSelect();
 
-                if (this.questSelect == this.questTexts.length) {
+                if (this.questCursor.getCurrentSelect() == this.questTexts.length-1) {
                     return this.quitScene();
                 }
 
                 this.selectsStep = true;
-                this.stepSelect = 0;
+                // TODO questStep
                 this.updateDesc();
             }
         }
         else {
             if (this.justPressedControl("DOWN")) {
-                this.stepSelect += 1;
+                this.stepCursor.goDown();
                 this.playSoundOK();
-                this.updateDesc();
             }
             else if (this.justPressedControl("UP")) {
-                this.stepSelect -= 1;
+                this.stepCursor.goUp();
                 this.playSoundOK();
-                this.updateDesc();
             }
 
-            if (this.stepSelect >= this.questStepTexts.length) {
-                this.stepSelect -= this.questStepTexts.length;
+            if (this.stepCursor.update()) {
                 this.updateDesc();
             }
-            else if (this.stepSelect < 0) {
-                this.stepSelect += this.questStepTexts.length;
-                this.updateDesc();
-            }
-
-            this.stepCursor.setY(10 + this.stepSelect*22);
 
             if (this.justPressedControl("ENTER")) {
                 this.playSoundSelect();
 
-                var q = this.loadedQuests[this.questSelect];
-                var s = ProgressManager.getUnlockedSteps(q.id)[this.stepSelect];
+                var q = this.loadedQuests[this.questCursor.getCurrentSelect()];
+                var s = ProgressManager.getUnlockedSteps(q.id)[this.stepCursor.getCurrentSelect()];
                 if (s.preFightDialogue != undefined && !ProgressManager.isStepCompleted(q.id, s.id)) {
                     this.readyForBattle = true;
                     this.openDialogue(s.preFightDialogue);
@@ -205,6 +184,10 @@ class AreaScene extends Scene {
                 this.playSoundSelect();
                 this.selectsStep = false;
                 this.updateDesc();
+
+                this.stepCursor.obj.setY(-1000);
+                this.stepCursor.currentSelect = 0;
+                this.stepCursor.currentOffset = 0;
             }
         }
 
@@ -243,13 +226,13 @@ class AreaScene extends Scene {
             for (var i in this.questStepTexts) this.questStepTexts[i].destroy();
             this.questStepTexts = [];
 
-            if (this.questSelect == this.questTexts.length) {
+            if (this.questCursor.getCurrentSelect() == this.questTexts.length-1) {
                 this.questStepFrame.setY(-1000);
                 this.logTextObject.setText("Exit " + this.area.name + " and go back to the map?");
                 return;
             }
             try {
-                var q = this.loadedQuests[this.questSelect];
+                var q = this.loadedQuests[this.questCursor.getCurrentSelect()];
                 var l = ProgressManager.getUnlockedSteps(q.id);
 
                 this.logTextObject.setText(q.getDescription());
@@ -260,13 +243,15 @@ class AreaScene extends Scene {
                     this.questStepTexts.push(this.addText(l[i].getName(), 300+30, 10 + i*22, data));
                 }
                 this.questStepFrame.setY(30 + l.length*22 - 675);
+
+                this.stepCursor.objList = this.questStepTexts;
             }
             catch(e) {} // out of bounds
         }
         else {
             try {
-                var q = this.loadedQuests[this.questSelect];
-                this.logTextObject.setText(ProgressManager.getUnlockedSteps(q.id)[this.stepSelect].getDescription());
+                var q = this.loadedQuests[this.questCursor.getCurrentSelect()];
+                this.logTextObject.setText(ProgressManager.getUnlockedSteps(q.id)[this.stepCursor.getCurrentSelect()].getDescription());
             }
             catch(e) {} // out of bounds
         }

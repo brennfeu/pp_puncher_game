@@ -5,9 +5,8 @@ class MapScene extends Scene {
 
     init(_data) { try {
         this.cursor = null;
-        this.currentSelect = 0;
-        this.currentSelectOffset = 0;
-        if (_data["areaSelect"] != undefined) this.currentSelect = parseInt(_data["areaSelect"]);
+        this.cursorStart = 0
+        if (_data["areaSelect"] != undefined) this.cursorStart = parseInt(_data["areaSelect"]);
 
         this.logTextObject = null;
         this.isOnArea = true;
@@ -43,15 +42,13 @@ class MapScene extends Scene {
 
         this.loadedAreas = ProgressManager.getUnlockedAreas();
         for (var i in this.loadedAreas) {
-            if (i > 2) continue; // only 3 shown areas
-
             var area = this.loadedAreas[i];
 
             var data = {align: "center", wordWrap: {width: 40, height: 100}};
             if (area.isCompleted()) data["fontStyle"] = "italic";
 
             this.areaTexts.push(this.addText(area.getName(), 100+i*263, 120, data));
-            this.areaPoints.push(this.addImage("ui/map/map_point", 120+i*263, 100));
+            if (i <= 2) this.areaPoints.push(this.addImage("ui/map/map_point", 120+i*263, 100));
 
             this.areaTexts[this.areaTexts.length-1].setX(140+i*253-Math.floor(this.areaTexts[this.areaTexts.length-1].width/2));
         }
@@ -62,9 +59,15 @@ class MapScene extends Scene {
             this.speOptTexts.push(this.addText(l[i], 20+12+i*263, 600+10));
         }
 
-        this.cursor = this.addImage('ui/cursor', 116+this.currentSelect*263, 90, {fontStyle: 'bold', fontSize: '40px'});
-
-        this.logTextObject.setText(this.loadedAreas[this.currentSelect].getDescription());
+        this.cursor = new CustomCursor(
+            this.addImage('ui/cursor', 116+263, 90, {fontStyle: 'bold', fontSize: '40px'}),
+            "horizontal",
+            this.areaTexts
+        );
+        this.cursor.setFormula(116, 263, 85);
+        this.cursor.setForcedLength(3);
+        this.cursor.currentSelect = this.cursorStart;
+        this.cursor.updateObjList();
 
         this.checkUnlock();
 
@@ -98,17 +101,32 @@ class MapScene extends Scene {
         }
 
         if (this.justPressedControl("RIGHT") && (!this.isOnArea || this.loadedAreas.length > 1)) {
-            this.currentSelect += 1;
+            this.cursor.goRight();
             this.playSoundOK();
             this.updateDesc();
         }
         else if (this.justPressedControl("LEFT") && (!this.isOnArea || this.loadedAreas.length > 1)) {
-            this.currentSelect -= 1;
+            this.cursor.goLeft();
             this.playSoundOK();
             this.updateDesc();
         }
         else if (this.justPressedControl("UP") || this.justPressedControl("DOWN")) {
             this.isOnArea = !this.isOnArea;
+            if (this.isOnArea) {
+                this.cursor.objList = this.areaTexts;
+                this.cursor.currentOffset = this.cursor.memoryOffset;
+                this.cursor.setFormula(116, 263, 85);
+                this.cursor.updateObjList();
+                this.cursor.obj.setY(90);
+            }
+            else {
+                this.cursor.objList = this.speOptTexts;
+                this.cursor.memoryOffset = this.cursor.currentOffset;
+                this.cursor.currentOffset = 0;
+                this.cursor.setFormula(100, 263, 32);
+                this.cursor.updateObjList();
+                this.cursor.obj.setY(600-10);
+            }
             this.playSoundOK();
             this.updateDesc();
         }
@@ -117,51 +135,8 @@ class MapScene extends Scene {
             return this.switchScene("Menu");
         }
 
-        if (this.isOnArea) {
-            //console.log(this.currentSelect + " / " + this.currentSelectOffset + " / " + this.loadedAreas.length);
-
-            if (this.currentSelect + this.currentSelectOffset >= this.loadedAreas.length) {
-                this.currentSelect = 0;
-                this.currentSelectOffset = 0;
-                this.updateTexts();
-                this.updateDesc();
-            }
-            else if (this.currentSelect < 0) {
-                this.currentSelect = 2;
-                if (this.loadedAreas.length > 2) this.currentSelectOffset = this.loadedAreas.length-3;
-                this.updateTexts();
-                this.updateDesc();
-            }
-
-            if ((this.currentSelect > 1 && this.currentSelect + this.currentSelectOffset < this.loadedAreas.length-1)
-            || this.currentSelect > 2) {
-                this.currentSelect -= 1;
-                this.currentSelectOffset += 1;
-                this.updateTexts();
-                this.updateDesc();
-            }
-            else if (this.currentSelect < 1 && this.currentSelectOffset > 0) {
-                this.currentSelect += 1;
-                this.currentSelectOffset -= 1;
-                this.updateTexts();
-                this.updateDesc();
-            }
-
-            this.cursor.setY(90);
-            this.cursor.setX(116+this.currentSelect*263);
-        }
-        else {
-            if (this.currentSelect >= this.speOptTexts.length) {
-                this.currentSelect -= this.speOptTexts.length;
-                this.updateDesc();
-            }
-            else if (this.currentSelect < 0) {
-                this.currentSelect += this.speOptTexts.length;
-                this.updateDesc();
-            }
-
-            this.cursor.setY(600-10);
-            this.cursor.setX(100+this.currentSelect*263);
+        if (this.cursor.update()) {
+            this.updateDesc();
         }
 
         if (this.justPressedControl("ENTER")) {
@@ -169,10 +144,10 @@ class MapScene extends Scene {
 
             if (this.isOnArea) {
                 var data = {};
-                data["areaId"] = this.currentSelect + this.currentSelectOffset;
+                data["areaId"] = this.cursor.getCurrentSelect();
                 return this.switchScene("Area", data);
             }
-            else if (this.currentSelect == 0) {
+            else if (this.cursor.getCurrentSelect() == 0) {
                 if (ProgressManager.getUnlockedFightingStyles().length <= 0) {
                     return this.openDialogue(5);
                 }
@@ -180,7 +155,7 @@ class MapScene extends Scene {
                     this.openParty();
                 }
             }
-            else if (this.currentSelect == 1) {
+            else if (this.cursor.getCurrentSelect() == 1) {
                 return this.openBible();
             }
             else {
@@ -195,27 +170,17 @@ class MapScene extends Scene {
         }
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
-    updateTexts() {
-        for (var i in this.areaTexts) {
-            var data = {};
-            var area = this.loadedAreas[parseInt(i) + parseInt(this.currentSelectOffset)];
-            this.areaTexts[i].setText(area.getName());
-            if (area.isCompleted()) this.areaTexts[i].setFontStyle("italic");
-            else this.areaTexts[i].setFontStyle("");
-        }
-    }
     updateDesc() {
         try {
-            if (this.isOnArea) this.logTextObject.setText(this.loadedAreas[this.currentSelect + this.currentSelectOffset].getDescription());
-            else if (this.currentSelect == 0) this.logTextObject.setText("Customize your party members' PP !");
-            else if (this.currentSelect == 1) this.logTextObject.setText("The Holy Book of PP Punching!\nHere you can find all kind of useful informations.\n\nTotal Number of Unlocked Things: " + ProgressManager.getTotalNbOfUnlocks());
-            else if (this.currentSelect == 2) this.logTextObject.setText("Exit to the menu");
+            if (this.isOnArea) this.logTextObject.setText(this.loadedAreas[this.cursor.getCurrentSelect()].getDescription());
+            else if (this.cursor.getCurrentSelect() == 0) this.logTextObject.setText("Customize your party members' PP !");
+            else if (this.cursor.getCurrentSelect() == 1) this.logTextObject.setText("The Holy Book of PP Punching!\nHere you can find all kind of useful informations.\n\nTotal Number of Unlocked Things: " + ProgressManager.getTotalNbOfUnlocks());
+            else if (this.cursor.getCurrentSelect() == 2) this.logTextObject.setText("Exit to the menu");
         }
         catch(e) {} // out of bounds
     }
 
     getMainObj() {
-        if (this.isOnArea) return this.areaTexts[this.currentSelect];
-        return this.speOptTexts[this.currentSelect];
+        return this.cursor.getCurrentObject();
     }
 }

@@ -5,7 +5,6 @@ class MenuScene extends Scene {
 
     init(_data) { try {
         this.cursor = null;
-        this.currentSelect = 0;
 
         this.textObjects = [];
         this.title = null;
@@ -34,7 +33,12 @@ class MenuScene extends Scene {
         this.textObjects.push(this.addText('OPTIONS', 80+10, 480+60+8, {fontStyle: 'bold', fontSize: '29px'}));
         this.textObjects.push(this.addText('EXIT', 80+10, 480+60*2+8, {fontStyle: 'bold', fontSize: '29px'}));
 
-        this.cursor = this.addText('>', 40, 480, {fontStyle: 'bold', fontSize: '40px'})
+        this.cursor = new CustomCursor(
+            this.addText('>', 40, 480, {fontStyle: 'bold', fontSize: '40px'}),
+            "vertical",
+            this.textObjects
+        );
+        this.cursor.setFormula(480, 60, 488);
 
         this.stopLoadingScreen();
 
@@ -56,32 +60,25 @@ class MenuScene extends Scene {
         }
 
         if (this.justPressedControl("DOWN")) {
-            this.currentSelect += 1;
             this.playSoundOK();
+            this.cursor.goDown();
         }
         else if (this.justPressedControl("UP")) {
-            this.currentSelect -= 1;
             this.playSoundOK();
+            this.cursor.goUp();
         }
 
-        if (this.currentSelect >= 3) {
-            this.currentSelect -= 3;
-        }
-        else if (this.currentSelect < 0) {
-            this.currentSelect += 3;
-        }
-
-        this.cursor.setY(480+this.currentSelect*60);
+        this.cursor.update();
 
         if (this.justPressedControl("ENTER")) {
-            if (this.currentSelect == 0) {
+            if (this.cursor.getCurrentSelect() == 0) {
                 // START
                 this.playSoundSelect();
 
                 var data = {};
                 return this.switchScene("Map", data);
             }
-            else if (this.currentSelect == 1) {
+            else if (this.cursor.getCurrentSelect() == 1) {
                 // OPTIONS
                 this.openOptions();
             }
@@ -99,6 +96,6 @@ class MenuScene extends Scene {
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     getMainObj() {
-        return this.textObjects[this.currentSelect];
+        return this.cursor.getCurrentObject();
     }
 }

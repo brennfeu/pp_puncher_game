@@ -578,10 +578,19 @@ class Scene extends Phaser.Scene {
             this.bibleTextsA.push(this.addText(l[i].name, 85, 84+22*this.bibleTextsA.length));
         }
 
-        this.cursorA = this.addText(">", 65, -1000);
-        this.cursorB = this.addText(">", 400-20, -1000);
-        this.cursorASelect = 0;
-        this.cursorBSelect = 0;
+        this.cursorA = new CustomCursor(
+            this.addText(">", 65, -1000),
+            "vertical",
+            this.bibleTextsA
+        );
+        this.cursorA.setFormula(84, 22, 84);
+        this.cursorB = new CustomCursor(
+            this.addText(">", 400-20, -1000),
+            "vertical",
+            this.bibleTextsB
+        );
+        this.cursorB.setFormula(84, 22, 84);
+        this.cursorB.setForcedLength(25);
 
         this.bibleStep = 0;
 
@@ -619,24 +628,17 @@ class Scene extends Phaser.Scene {
     partyUpdate() {
         if (this.bibleStep == 0) {
             if (this.justPressedControl("UP")) {
-                this.cursorASelect -= 1;
+                this.cursorA.goUp();
                 this.playSoundOK();
-                if (this.cursorASelect < 0) {
-                    this.cursorASelect += this.bibleTextsA.length;
-                }
-                this.partyUpdateDesc();
             }
             else if (this.justPressedControl("DOWN")) {
-                this.cursorASelect += 1;
+                this.cursorA.goDown();
                 this.playSoundOK();
-                if (this.cursorASelect >= this.bibleTextsA.length) {
-                    this.cursorASelect -= this.bibleTextsA.length;
-                }
-                this.partyUpdateDesc();
             }
 
-            this.cursorA.setY(84+22*this.cursorASelect);
-            this.cursorB.setY(-1000);
+            if (this.cursorA.update()) {
+                this.partyUpdateDesc();
+            }
 
             if (this.justPressedControl("ENTER") || this.justPressedControl("RIGHT")) {
                 this.bibleStep = 1;
@@ -647,29 +649,23 @@ class Scene extends Phaser.Scene {
         }
         else {
             if (this.justPressedControl("UP")) {
-                this.cursorBSelect -= 1;
+                this.cursorB.goUp();
                 this.playSoundOK();
-                if (this.cursorBSelect < 0) {
-                    this.cursorBSelect += this.bibleTextsB.length;
-                }
-                this.partyUpdateDesc();
             }
             else if (this.justPressedControl("DOWN")) {
-                this.cursorBSelect += 1;
+                this.cursorB.goDown();
                 this.playSoundOK();
-                if (this.cursorBSelect >= this.bibleTextsB.length) {
-                    this.cursorBSelect -= this.bibleTextsB.length;
-                }
+            }
+
+            if (this.cursorB.update()) {
                 this.partyUpdateDesc();
             }
 
-            this.cursorB.setY(84+22*this.cursorBSelect);
-
             if (this.justPressedControl("ENTER")) {
-                var pm = ProgressManager.getUnlockedPartyMembers()[this.cursorASelect];
+                var pm = ProgressManager.getUnlockedPartyMembers()[this.cursorA.getCurrentSelect()];
 
                 if (this.partyIsOnFightingStyles()) {
-                    var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorBSelect];
+                    var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorB.getCurrentSelect()];
 
                     if (pm.fightingStyles.indexOf(fs) > -1) {
                         pm.fightingStyles.splice(pm.fightingStyles.indexOf(fs), 1);
@@ -679,7 +675,7 @@ class Scene extends Phaser.Scene {
                     }
                 }
                 else if (this.partyIsOnGods()) {
-                    var god = ProgressManager.getUnlockedGods()[this.cursorBSelect - ProgressManager.getUnlockedFightingStyles().length-1].name;
+                    var god = ProgressManager.getUnlockedGods()[this.cursorB.getCurrentSelect() - ProgressManager.getUnlockedFightingStyles().length-1].name;
 
                     if (pm.gods.indexOf(god) > -1) {
                         pm.gods.splice(pm.gods.indexOf(god), 1);
@@ -696,6 +692,9 @@ class Scene extends Phaser.Scene {
 
             if (this.justPressedControl("BACK") || this.justPressedControl("LEFT")) {
                 this.bibleStep = 0;
+                this.cursorB.obj.setY(-1000); // hide cursorB
+                this.cursorB.currentSelect = 0;
+                this.cursorB.currentOffset = 0;
                 this.partyUpdateDesc();
                 this.playSoundSelect();
             }
@@ -706,16 +705,17 @@ class Scene extends Phaser.Scene {
         }
     }
     partyUpdateDesc() {
-        var desc = ProgressManager.getUnlockedPartyMembers()[this.cursorASelect].getDescription();
+        var partyMember = ProgressManager.getUnlockedPartyMembers()[this.cursorA.getCurrentSelect()];
+        var desc = partyMember.getDescription();
         if (this.bibleStep != 0) {
             if (this.partyIsOnFightingStyles()) {
-                var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorBSelect];
-                desc = ProgressManager.getUnlockedPartyMembers()[this.cursorASelect].getDescription("fs");
+                var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorB.getCurrentSelect()];
+                desc = partyMember.getDescription("fs");
                 desc += "\n\n" + fs + ":\n" + FightingStyles.getDesc(fs);
             }
             else if (this.partyIsOnGods()) {
-                var god = ProgressManager.getUnlockedGods()[this.cursorBSelect - ProgressManager.getUnlockedFightingStyles().length-1];
-                desc = ProgressManager.getUnlockedPartyMembers()[this.cursorASelect].getDescription("gods");
+                var god = ProgressManager.getUnlockedGods()[this.cursorB.getCurrentSelect() - ProgressManager.getUnlockedFightingStyles().length-1];
+                desc = partyMember.getDescription("gods");
                 desc += "\n\n" + god.name + "\n" + god.getDescription();
             }
         }
@@ -738,14 +738,16 @@ class Scene extends Phaser.Scene {
         for (var i in l) {
             this.bibleTextsB.push(this.addText(l[i], 400, 84+22*i))
         }
+        this.cursorB.objList = this.bibleTextsB;
+        this.cursorB.updateObjList();
     }
     partyIsOnFightingStyles() {
         if (this.bibleStep == 0) return false;
-        return this.cursorBSelect >= 0 && this.cursorBSelect < ProgressManager.getUnlockedFightingStyles().length;
+        return this.cursorB.getCurrentSelect() >= 0 && this.cursorB.getCurrentSelect() < ProgressManager.getUnlockedFightingStyles().length;
     }
     partyIsOnGods() {
         if (this.bibleStep == 0) return false;
-        return this.cursorBSelect > ProgressManager.getUnlockedFightingStyles().length && this.cursorBSelect <= ProgressManager.getUnlockedFightingStyles().length + ProgressManager.getUnlockedGods().length;
+        return this.cursorB.getCurrentSelect() > ProgressManager.getUnlockedFightingStyles().length && this.cursorB.getCurrentSelect() <= ProgressManager.getUnlockedFightingStyles().length + ProgressManager.getUnlockedGods().length;
     }
 
     loadBibleResources() {
@@ -770,10 +772,19 @@ class Scene extends Phaser.Scene {
         }
         //this.bibleTextsA.push(this.addText("Enemies", 85, 84+22*this.bibleTextsA.length)); // toujours en dernier
 
-        this.cursorA = this.addText(">", 65, -1000);
-        this.cursorB = this.addText(">", 400-20, -1000);
-        this.cursorASelect = 0;
-        this.cursorBSelect = 0;
+        this.cursorA = new CustomCursor(
+            this.addText(">", 65, -1000),
+            "vertical",
+            this.bibleTextsA
+        );
+        this.cursorA.setFormula(84, 22, 84);
+        this.cursorB = new CustomCursor(
+            this.addText(">", 400-20, -1000),
+            "vertical",
+            this.bibleTextsB
+        );
+        this.cursorB.setFormula(84, 22, 84);
+        this.cursorB.setForcedLength(25);
 
         this.bibleStep = 0;
 
@@ -813,24 +824,17 @@ class Scene extends Phaser.Scene {
     bibleUpdate() {
         if (this.bibleStep == 0) {
             if (this.justPressedControl("UP")) {
-                this.cursorASelect -= 1;
+                this.cursorA.goUp();
                 this.playSoundOK();
-                if (this.cursorASelect < 0) {
-                    this.cursorASelect += this.bibleTextsA.length;
-                }
-                this.bibleUpdateDesc();
             }
             else if (this.justPressedControl("DOWN")) {
-                this.cursorASelect += 1;
+                this.cursorA.goDown();
                 this.playSoundOK();
-                if (this.cursorASelect >= this.bibleTextsA.length) {
-                    this.cursorASelect -= this.bibleTextsA.length;
-                }
-                this.bibleUpdateDesc();
             }
 
-            this.cursorA.setY(84+22*this.cursorASelect);
-            this.cursorB.setY(-1000);
+            if (this.cursorA.update()) {
+                this.bibleUpdateDesc();
+            }
 
             if ((this.justPressedControl("ENTER") || this.justPressedControl("RIGHT")) && this.bibleTextsB.length > 0) {
                 this.bibleStep = 1;
@@ -841,32 +845,31 @@ class Scene extends Phaser.Scene {
         }
         else {
             if (this.justPressedControl("UP")) {
-                this.cursorBSelect -= 1;
+                this.cursorB.goUp();
                 this.playSoundOK();
-                if (this.cursorBSelect < 0) {
-                    this.cursorBSelect += this.bibleTextsB.length;
-                }
-                this.bibleUpdateDesc();
             }
             else if (this.justPressedControl("DOWN")) {
-                this.cursorBSelect += 1;
+                this.cursorB.goDown();
                 this.playSoundOK();
-                if (this.cursorBSelect >= this.bibleTextsB.length) {
-                    this.cursorBSelect -= this.bibleTextsB.length;
-                }
-                this.bibleUpdateDesc();
             }
 
-            this.cursorB.setY(84+22*this.cursorBSelect);
+            if (this.cursorB.update()) {
+                this.bibleUpdateDesc();
+            }
 
             if (this.justPressedControl("BACK") || this.justPressedControl("LEFT")) {
                 this.bibleStep = 0;
+                this.cursorB.obj.setY(-1000); // hide cursorB
+                this.cursorB.currentSelect = 0;
+                this.cursorB.currentOffset = 0;
                 this.bibleUpdateDesc();
                 this.playSoundSelect();
             }
 
-            if (this.sceneName == "Battle" && this.duel.duelState == "moveChoice" && this.cursorASelect == 1 && this.justPressedControl("ENTER")) {
-                this.selectMove(ProgressManager.getUnlockedMoves()[this.cursorBSelect]);
+            if (this.justPressedKey("I")) console.log(this.cursorB);
+
+            if (this.sceneName == "Battle" && this.duel.duelState == "moveChoice" && this.cursorA.getCurrentSelect() == 1 && this.justPressedControl("ENTER")) {
+                this.selectMove(ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]);
                 this.closeBible();
                 if (!ProgressManager.isStepCompleted(0, 1)) {
                     this.openDialogue(18);
@@ -876,19 +879,22 @@ class Scene extends Phaser.Scene {
                 return;
             }
             else if (this.justPressedControl("ENTER") && ProgressManager.isStepCompleted(0, 3)) {
-                var move = ProgressManager.getUnlockedMoves()[this.cursorBSelect]
+                var move = ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]
                 var pref = move.getPreference();
                 if (pref == 0 && ProgressManager.canAddNewMovePref()) {
                     move.setPreference(1);
-                    this.bibleTextsB[this.cursorBSelect].setText(move.newInstance().name + " (+)");
+                    this.bibleTextsB[this.cursorB.getCurrentSelect()].setText(move.newInstance().name + " (+)");
+                    this.playSoundOK();
                 }
                 else if (pref == 1) {
                     move.setPreference(-1);
-                    this.bibleTextsB[this.cursorBSelect].setText(move.newInstance().name + " (-)");
+                    this.bibleTextsB[this.cursorB.getCurrentSelect()].setText(move.newInstance().name + " (-)");
+                    this.playSoundOK();
                 }
                 else {
                     move.setPreference(0);
-                    this.bibleTextsB[this.cursorBSelect].setText(move.newInstance().name);
+                    this.bibleTextsB[this.cursorB.getCurrentSelect()].setText(move.newInstance().name);
+                    this.playSoundOK();
                 }
             }
         }
@@ -900,16 +906,16 @@ class Scene extends Phaser.Scene {
     bibleUpdateDesc() {
         if (this.bibleStep == 0) {
             var l = [];
-            if (this.cursorASelect == this.bibleTextsA.length-1 && false) {
+            if (this.cursorA.getCurrentSelect() == this.bibleTextsA.length-1 && false) {
                 // when I'll do the enemies tab
                 this.bibleDescription.setText("Every opponent you managed to beat.");
             }
-            else if (this.cursorASelect == 0) {
+            else if (this.cursorA.getCurrentSelect() == 0) {
                 this.bibleDescription.setText("All the game mechanics you know about!");
                 var a = ProgressManager.getUnlockedGameMechanics();
                 for (var i in a) l[i] = a[i];
             }
-            else if (this.cursorASelect == 1) {
+            else if (this.cursorA.getCurrentSelect() == 1) {
                 this.bibleDescription.setText("All the different attacks you have access to!");
                 var a = ProgressManager.getUnlockedMoves();
                 for (var i in a) {
@@ -918,26 +924,26 @@ class Scene extends Phaser.Scene {
                     else if (a[i].getPreference() == -1) l[i] += " (-)";
                 }
             }
-            else if (this.cursorASelect == 2) {
+            else if (this.cursorA.getCurrentSelect() == 2) {
                 this.bibleDescription.setText("All the people that makes your adventurers group!");
                 var a = ProgressManager.getUnlockedPartyMembers();
                 for (var i in a) l[i] = a[i].name;
             }
-            else if (this.cursorASelect == 3) {
+            else if (this.cursorA.getCurrentSelect() == 3) {
                 this.bibleDescription.setText("Effects you can acquire during battle, or start with for every battle.");
                 l = ProgressManager.getUnlockedFightingStyles();
             }
-            else if (this.cursorASelect == 4) {
+            else if (this.cursorA.getCurrentSelect() == 4) {
                 this.bibleDescription.setText("Random Events that have a chance to occur every turn.");
                 var a = ProgressManager.getUnlockedEvents();
                 for (var i in a) l[i] = EventManager.getEvent(a[i]).name;
             }
-            else if (this.cursorASelect == 5) {
+            else if (this.cursorA.getCurrentSelect() == 5) {
                 this.bibleDescription.setText("All the Gods you know you can worship.");
                 var a = ProgressManager.getUnlockedGods();
                 for (var i in a) l[i] = a[i].name;
             }
-            else if (this.cursorASelect == 6) {
+            else if (this.cursorA.getCurrentSelect() == 6) {
                 this.bibleDescription.setText("All the Synergies between the Gods you have access to.");
                 var a = ProgressManager.getUnlockedSynergies();
                 for (var i in a) l[i] = a[i].name;
@@ -948,39 +954,43 @@ class Scene extends Phaser.Scene {
             for (var i in l) {
                 this.bibleTextsB.push(this.addText(l[i], 400, 84+22*i))
             }
+
+            this.cursorB.objList = this.bibleTextsB;
+            this.cursorB.updateObjList();
+            this.cursorB.obj.setY(-1000); // hide cursor
         }
         else {
-            if (this.cursorASelect == this.bibleTextsA.length-1 && false) {
+            if (this.cursorA.getCurrentSelect() == this.bibleTextsA.length-1 && false) {
                 // when I'll do the enemies tab
                 this.bibleDescription.setText("");
             }
-            else if (this.cursorASelect == 0) {
-                var gm = ProgressManager.getUnlockedGameMechanics()[this.cursorBSelect];
+            else if (this.cursorA.getCurrentSelect() == 0) {
+                var gm = ProgressManager.getUnlockedGameMechanics()[this.cursorB.getCurrentSelect()];
                 this.bibleDescription.setText(ProgressManager.getMechanicDescription(gm));
             }
-            else if (this.cursorASelect == 1) {
-                var move = ProgressManager.getUnlockedMoves()[this.cursorBSelect].newInstance();
+            else if (this.cursorA.getCurrentSelect() == 1) {
+                var move = ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()].newInstance();
                 this.bibleDescription.setText(move.getDescription());
             }
-            else if (this.cursorASelect == 2) {
-                var pm = ProgressManager.getUnlockedPartyMembers()[this.cursorBSelect];
+            else if (this.cursorA.getCurrentSelect() == 2) {
+                var pm = ProgressManager.getUnlockedPartyMembers()[this.cursorB.getCurrentSelect()];
                 this.bibleDescription.setText(PartyManager.getHeroDescription(pm.name));
             }
-            else if (this.cursorASelect == 3) {
-                var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorBSelect];;
+            else if (this.cursorA.getCurrentSelect() == 3) {
+                var fs = ProgressManager.getUnlockedFightingStyles()[this.cursorB.getCurrentSelect()];;
                 this.bibleDescription.setText(fs + "\n\n" +
                     FightingStyles.getDesc(fs));
             }
-            else if (this.cursorASelect == 4) {
-                var ev = EventManager.getEvent(ProgressManager.getUnlockedEvents()[this.cursorBSelect]);
+            else if (this.cursorA.getCurrentSelect() == 4) {
+                var ev = EventManager.getEvent(ProgressManager.getUnlockedEvents()[this.cursorB.getCurrentSelect()]);
                 this.bibleDescription.setText(ev.getDescription());
             }
-            else if (this.cursorASelect == 5) {
-                var god = ProgressManager.getUnlockedGods()[this.cursorBSelect];
+            else if (this.cursorA.getCurrentSelect() == 5) {
+                var god = ProgressManager.getUnlockedGods()[this.cursorB.getCurrentSelect()];
                 this.bibleDescription.setText(god.getDescription());
             }
-            else if (this.cursorASelect == 6) {
-                var synergy = ProgressManager.getUnlockedSynergies()[this.cursorBSelect];
+            else if (this.cursorA.getCurrentSelect() == 6) {
+                var synergy = ProgressManager.getUnlockedSynergies()[this.cursorB.getCurrentSelect()];
                 this.bibleDescription.setText(synergy.getDescription());
             }
         }
