@@ -49,3 +49,25 @@ class DiamondWeeb extends Weeb {
         this.addFightingStyle("diamond");
     }
 }
+
+class SuperWeeb extends Weeb {
+    constructor(_name = "Super Weeb") {
+        super(_name);
+
+        this.STRValue = this.STRValue*2;
+    }
+}
+class MegaWeeb extends SuperWeeb {
+    constructor(_name = "Mega Weeb") {
+        super(_name);
+
+        this.STRValue = this.STRValue*2;
+    }
+}
+class GigaWeeb extends MegaWeeb {
+    constructor(_name = "Giga Weeb") {
+        super(_name);
+
+        this.STRValue = this.STRValue*2;
+    }
+}

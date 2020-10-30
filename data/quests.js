@@ -20,6 +20,7 @@ QuestManager.loadList([
                 "name": "CHEATING",
                 "description": "FIRST TIME CHEATING CHECK",
                 "unlockQuests": [ 10, 15 ],
+                "unlockQuestSteps": [ [24, 1] ],
                 "unlockGameMechanics": [ "Cheating" ]
             },
             { // 2
@@ -102,7 +103,8 @@ QuestManager.loadList([
                 "name": "IKEA Guards",
                 "description": "Some kind of swedish military organisation seized the place. Now you can't enter without beating guards.",
                 "encounter": "ikeaGuards",
-                "postFightDialogue": 8
+                "postFightDialogue": 8,
+                "unlockQuests": [ 26 ]
             },
             { // 1
                 "name": "The Scout",
@@ -179,7 +181,8 @@ QuestManager.loadList([
             { // 3
                 "name": "Training Session",
                 "description": "A guard seems to be taking lessons from both a kicker and a diver. You're the one who's gonna teach a lesson.",
-                "encounter": "ikeaGuardAndCo"
+                "encounter": "ikeaGuardAndCo",
+                "unlockQuests": [ 24 ]
             },
             { // 4
                 "name": "Vitamin Storage",
@@ -205,7 +208,8 @@ QuestManager.loadList([
             { // 8
                 "name": "The Mighty One",
                 "description": "He was busy taking care of the annoying people stuck in the IKEA. And now he has to take you out? Poor guy.",
-                "encounter": "ikeaManager"
+                "encounter": "ikeaManager",
+                "unlockQuests": [ 25 ]
             },
             { // 9
                 "name": "The Ritual",
@@ -393,9 +397,10 @@ QuestManager.loadList([
                 "duelParam": { "waifuDetermination": true },
                 "unlockQuestSteps": [ [12, 2] ],
                 "unlockQuests": [ 16 ],
-                "unlockAreas": [ 3 ],
+                //"unlockAreas": [ 3 ],
+                "unlockEvents": [ 6 ],
                 "saveWaifu": "Ryuko",
-                "postFightCutscene": 6
+                "postFightCutscene": 5
             },
         ]
     },
@@ -836,6 +841,77 @@ QuestManager.loadList([
                 "unlockNextStep": false,
                 "unlockGameMechanics": [ "Synergies" ],
                 "unlockQuestSteps": [ [17, 4] ]
+            }
+        ]
+    },
+    { // 24
+        "name": "Cheater Gate",
+        "description": "The original swedish pilgrims that made the IKEA are angry about how you treat their brothers! Give them a good punch in the PP.",
+        "isMain": false,
+        "areaId": 1,
+
+        "questSteps": [
+            { // 0
+                "name": "Illegal Pilgrims",
+                "description": "Deceive your narrator. Deceive the world. That is what you must do to reach the next step. Good Luck.",
+                "encounter": "swedishPilgrims",
+                "unlockNextStep": false
+            },
+            { // 1
+                "name": "Cheater Shame",
+                "description": "So now that you know you can cheat, and you know how, let's see if you can beat this stage.",
+                "encounter": "targetDummy",
+                "duelParam": {
+                    "forceRootOfNuisance": true
+                },
+                "unlockFightingStyles": [ "Small PP" ]
+            }
+        ]
+    },
+    { // 25
+        "name": "Eye of Truth",
+        "description": "The Eye of Truth needs your help! As an all-seeing eye, he saw unspeakable things he wishes to forget! Fetch the Ultimate Bleach to free him from this curse.",
+        "isMain": false,
+        "areaId": 0,
+
+        "questSteps": [
+            { // 0
+                "name": "See",
+                "description": "The Ultimate Bleach was last seen in this Anime Convention. Weebs should be stronger when closer to the relic we're seeking.",
+                "encounter": "superWeebs"
+            },
+            { // 1
+                "name": "Behold",
+                "description": "Weebs are acting weird, probably because they couldn't handle the power of the Ultimate Bleach. Punch them  until this behaviour stops.",
+                "encounter": "megaWeebs"
+            },
+            { // 2
+                "name": "Contemplate",
+                "description": "Those Giga Weebs are going to drink the Ultimate Bleach, thinking this is old milk. Stop them before they commit the sin of drinking this holy bleach!",
+                "encounter": "gigaWeebs",
+                "postFightDialogue": 33,
+                "unlockMoves": [ EyeOfTruth ]
+            }
+            // TODO last step unlocked after relics to keep the bleach (fight against eye of truth?)
+        ]
+    },
+    { // 26
+        "name": "Explosive Traps",
+        "description": "Watch out! This area of the IKEA has landmines hidden all over the place. We just have to steal one, it might be useful.",
+        "isMain": false,
+        "areaId": 1,
+
+        "questSteps": [
+            { // 0
+                "name": "It Must Be a Sign",
+                "description": "The workers that made the landmines don't want you here. You could blow up their whole work! You don't want them here either.",
+                "encounter": "landmineGuards"
+            },
+            { // 1
+                "name": "Sign of the Winner",
+                "description": "You know what? Getting a landmine is too much effort. We should get back and get the warning sign, it'll work the same way.",
+                "encounter": "landmineGuards2",
+                "unlockMoves": [ TrapSign ]
             }
         ]
     }

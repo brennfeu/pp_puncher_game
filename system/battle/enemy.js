@@ -10,6 +10,11 @@ class Enemy extends Fighter {
     }
 
     getCurrentListOfMoves() {
+        var forcedPool = this.getForcedMovepool();
+        if (forcedPool != null) {
+            return forcedPool;
+        }
+
         var l = this.currentMovepool.slice();
 
         // gods moves

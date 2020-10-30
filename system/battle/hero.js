@@ -20,12 +20,9 @@ class Hero extends Fighter {
     rollNewMovepool() {
         this.currentMovepool = [];
 
-        if (this.duel.forceConfusion) {
-            this.currentMovepool = [ InterrogationPoint ];
-            return;
-        }
-        else if (this.duel.forceSatan) {
-            this.currentMovepool = [ BigSatan ];
+        var forcedPool = this.getForcedMovepool();
+        if (forcedPool != null) {
+            this.currentMovepool = forcedPool;
             return;
         }
         else {
@@ -103,6 +100,12 @@ class Hero extends Fighter {
         console.log("Warning: Could not find an unlocked move from the following list:");
         console.log(_list);
         return null;
+    }
+    getForcedMovepool() {
+        if (this.duel.checkParam("forceRootOfNuisance", true)) {
+            return [ RootOfNuisance ];
+        }
+        return super.getForcedMovepool();
     }
 
     hasSynergy(_synergy) {

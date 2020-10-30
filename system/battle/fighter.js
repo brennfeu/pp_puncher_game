@@ -38,7 +38,11 @@ class Fighter {
     }
 
     getName() {
-        return this.name;
+        var fullname = this.name;
+        if (this.genderBender) {
+            fullname = "GenderBender " + fullname;
+        }
+        return fullname;
     }
     getDescription() {
         var txt = this.getName();
@@ -150,6 +154,12 @@ class Fighter {
                 AchievementManager.unlockAchievement(4); // FLEX
             }
         }
+        if (this.confusion > 0) {
+            var status = {};
+            status["display"] = " - Confused";
+            status["icon"] = "confusion";
+            list.push(status);
+        }
         if (this.scoutBuff > 0) {
             var status = {};
             status["display"] = " - Examination Buff";
@@ -166,6 +176,12 @@ class Fighter {
             var status = {};
             status["display"] = " - High Five Buff";
             status["icon"] = "highFive";
+            list.push(status);
+        }
+        if (this.readyToBurst) {
+            var status = {};
+            status["display"] = " - Ready to Burst";
+            status["icon"] = "trapSign";
             list.push(status);
         }
         // Value Buffs
@@ -308,31 +324,36 @@ class Fighter {
         }
         return list;
     }
-    resetStatus() {
+    resetStatus(_onlyBadStatus = false) {
+        // resets bad status
+        this.bleedDamage = 0;
+        this.turkeyBomb = -1;
+        this.noDex = 0;
+        this.depression = 0;
+        this.damageBuildUp = 0;
+        this.hasBoner = false;
+        this.isFurry = false; // TODO: icon+status text
+        this.isSilenced = false;
+        this.saltyWounds = false;
+        this.confusion = 0;
+
+        if (_onlyBadStatus) return;
+        // resets good status
         this.killerBlessing = 0;
         this.wantsHighFive = false;
         this.highFiveBuff = 0;
-        this.bleedDamage = 0;
         this.truffleFriendly = false;
         this.scoutBuff = 0;
         this.redPillAddiction = 0;
-        this.turkeyBomb = -1;
         this.boomerang = 0;
         this.pigHeal = 0;
-        this.noDex = 0;
         this.waifuDetermination = 0;
-        this.depression = 0;
-        this.damageBuildUp = 0;
         this.extraLife = 0;
         this.isCowboy = false;
         this.eldritchFriendly = false;
-        this.hasBoner = false;
-        this.saltyWounds = false;
-        this.isFurry = false; // TODO: icon+status text
         this.isFrightening = false;
         this.riotShield = false;
         this.shieldOfFaith = false;
-        this.isSilenced = false;
         this.hasKamui = false;
         this.lifeFibers = false;
     }
@@ -397,6 +418,9 @@ class Fighter {
         }
         if (this.hasFightingStyle("hockey puck")) {
             a -= 45;
+        }
+        if (this.hasFightingStyle("small")) {
+            a += 5;
         }
         if (this.hasUltimatePP()) {
             a += 50;
@@ -559,12 +583,14 @@ class Fighter {
         // temporary effects
         this.wantsHighFive = false;
         this.isFrightening = false;
+        this.readyToBurst = false;
         this.highFiveBuff = Math.max(0, this.highFiveBuff-1);
         this.scoutBuff = Math.max(0, this.scoutBuff-1);
         this.boomerang = Math.max(0, this.boomerang-1);
         this.noDex = Math.max(0, this.noDex-1);
         this.waifuDetermination = Math.max(0, this.waifuDetermination-1);
         this.backFromDeath = Math.max(0, this.backFromDeath-1);
+        this.confusion = Math.max(0, this.confusion-1);
     }
     checkNextPhase() {
         if (this.isAlive()) return;
@@ -580,12 +606,21 @@ class Fighter {
     getRandomMove() {
         return randomFromList(this.getCurrentListOfMoves());
     }
+    getForcedMovepool() {
+        if (this.duel.forceConfusion || this.confusion > 0) {
+            return [ InterrogationPoint ];
+        }
+        else if (this.duel.forceSatan) {
+            return [ BigSatan ];
+        }
+        return null;
+    }
 
     executeMove(_move = this.chosenMove, _target = this.chosenTarget, _forceMove = false) {
         if (_move == null) return;
 
         this.duel.moveCount += 1;
-        if (_forceMove) return _move.newInstance().execute(this, _target);;
+        if (_forceMove) return _move.newInstance().execute(this, _target);
 
         this.moveCap += 1;
         if (this.moveCap >= 100) {
@@ -596,7 +631,19 @@ class Fighter {
             }
             return;
         }
+        var willBurst = _target != null && _target.isAlive() && _target.readyToBurst;
         _move.newInstance().execute(this, _target);
+
+        // burst
+        if (willBurst) {
+            _target.readyToBurst = false;
+            this.duel.addMessage(_target.getName() + " bursts!");
+            var l = _target.duel.getOppsOf(_target);
+            for (var i in l) {
+                l[i].noDex = 2;
+            }
+            this.duel.memorySoundEffects.push("explosion");
+        }
 
         var nbActions = this.nbActions;
         if (this.boomerang > 0) nbActions += nbActions;
@@ -683,7 +730,12 @@ class Fighter {
                         this.duel.addMessage(this.getName() + " uses an extra life!");
                         this.duel.memorySoundEffects.push("extraLife");
                     }
-                    else { this.checkNextPhase(); }
+                    else {
+                        if (this.confusion > 0 && this.STR + _value > 0) {
+                            this.duel.addMessage("\nConfusion was " + this.getName() + "'s epitaph.");
+                        }
+                        this.checkNextPhase();
+                    }
                 }
                 return true;
             }

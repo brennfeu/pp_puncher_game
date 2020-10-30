@@ -63,10 +63,6 @@ class AreaScene extends Scene {
 
         this.questStepFrame = this.addImage("ui/area/quest_frame", 300-10, 675-1000);
 
-        if (this.onLoadQuest != undefined) {
-            this.questSelect = this.loadedQuests.indexOf(QuestManager.getQuest(parseInt(this.onLoadQuest[0])));
-        }
-
         this.playMusic(this.area.getAreaTheme());
 
         // cursors
@@ -76,6 +72,7 @@ class AreaScene extends Scene {
             this.questTexts
         );
         this.questCursor.setFormula(10, 22, 10);
+        if (this.onLoadQuest != undefined) this.questCursor.currentSelect = this.loadedQuests.indexOf(QuestManager.getQuest(parseInt(this.onLoadQuest[0])));
         this.updateDesc();
         this.stepCursor = new CustomCursor(
             this.addText(">", 300+5, -10000),
@@ -207,8 +204,8 @@ class AreaScene extends Scene {
     }
 
     triggerDuel() {
-        var q = this.loadedQuests[this.questSelect];
-        var s = ProgressManager.getUnlockedSteps(q.id)[this.stepSelect];
+        var q = this.loadedQuests[this.questCursor.getCurrentSelect()];
+        var s = ProgressManager.getUnlockedSteps(q.id)[this.stepCursor.getCurrentSelect()];
 
         var data = {}
         //data["duel"] = new StoryDuel(PartyManager.getCurrentParty(), new Encounter(s.encounter), AreaManager.getArea(this.area.id));

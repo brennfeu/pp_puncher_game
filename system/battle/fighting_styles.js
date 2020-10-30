@@ -28,6 +28,8 @@ class FightingStyles {
                 return "-10 STR, attacking an enemy has 10% chance to remove his DEX for 1 turn.";
             case "Versatile PP":
                 return "-20 DEX, +1 move slot.";
+            case "Small PP":
+                return "+5 DEX, but you have to live with the fact you have a small PP. Does not have a respective move (can only be acquired as a starting bonus).";
         }
         return "";
     }
@@ -42,5 +44,6 @@ FightingStyles.StylesList = [
     "Versatile PP",
     "Crystal PP",
     "Diamond PP",
-    "Scarred PP"
+    "Scarred PP",
+    "Small PP"
 ]

@@ -120,6 +120,7 @@ class PartyManager {
 PartyManager.HEROES_LIST = [];
 var l = ["Brenn", "Pudding", "Eldon", "Valurin", "Country Music Brenn"];
 for (var i in l) PartyManager.addPartyMember(l[i]);
+// TODO: Eye of Truth moves for all these guys
 
 if (JSON.parse(localStorage.getItem("partyMembers")) == null) PartyManager.updateLocalStorage();
 PartyManager.loadLocalStorage();

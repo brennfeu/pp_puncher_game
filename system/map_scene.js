@@ -66,7 +66,13 @@ class MapScene extends Scene {
         );
         this.cursor.setFormula(116, 263, 85);
         this.cursor.setForcedLength(3);
-        this.cursor.currentSelect = this.cursorStart;
+        if (this.cursorStart > 2) {
+            this.cursor.currentSelect = 2;
+            this.cursor.currentOffset = this.cursorStart - 2;
+        }
+        else {
+            this.cursor.currentSelect = this.cursorStart;
+        }
         this.cursor.updateObjList();
 
         this.checkUnlock();

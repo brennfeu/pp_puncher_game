@@ -45,6 +45,18 @@ class Encounter {
                 this.addEnemy(new BossWeeb(), 300);
                 this.addEnemy(new CrystalWeeb(), 561);
                 break;
+            case("superWeebs"):
+                this.addEnemy(new SuperWeeb(), 198);
+                this.addEnemy(new SuperWeeb(), 442);
+                break;
+            case("megaWeebs"):
+                this.addEnemy(new MegaWeeb(), 198);
+                this.addEnemy(new MegaWeeb(), 442);
+                break;
+            case("gigaWeebs"):
+                this.addEnemy(new GigaWeeb(), 198);
+                this.addEnemy(new GigaWeeb(), 442);
+                break;
 
             // IKEA
             case("ikeaGuards"):
@@ -143,6 +155,21 @@ class Encounter {
 
             case("edimo"):
                 this.addEnemy(new Edimo());
+                break;
+            case("swedishPilgrims"):
+                this.addEnemy(new SwedishPilgrims(), 198);
+                this.addEnemy(new SwedishPilgrims(), 442);
+                break;
+            case("targetDummy"):
+                this.addEnemy(new TargetDummy());
+                break;
+            case("landmineGuards"):
+                this.addEnemy(new LandMineGuard(undefined, true), 198);
+                this.addEnemy(new LandMineGuard(undefined, false), 442);
+                break;
+            case("landmineGuards2"):
+                this.addEnemy(new LandMineGuard(undefined, true), 198);
+                this.addEnemy(new LandMineGuard(undefined, true), 442);
                 break;
 
             // high school

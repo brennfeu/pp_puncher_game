@@ -172,6 +172,8 @@ class Scene extends Phaser.Scene {
         this.loadImage("status/silence.png");
         this.loadImage("status/kamui.png");
         this.loadImage("status/lifeFiber.png");
+        this.loadImage("status/confusion.png");
+        this.loadImage("status/trapSign.png");
 
         this.loadImage("status/other/depression.png");
         this.loadImage("status/other/fungus.png");
@@ -866,8 +868,6 @@ class Scene extends Phaser.Scene {
                 this.playSoundSelect();
             }
 
-            if (this.justPressedKey("I")) console.log(this.cursorB);
-
             if (this.sceneName == "Battle" && this.duel.duelState == "moveChoice" && this.cursorA.getCurrentSelect() == 1 && this.justPressedControl("ENTER")) {
                 this.selectMove(ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]);
                 this.closeBible();
@@ -878,7 +878,7 @@ class Scene extends Phaser.Scene {
                 }
                 return;
             }
-            else if (this.justPressedControl("ENTER") && ProgressManager.isStepCompleted(0, 3)) {
+            else if (this.justPressedControl("ENTER") && ProgressManager.isStepCompleted(0, 3) && this.cursorA.getCurrentSelect() == 1) {
                 var move = ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]
                 var pref = move.getPreference();
                 if (pref == 0 && ProgressManager.canAddNewMovePref()) {
@@ -1293,21 +1293,21 @@ class Scene extends Phaser.Scene {
 
     checkDevTools() {
         if (this.sceneName == "Area") {
-            var q = this.loadedQuests[this.questSelect];
+            var q = this.loadedQuests[this.questCursor.getCurrentSelect()];
 
             // unlock / lock steps
             if (this.justPressedKey("U")) {
                 this.playSoundOK();
                 if (this.selectsStep) {
                     if (!ProgressManager.isStepCompleted(q.id, this.stepSelect)) {
-                        ProgressManager.unlockStep(q.id, parseInt(this.stepSelect));
+                        ProgressManager.unlockStep(q.id, parseInt(this.stepCursor.getCurrentSelect()));
 
                         this.selectsStep = false;
                         this.updateDesc();
                         this.selectsStep = true;
                     }
                     else {
-                        ProgressManager.lockStep(q.id, this.stepSelect);
+                        ProgressManager.lockStep(q.id, this.stepCursor.getCurrentSelect());
                     }
                 }
                 else {

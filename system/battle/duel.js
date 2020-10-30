@@ -381,15 +381,13 @@ class Duel {
         }
 
         // cheating
-        if (_fighter.getCurrentListOfMoves().indexOf(_fighter.chosenMove) < 0 &&
+        if (_fighter.currentMovepool.indexOf(_fighter.chosenMove) < 0 &&
           getRandomPercent() <= _fighter.chosenMove.newInstance().getCheatProb() &&
-          !(this.forceConfusion && _fighter.chosenMove == InterrogationPoint) &&
-          !(this.forceSatan && _fighter.chosenMove == BigSatan) &&
           !this.allowCheating) {
             illegal = true;
         }
 
-        // dev cheat
+        // dev cheat always works
         if (_fighter.chosenMove.newInstance().type == "Dev Test") {
             illegal = false;
         }

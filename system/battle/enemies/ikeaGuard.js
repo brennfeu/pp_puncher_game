@@ -283,3 +283,43 @@ class IkeaMonstruosityPhaseTwo extends Machine {
         this.chosenMove = Bullet;
     }
 }
+
+class SwedishPilgrims extends IkeaGuard {
+    constructor(_name = "Swedish Pilgrim") {
+        super(_name);
+
+        this.STRValue = 80;
+
+        this.currentMovepool = this.randomMovepool;
+    }
+}
+class TargetDummy extends Enemy {
+    constructor(_name = "Target Dummy") {
+        super(_name);
+
+        this.STRValue = 1;
+        this.currentMovepool = [ Wait ];
+    }
+}
+
+class LandMineGuard extends IkeaGuard {
+    constructor(_name = "Landmine Worker", _startsWithTrap) {
+        super(_name);
+
+        this.STRValue = 80;
+
+        this.currentMovepool = [ PunchingPPReallyHard ];
+
+        this.trapSignLoopCount = !_startsWithTrap;
+        this.readyToBurst = _startsWithTrap;
+    }
+
+    turnChange() {
+        super.turnChange();
+
+        if (this.trapSignLoopCount) {
+            this.readyToBurst = true;
+        }
+        this.trapSignLoopCount = !this.trapSignLoopCount;
+    }
+}

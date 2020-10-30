@@ -346,6 +346,11 @@ class Pig extends Move {
 
         _user.duel.memorySoundEffects.push("mmh");
         _user.duel.addAnimation("squeeze", 60, _user);
+
+		if (_user.hasBoner) {
+			_user.duel.addMessage(_user.getName() + " loses his boner!");
+            _user.hasBoner = false;
+		}
     }
 }
 
@@ -423,6 +428,20 @@ class RedPill extends Move {
 
         _user.duel.memorySoundEffects.push("flex");
         _user.duel.addAnimation("pill", 60, _user);
+    }
+}
+
+class RootOfNuisance extends Move {
+    constructor() {
+        super();
+        this.name = "Root Of Nuisance";
+        this.description = "Abandons the battle by setting the user's STR at -9999999999.";
+        this.needsTarget = false;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " abandons the battle!");
+		_user.setSTR(-9999999999);
     }
 }
 
@@ -578,6 +597,23 @@ class TurkeyBomb extends Move {
     }
 }
 
+class TrapSign extends Move {
+    constructor() {
+        super();
+        this.name = "Trap Sign";
+        this.description = "If an opponent uses a move targetting you for this turn, every opponent gets no DEX for next turn.";
+        this.autoPass = true;
+        this.priority = true;
+        this.needsTarget = false;
+    }
+
+    execute(_user, _target = null) {
+        if (_user.readyToBurst) _user.duel.addMessage(_user.getName() + " gets ready to burst!");
+        else _user.duel.addMessage(_user.getName() + " is ready to burst!");
+        _user.readyToBurst = true;
+    }
+}
+
 class Yes extends Move {
     constructor() {
         super();
@@ -626,4 +662,5 @@ class Yes extends Move {
 const REGULAR_MOVE_LIST = [AdaptPP, BigGuy, BigSatan, Boomerang, BrocketeerDive, BronanSlam,
     Bullet, DeadBro, EncrustPP, FlexBro, HighFiveBro,
     Hologram, InterrogationPoint, Kick, Pig, PregnantBro, PunchingPP, PunchingPPReallyHard,
-    RedPill, Save, SawBlade, Scout, ShieldMove, Steel, TurkeyBomb, Yes];
+    RedPill, RootOfNuisance, Save, SawBlade, Scout,
+    ShieldMove, Steel, TrapSign, TurkeyBomb, Yes];

@@ -625,5 +625,23 @@ DialogueManager.loadList([
                 "text": "You may attempt the last trial, only when you've proven yourself."
             }
         ]
+    },
+    { // 33 - Eye of Truth gets Bleach
+        "dialogueLines": [
+            {
+                "speaker": "Pudding",
+                "text": "We're back from our quest. Here's the thing you requested."
+            },
+            {
+                "speaker": "Eye of Truth",
+                "text": "Alas, the Ultimate Bleach."
+            },
+            {
+                "text": "Thank you kind sirs. As a reward, you can always call for aid, and I will answer."
+            },
+            {
+                "text": "I will show you the power of your inner worth."
+            }
+        ]
     }
 ])

@@ -94,3 +94,16 @@ EventManager.addEvent(
     3,
     25
 ); // 15 - 17
+EventManager.addEvent(
+    "Nudist Beach", // 6
+    "All fighters gets negative effects removed.",
+    function(_duel) {
+        _duel.addMessage("Fear is freedom! Subjugation is liberation! Contradiction is truth! Those are the facts of this world! And you will all surrender to them, you pigs in human clothing!");
+        var l = _duel.getAllFighters();
+        for (var i in l) {
+            if (l[i].isDead()) continue;
+            l[i].resetStatus(true);
+        }
+    },
+    1
+); // 18
