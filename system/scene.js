@@ -303,7 +303,9 @@ class Scene extends Phaser.Scene {
     }
 
     startLoadingScreen() {
-        this.loadingText = this.addText("LOADING...", 1000, 650, {fontStyle: 'bold', fontSize: '30px'});
+        var txt = "LOADING...";
+        if (getRandomPercent() <= 1) txt = "¯\\_(ツ)_/¯";
+        this.loadingText = this.addText(txt, 1000, 650, {fontStyle: 'bold', fontSize: '30px'});
     }
     stopLoadingScreen() {
         this.loadingText.destroy();
@@ -363,8 +365,10 @@ class Scene extends Phaser.Scene {
         this.currentDialogue = DialogueManager.getDialogue(_dialogueId);
         this.currentLine = 0;
 
-        this.optionBlackScreen = this.addImage("ui/blackScreen");
-        this.optionBlackScreen.setAlpha(0.5);
+        if (!this.isInBible) {
+            this.optionBlackScreen = this.addImage("ui/blackScreen");
+            this.optionBlackScreen.setAlpha(0.5);
+        }
 
         this.dialogueFrame = this.addImage("ui/other/dialogue_frame", 0, 675-200);
         this.dialogueSpeakerObj = this.addText("", 12, 675-200+12, {fontStyle: 'bold'});
@@ -379,8 +383,10 @@ class Scene extends Phaser.Scene {
     closeDialogue() {
         this.isInDialogue = false;
 
-        this.optionBlackScreen.destroy();
-        this.optionBlackScreen = null;
+        if (!this.isInBible) {
+            this.optionBlackScreen.destroy();
+            this.optionBlackScreen = null;
+        }
 
         this.currentDialogue = null;
         this.currentLine = 0;
@@ -868,33 +874,42 @@ class Scene extends Phaser.Scene {
                 this.playSoundSelect();
             }
 
-            if (this.sceneName == "Battle" && this.duel.duelState == "moveChoice" && this.cursorA.getCurrentSelect() == 1 && this.justPressedControl("ENTER")) {
-                this.selectMove(ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]);
-                this.closeBible();
-                if (!ProgressManager.isStepCompleted(0, 1)) {
-                    this.openDialogue(18);
-                    ProgressManager.unlockStep(0, 1);
-                    this.unlockList.push(["Game Mechanic", "Cheating"])
+            if (this.justPressedControl("ENTER")) {
+                if (this.sceneName == "Battle" && this.duel.duelState == "moveChoice" && this.cursorA.getCurrentSelect() == 1) {
+                    this.selectMove(ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]);
+                    this.closeBible();
+                    if (!ProgressManager.isStepCompleted(0, 1)) {
+                        this.openDialogue(18);
+                        ProgressManager.unlockStep(0, 1);
+                        this.unlockList.push(["Game Mechanic", "Cheating"])
+                    }
+                    return;
                 }
-                return;
-            }
-            else if (this.justPressedControl("ENTER") && ProgressManager.isStepCompleted(0, 3) && this.cursorA.getCurrentSelect() == 1) {
-                var move = ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]
-                var pref = move.getPreference();
-                if (pref == 0 && ProgressManager.canAddNewMovePref()) {
-                    move.setPreference(1);
-                    this.bibleTextsB[this.cursorB.getCurrentSelect()].setText(move.newInstance().name + " (+)");
-                    this.playSoundOK();
+                else if (ProgressManager.isStepCompleted(0, 3) && this.cursorA.getCurrentSelect() == 1) {
+                    var move = ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]
+                    var pref = move.getPreference();
+                    if (pref == 0 && ProgressManager.canAddNewMovePref()) {
+                        move.setPreference(1);
+                        this.bibleTextsB[this.cursorB.getCurrentSelect()].setText(move.newInstance().name + " (+)");
+                        this.playSoundOK();
+                    }
+                    else if (pref == 1) {
+                        move.setPreference(-1);
+                        this.bibleTextsB[this.cursorB.getCurrentSelect()].setText(move.newInstance().name + " (-)");
+                        this.playSoundOK();
+                    }
+                    else {
+                        move.setPreference(0);
+                        this.bibleTextsB[this.cursorB.getCurrentSelect()].setText(move.newInstance().name);
+                        this.playSoundOK();
+                    }
                 }
-                else if (pref == 1) {
-                    move.setPreference(-1);
-                    this.bibleTextsB[this.cursorB.getCurrentSelect()].setText(move.newInstance().name + " (-)");
-                    this.playSoundOK();
-                }
-                else {
-                    move.setPreference(0);
-                    this.bibleTextsB[this.cursorB.getCurrentSelect()].setText(move.newInstance().name);
-                    this.playSoundOK();
+                else if (this.sceneName == "Map" && this.cursorA.getCurrentSelect() == 2) {
+                    var dialogueLine = PartyManager.getHeroDialogueLine(ProgressManager.getUnlockedPartyMembers()[this.cursorB.getCurrentSelect()].name);
+                    if (dialogueLine != null) {
+                        this.playSoundOK();
+                        this.openDialogue(dialogueLine);
+                    }
                 }
             }
         }

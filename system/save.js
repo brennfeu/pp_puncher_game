@@ -426,7 +426,7 @@ class ProgressManager {
     }
     static loadLocalStorage() {
         ProgressManager.SAVE_FILES = JSON.parse(localStorage.getItem("savefile"));
-        if (ProgressManager.SAVE_FILES["movePreferences"] == undefined) {
+        if (ProgressManager.SAVE_FILES != null && ProgressManager.SAVE_FILES["movePreferences"] == undefined) {
             ProgressManager.SAVE_FILES["movePreferences"] = [];
         }
     }

@@ -5,6 +5,7 @@ let fs = require('fs');
 
 var GREENWORKS = require("./greenworks");
 console.log("Steam API Init: " + GREENWORKS.init());
+console.log(GREENWORKS);
 
 function TRIGGER_ERROR(_scene, _err) {
     var crash_log_txt = "An error occured :(\nCould you please send this to the dev at pppunchergame@gmail.com,\n" +

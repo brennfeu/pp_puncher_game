@@ -581,18 +581,20 @@ class TurkeyBomb extends Move {
     constructor() {
         super();
         this.name = "Turkey";
-        this.description = "Every living fighter gets 300 STR, but they all explode in 5 turns, inflicting 1000 damages. Eating again resets the countdown.";
+        this.description = "Every living opponent gets 500 STR, but they all explode in 5 turns, inflicting 1000 damages. Eating again resets the countdown.";
         this.needsTarget = false;
     }
 
     execute(_user, _target = null) {
         _user.duel.addMessage(_user.getName() + " starts a feast!");
 
-        for (var i in _user.duel.getAllFighters()) {
-            if (_user.duel.getAllFighters()[i].isDead()) continue;
-             _user.duel.getAllFighters()[i].heal(300);
-             _user.duel.getAllFighters()[i].turkeyBomb = 6;
-                 _user.duel.addAnimation("yum", 60, _user.duel.getAllFighters()[i]);
+        var l = _user.duel.getOppsOf(_user);
+        for (var i in l) {
+            if (l[i].isDead()) continue;
+            l[i].heal(500);
+            l[i].turkeyBomb = 6;
+
+            _user.duel.addAnimation("yum", 60, l[i]);
         }
     }
 }

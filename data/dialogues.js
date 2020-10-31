@@ -643,5 +643,29 @@ DialogueManager.loadList([
                 "text": "I will show you the power of your inner worth."
             }
         ]
-    }
+    },
+    { // 34 - Brenn Special Dialogue Line
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "I WILL PUNCH PP! I WILL PUNCH PP! I WILL PUNCH PUNCH PUNCH!"
+            }
+        ]
+    },
+    { // 35 - Pudding Special Dialogue Line
+        "dialogueLines": [
+            {
+                "speaker": "Pudding",
+                "text": "Heck Yeah!"
+            }
+        ]
+    },
+    { // 36 - Eldon Special Dialogue Line
+        "dialogueLines": [
+            {
+                "speaker": "Eldon",
+                "text": "Guys, I don't really want to punch PP..."
+            }
+        ]
+    },
 ])

@@ -828,8 +828,8 @@ class Fighter {
     addRandomGod(_category = "regular") {
         var god = GodManager.getRandomGod(_category);
         var nbTries = 0;
-        while (nbTries <= 10000) {
-            if (this.godsList.indexOf(god) < 0) {
+        while (nbTries <= 100) {
+            if (this.godsList.indexOf(god) < 0 && god != null) {
                 this.godsList.push(god);
                 return true;
             }

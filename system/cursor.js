@@ -29,7 +29,6 @@ class CustomCursor {
                 this.updateObjList();
             }
             else if (this.currentSelect < middle && this.getCurrentSelect() >= middle) {
-                console.log(middle)
                 this.currentOffset -= 1;
                 this.currentSelect += 1;
                 this.updateObjList();

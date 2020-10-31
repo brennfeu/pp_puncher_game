@@ -116,11 +116,17 @@ class IkeaChef extends IkeaGuard {
     constructor(_name = "Ikea Chef") {
         super(_name);
 
+        this.STRValue = 200;
+
         this.currentMovepool = [ TurkeyBomb, SawBlade ]
     }
 
     selectMove() {
-        if (this.turkeyBomb <= 1 && this.STRValue <= 1000) {
+        var oppHasTurkey = false;
+        var l = this.duel.getOppsOf(this);
+        for (var i in l) if (l[i].turkeyBomb > 0) oppHasTurkey = true;
+
+        if (!oppHasTurkey) {
             this.chosenMove = TurkeyBomb;
         }
         else {

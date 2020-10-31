@@ -93,6 +93,17 @@ class PartyManager {
         }
         return "No Description :("
     }
+    static getHeroDialogueLine(_hero) {
+        switch(_hero) {
+            case "Brenn":
+                return 34;
+            case "Pudding":
+                return 35;
+            case "Eldon":
+                return 36;
+        }
+        return null
+    }
 
     static updateLocalStorage() {
         var l = [];

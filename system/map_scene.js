@@ -92,14 +92,14 @@ class MapScene extends Scene {
         if (this.isInOptions) {
             return this.optionsUpdate();
         }
+        if (this.isInDialogue) {
+            return this.dialogueUpdate();
+        }
         if (this.isInBible) {
             return this.bibleUpdate();
         }
         if (this.isInParty) {
             return this.partyUpdate();
-        }
-        if (this.isInDialogue) {
-            return this.dialogueUpdate();
         }
         if (this.unlockList.length > 0) {
             if (!this.isInUnlock) this.openUnlock();

@@ -92,7 +92,10 @@ class GodManager {
         return l;
     }
     static getRandomGod(_category = "regular") {
-        while (true) {
+        if (ProgressManager.getUnlockedGods().lenth == 0) return null;
+
+        var nbTries = 0;
+        while (nbTries <= 100) {
             var random = randomFromList(GodManager.getAllGods(_category));
             if (_category == "waifu" && ProgressManager.getSavedWaifus().indexOf(random.name) > -1) {
                 return random;
@@ -100,7 +103,10 @@ class GodManager {
             if (ProgressManager.getUnlockedGods().indexOf(random) > -1) {
                 return random;
             }
+
+            nbTries += 1;
         }
+        return null;
     }
 
     static loadList(_list) {
