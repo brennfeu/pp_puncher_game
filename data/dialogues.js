@@ -320,6 +320,10 @@ DialogueManager.loadList([
                 "text": " - Brenn"
             },
             {
+                "speaker": "Special Thanks",
+                "text": " - oRpheusB20"
+            },
+            {
                 "speaker": "Cool Player",
                 "text": " - You :)"
             }
@@ -516,7 +520,7 @@ DialogueManager.loadList([
                 "text": "I was working on the waifu device. I've got my priorities you know."
             },
             {
-                "text": "And, to be honest, I'm not going there to help him. It's because there's a waifu stuck in the temple that I want to save."
+                "text": "And, to be honest, I'm not going there only to help him. It's because there's a waifu stuck in the temple that I want to save. Saving my friend is a bonus."
             }
         ]
     },
@@ -656,7 +660,7 @@ DialogueManager.loadList([
         "dialogueLines": [
             {
                 "speaker": "Pudding",
-                "text": "Heck Yeah!"
+                "text": "HECK YEAH! LET'S GO DEFEAT SOME COCK!"
             }
         ]
     },

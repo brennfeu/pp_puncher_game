@@ -8,26 +8,32 @@ class WoodCutting extends Move {
 
         this.type = "rare";
 
-        try {
-            var nbWood = GREENWORKS.getStatInt("WOOD");
-            this.description += nbWood;
-        }
-        catch(e) {
-            this.description += "\n\nUnknown :("
-        }
+        var currentWood = ProgressManager.getValue("wood");
+        if (currentWood == undefined) currentWood = 0;
+        this.description += currentWood;
     }
 
     execute(_user, _target = null) {
+        var currentWood = ProgressManager.getValue("wood");
+        if (currentWood == undefined) currentWood = 0;
+
+        var nb = Math.floor(getRandomPercent()/10)+1;
+        var total = currentWood;
+        nb += Math.floor((_user.STR+total)/19);
+        ProgressManager.setValue("wood", total + nb);
+
+        _user.duel.addMessage(_user.getName() + " gets " + nb + " wood.");
+        _user.duel.memorySoundEffects.push("woodcut");
+
+        WoodCutting.saveToSteam();
+    }
+
+    static saveToSteam() {
         try {
-            var nb = Math.floor(getRandomPercent()/10)+1;
-            var total = GREENWORKS.getStatInt("WOOD");
-            nb += Math.floor((_user.STR+total)/19);
-            GREENWORKS.setStat("WOOD", total + nb);
-            GREENWORKS.storeStats(function(_idk) { if(GREENWORKS.getStatInt("WOOD") > 1000000000) { AchievementManager.unlockAchievement(5); } }, function(_err) {});
-            _user.duel.addMessage(_user.getName() + " gets " + nb + " wood.");
+            GREENWORKS.setStat("WOOD", ProgressManager.getValue("wood"));
+            GREENWORKS.storeStats(function(_idk) { if(ProgressManager.getValue("wood") > 1000000000) { AchievementManager.unlockAchievement(5); } }, function(_err) { console.log(_err) });
         }
         catch(e) {
-            _user.duel.addMessage(_user.getName() + " fails to find a good wood source. It might be because you aren't connected to steam?");
             console.log(e);
         }
     }
@@ -53,6 +59,9 @@ class EyeOfTruth extends Move {
                 _user.duel.addMessage(_user.getName() + " decides to make a game called PP Puncher!");
                 _user.duel.addMessage(_user.getName() + " uses his new knowledge to punch " + _target.getName() + "'s PP!");
                 _target.damage(_user.STR, "attack", _user);
+
+                _user.duel.addAnimation("punch", 60, _target, true, false);
+                _user.duel.memorySoundEffects.push("punchA");
                 break;
             case("Pudding"):
                 _user.duel.addMessage(_user.getName() + "'s true inner worth is too complex for the Eye of Truth to understand!");
@@ -65,6 +74,9 @@ class EyeOfTruth extends Move {
                 for (var i in l) {
                     l[i].confusion = 2;
                 }
+
+                _user.duel.addAnimation("genderbending", 60, _user);
+                _user.duel.memorySoundEffects.push("mmh");
                 break;
             default:
                 _user.duel.addMessage("The Eye of Truth cannot find " + _user.getName() + "'s signature move :(");

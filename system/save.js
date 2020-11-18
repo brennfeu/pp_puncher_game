@@ -421,6 +421,27 @@ class ProgressManager {
         return "No Description :("
     }
 
+    static getCurrentVersion() {
+        var currentVersion = ProgressManager.getValue("version");
+        if (currentVersion == undefined) {
+            return "Beta 1.0.10";
+        }
+        return currentVersion;
+    }
+    static updateCurrentVersion() {
+        ProgressManager.setValue("version", GAME_VERSION);
+    }
+
+    static getValue(_valueName) {
+        if (ProgressManager.SAVE_FILES["otherValues"] == undefined) ProgressManager.SAVE_FILES["otherValues"] = {};
+        return ProgressManager.SAVE_FILES["otherValues"][_valueName];
+    }
+    static setValue(_valueName, _value) {
+        console.log(_valueName + " / " + _value)
+        ProgressManager.SAVE_FILES["otherValues"][_valueName] = _value;
+        ProgressManager.updateLocalStorage();
+    }
+
     static updateLocalStorage() {
         localStorage.setItem("savefile", JSON.stringify(ProgressManager.SAVE_FILES));
     }
@@ -437,7 +458,8 @@ if (ProgressManager.SAVE_FILES == null) {
     console.log("Savefile Initialisation");
     ProgressManager.SAVE_FILES = {
         "completedSteps": [],
-        "movePreferences": []
+        "movePreferences": [],
+        "otherValues": {}
     };
     ProgressManager.updateLocalStorage();
 }

@@ -143,7 +143,7 @@ class TriggerNextPhase extends Move {
             if (_user.duel.enemies[i].id == _user.id) {
                 // create a new instance of the next phase
                 var next = _user.nextPhase.newInstance();
-                var obj = ["spriteObject", "spriteX", "spriteY", "STRTextObject", "DEXTextObject", "duel"];
+                var obj = Fighter.SPECIAL_OBJECTS;
                 for (var j in obj) {
                     next[obj[j]] = _user[obj[j]];
                 }

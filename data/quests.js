@@ -154,8 +154,8 @@ QuestManager.loadList([
         ]
     },
     { // 4
-        "name": "Senjougahara",
-        "description": "Senjougahara has been spotted in the IKEA's basement! This is a rescue mission! She must be retrieved!",
+        "name": "The Beginning",
+        "description": "Senjougahara has been spotted in the IKEA's basement! This is the first waifu you found, you have to succeed!",
         "isMain": true,
         "areaId": 1,
 
@@ -352,7 +352,7 @@ QuestManager.loadList([
         ]
     },
     { // 8
-        "name": "Ryuko",
+        "name": "Rescue Mission",
         "description": "Ryuko has been spotted in the High School! This is a rescue mission! She must be retrieved!",
         "isMain": true,
         "areaId": 2,
@@ -397,10 +397,10 @@ QuestManager.loadList([
                 "duelParam": { "waifuDetermination": true },
                 "unlockQuestSteps": [ [12, 2] ],
                 "unlockQuests": [ 16 ],
-                //"unlockAreas": [ 3 ],
+                "unlockAreas": [ 3 ],
                 "unlockEvents": [ 6 ],
                 "saveWaifu": "Ryuko",
-                "postFightCutscene": 5
+                "postFightCutscene": 6
             },
         ]
     },
@@ -624,7 +624,7 @@ QuestManager.loadList([
     },
     { // 17
         "name": "Trials of Faith",
-        "description": "The next waifu, Priestess, is in this temple. She is at the end of this corridor.",
+        "description": "The next waifu, Priestess, is in this temple. She is at the end of this corridor, though you feel a holy presence watching you.",
         "isMain": true,
         "areaId": 3,
 
@@ -668,8 +668,10 @@ QuestManager.loadList([
                 "name": "Trial of Faith",
                 "description": "Did you think it would be that easy? Here comes the last trial. Prove your faith, and you shall be rewareded.",
                 "encounter": "faithForReal",
+                "duelParam": { "waifuDetermination": true },
+                "unlockQuestSteps": [ [12, 3] ],
                 "saveWaifu": "Priestess",
-                "unlockQuestSteps": [ [12, 3] ]
+                "postFightCutscene": 5
             }
         ]
     },

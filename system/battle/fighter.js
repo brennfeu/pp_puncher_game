@@ -117,13 +117,13 @@ class Fighter {
     getAllStatus() {
         var list = [];
         // Only Icons
-        if (this.regularCharges > 0) {
+        if (this.regularCharges > 0 && this.godsList.length > 0) {
             var status = {};
             status["display"] = null;
             status["icon"] = "special/regularCharge";
             list.push(status);
         }
-        if (this.specialCharges > 0) {
+        if (this.specialCharges > 0 && this.godsList.length > 0) {
             var status = {};
             status["display"] = null;
             status["icon"] = "special/specialCharge";
@@ -389,9 +389,6 @@ class Fighter {
         if (this.hasBoner) {
             a += 50;
         }
-        if (this.hasKamui) {
-            a += 200;
-        }
 
         return a;
     }
@@ -577,6 +574,8 @@ class Fighter {
                     if (l[i].isDead()) continue;
                     l[i].bleedDamage += 1;
                 }
+
+                _fighter.duel.memorySoundEffects.push("guitarSolo");
             });
         }
 
@@ -890,3 +889,4 @@ class Fighter {
 }
 
 Fighter.idCounter = 0;
+Fighter.SPECIAL_OBJECTS = ["spriteObject", "spriteX", "spriteY", "STRTextObject", "DEXTextObject", "duel"];

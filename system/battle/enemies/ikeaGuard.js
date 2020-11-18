@@ -248,7 +248,7 @@ class IkeaTurret extends Machine {
 }
 
 class IkeaMonstruosity extends Machine {
-    constructor(_name = "Ikea Monstruosity") {
+    constructor(_name = "Ikea Monstrosity") {
         super(_name);
 
         this.STRValue = 500;

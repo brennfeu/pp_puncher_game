@@ -145,6 +145,27 @@ class Scene extends Phaser.Scene {
         return obj;
     }
 
+    executeQuery(_str, _queryID = null) {
+        var _scene = this;
+        var _function = this.recieveQuery;
+
+        DB_CONNECTION.query(_str, (_error, _result) => {
+            if (_error) {
+                console.log("QUERY ERROR :");
+        		console.log(_error);
+
+                QUERY_RESULT = _error;
+                throw _error;
+            }
+
+            _function(_result, _queryID);
+        });
+
+        // HOW TO USE:
+        // have a recieveQuery(_results, _queryID) function in your scene
+        // _queryID helps knowing what was the purpose of the query, so the function could have a switch:case for each queryID
+    }
+
     loadMovesImages() {
         for (var i in REGULAR_MOVE_LIST) {
             this.loadImage("ui/battle/moves/" + REGULAR_MOVE_LIST[i].newInstance().name + ".png");
@@ -222,10 +243,15 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/jesus.mp3");
         this.loadSound("battle/yeehaw.mp3");
         this.loadSound("battle/ghostSound.mp3");
-
+        this.loadSound("battle/woodcut.mp3");
         this.loadSound("battle/thisSucks.mp3");
-        this.loadSound("battle/uuh.mp3");
+        this.loadSound("battle/guitarSolo.mp3");
         this.loadSound("battle/ohYeah.mp3");
+        this.loadSound("battle/scream.mp3");
+        this.loadSound("battle/salt.mp3");
+        this.loadSound("battle/staple.mp3");
+
+        this.loadSound("battle/uuh.mp3");
     }
 
     getInputKeyObj(_key) {
@@ -325,6 +351,7 @@ class Scene extends Phaser.Scene {
         this.mainObjTint = 0;
         this.forceTint = [];
 
+        WoodCutting.saveToSteam();
         try {
             if (!GREENWORKS.initAPI()) GREENWORKS = null;
         }
@@ -333,6 +360,7 @@ class Scene extends Phaser.Scene {
         return this.scene.start(_sceneName, _data);
     }
     closeGame() {
+        DB_CONNECTION.end((err) => {});
         window.close();
     }
 
@@ -888,7 +916,8 @@ class Scene extends Phaser.Scene {
                 else if (ProgressManager.isStepCompleted(0, 3) && this.cursorA.getCurrentSelect() == 1) {
                     var move = ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]
                     var pref = move.getPreference();
-                    if (pref == 0 && ProgressManager.canAddNewMovePref()) {
+                    if (pref == 0) {
+                        if (!ProgressManager.canAddNewMovePref()) return this.playSoundError();
                         move.setPreference(1);
                         this.bibleTextsB[this.cursorB.getCurrentSelect()].setText(move.newInstance().name + " (+)");
                         this.playSoundOK();

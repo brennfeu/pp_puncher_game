@@ -1,5 +1,5 @@
 class Encounter {
-    constructor(_id){
+    constructor(_id, _otherData = null) {
         this.enemyList = [];
         this.name = _id;
 
@@ -309,11 +309,11 @@ class Encounter {
                 this.addEnemy(new SpiritGuardian(), 76);
                 this.addEnemy(new TutorialPriest(), 330);
                 this.addEnemy(new GuardianOfFaith(), 521);
+                this.enemyList[0].STRValue = 30;
+                this.enemyList[2].STRValue = 30;
                 break;
             case("energyBarrier"):
-                this.addEnemy(new SpiritGuardian(), 36);
-                this.addEnemy(new EnergyBarrier(), 290);
-                this.addEnemy(new GuardianOfFaith(), 521);
+                this.addEnemy(new EnergyBarrier());
                 break;
             case("faith"):
                 this.addEnemy(new FaithFirstBattle());
@@ -393,6 +393,22 @@ class Encounter {
                 this.addEnemy(new PriestEnemy(), 56);
                 this.addEnemy(new BossWeeb(), 290);
                 this.addEnemy(new PriestEnemy(), 561);
+                break;
+
+            // multiplayer
+            case("multiplayer"):
+                if (_otherData.length == 1) {
+                    this.addEnemy(_otherData[0]);
+                }
+                else if (_otherData.length == 2) {
+                    this.addEnemy(_otherData[0], 190);
+                    this.addEnemy(_otherData[1], 450);
+                }
+                else if (_otherData.length == 3) {
+                    this.addEnemy(_otherData[0], 79);
+                    this.addEnemy(_otherData[1]);
+                    this.addEnemy(_otherData[2], 561);
+                }
                 break;
         }
     }

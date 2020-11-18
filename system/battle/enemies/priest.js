@@ -51,7 +51,6 @@ class HighCleric extends PriestEnemy {
         this.DEXValue = 40;
 
         this.newChargeChance = 66;
-        this.isBoss = true;
     }
 }
 
@@ -86,7 +85,7 @@ class Faith extends Enemy {
         super(_name);
 
         this.STRValue = 5000;
-        this.DEXValue = 40;
+        this.DEXValue = 50;
 
         this.currentMovepool = [ Save ];
 
@@ -147,7 +146,7 @@ class FaithFirstBattle extends Faith {
         if (this.attackCounter >= 1) {
             this.duel.memoryTurnChange.push(function(_fighter) {
                 _fighter.duel.triggerVictory();
-                
+
                 _fighter.duel.memoryDialogues.push(32);
             });
         }

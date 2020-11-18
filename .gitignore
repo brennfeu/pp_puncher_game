@@ -4,8 +4,11 @@ lib/
 phaser.js
 greenworks.js
 
+db_values.js
+
 web2exe.json
 package.json
+package-lock.json
 
 favicon.ico
 favicon.png
@@ -16,6 +19,7 @@ crash_log.txt
 locales/
 pnacl/
 swiftshader/
+node_modules/
 *.dll
 *.dat
 *.pak

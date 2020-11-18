@@ -15,6 +15,8 @@ GodManager.loadList([
             _target.bleedDamage += Math.floor(_user.STR/10);
 
             _user.duel.addAnimation("bleed", 60, _target, true, false);
+            _user.duel.addAnimation("solo", 60, _user);
+            _user.duel.memorySoundEffects.push("guitarSolo");
             if (_target.isAlive()) _user.duel.memorySoundEffects.push(_target.getHurtSound());
         },
         function(_user, _target = null) { // special move
@@ -23,6 +25,7 @@ GodManager.loadList([
             _user.extraLife += 1;
 
             _user.duel.memorySoundEffects.push("jesus");
+            _user.duel.addAnimation("amen", 60, _user);
         }
     ),
     new RegularGod(
@@ -37,8 +40,12 @@ GodManager.loadList([
 
             if (_user.addRandomGod("waifu")) {
                 _user.duel.addMessage(_user.godsList[_user.godsList.length-1].name + " joined him!");
+
+                _user.duel.addAnimation("chad", 60, _user);
+                _user.duel.memorySoundEffects.push("ohYeah");
             }
             else {
+                _user.duel.addAnimation("sad", 60, _user);
                 _user.duel.addMessage("But no one joined him!");
             }
         },
@@ -46,6 +53,8 @@ GodManager.loadList([
             if (_target.STR > _user.STR) {
                 _user.duel.addMessage(_user.getName() + " gets " + _target.getName() + "'s strength!");
                 _user.setSTR(_target.STR);
+
+                _user.duel.memorySoundEffects.push("mmh");
             }
             else {
                 _user.duel.addMessage(_user.getName() + " already is the strongest!");
@@ -53,6 +62,8 @@ GodManager.loadList([
             if (_target.DEX > _user.DEX) {
                 _user.duel.addMessage(_user.getName() + " gets " + _target.getName() + "'s dexterity!");
                 _user.setDEX(_target.DEX);
+
+                _user.duel.memorySoundEffects.push("mmh");
             }
             else {
                 _user.duel.addMessage(_user.getName() + " already is the fastest!");
@@ -101,6 +112,7 @@ GodManager.loadList([
                 _user.duel.addMessage(_user.getName() + " becomes eldritch friendly!");
                 _user.eldritchFriendly = true;
 
+                _user.duel.addAnimation("eldritch", 60, _user);
                 _user.duel.memorySoundEffects.push("darkMagic");
             }
             else {
@@ -129,10 +141,16 @@ GodManager.loadList([
             else {
                 _user.duel.addMessage("But it fails...");
             }
+
+            _user.duel.addAnimation("aah", 60, _user);
+            _user.duel.memorySoundEffects.push("scream");
         },
         function(_user, _target = null) { // special move
             _user.duel.addMessage(_user.getName() + " gets a sudden body change!");
             _user.DEXValue += Math.floor(_user.DEX/4);
+
+            _user.duel.memorySoundEffects.push("scream");
+            _user.duel.addAnimation("change", 60, _user);
         }
     ),
     new RegularGod(
@@ -166,10 +184,16 @@ GodManager.loadList([
         function(_user, _target = null) { // regular move
             _user.duel.addMessage(_user.getName() + " makes " + _target.getName() + "'s wounds salty!");
             _target.saltyWounds = true;
+
+            _user.duel.memorySoundEffects.push("salt");
+            _user.duel.addAnimation("salt", 60, _target, true, false);
         },
         function(_user, _target = null) { // special move
             _user.duel.addMessage(_user.getName() + " bores " + _target.getName() + " by non-stop talking!");
             _target.DEXValue -= Math.floor(_target.DEXValue/5);
+
+            _user.duel.addAnimation("bored", 60, _target, true, false);
+            _user.duel.addAnimation("blabla", 60, _user);
         }
     ),
     new RegularGod(
@@ -190,6 +214,9 @@ GodManager.loadList([
             _user.duel.addMessage(_user.getName() + " gives a boner punch to " + _target.getName() + "!");
             _user.duel.addAnimation("punch", 60, _target);
 			_target.damage(Math.floor((_user.STR - (_user.DEX/2))/5), "attack", _user);
+
+            _user.duel.addAnimation("punch", 60, _target, true, false);
+            _user.duel.memorySoundEffects.push("punchB");
         },
         function(_user, _target = null) { // special move
             if (!_user.hasBoner) {
@@ -208,6 +235,9 @@ GodManager.loadList([
             _user.duel.addMessage(_user.getName() + " gives a boner punch to " + _target.getName() + "!");
             _user.duel.addAnimation("punch", 60, _target);
 			_target.damage(Math.floor(_user.STR/2), "attack", _user);
+
+            _user.duel.addAnimation("punch", 60, _target, true, false);
+            _user.duel.memorySoundEffects.push("punchB");
         }
     ),
 
@@ -228,6 +258,8 @@ GodManager.loadList([
             _user.duel.memoryDialogues.push(29);
             _target.isSilenced = true;
             _user.duel.addMessage(_target.getName() + " is silenced!");
+
+            _user.duel.addAnimation("silenced", 60, _target, true, false);
         }
     ),
     new Waifu(
@@ -245,15 +277,23 @@ GodManager.loadList([
 			}
 			if (_user.lifeFibers > 1) {
 				_user.duel.addMessage(_user.getName() + "'s body fuses with more life fibers!");
+                _user.duel.memorySoundEffects.push(_user.getHurtSound());
+                _user.duel.addAnimation("fiber", 60, _user);
 			}
 			else {
 				_user.duel.addMessage(_user.getName() + "'s body fuses with life fibers!");
+                _user.duel.memorySoundEffects.push(_user.getHurtSound());
+                _user.duel.addAnimation("fiber", 60, _user);
 			}
         },
         function(_user, _target = null) { // special move
             if (!_user.hasKamui) {
 				_user.duel.addMessage(_user.getName() + " gets a Kamui!");
+                _user.STRValue += 200;
 				_user.hasKamui = true;
+
+                _user.duel.memorySoundEffects.push(_user.getHurtSound());
+                _user.duel.addAnimation("kamui", 60, _user);
 			}
 			else {
 				_user.duel.addMessage(_user.getName() + " already has a Kamui!");
@@ -272,10 +312,16 @@ GodManager.loadList([
 			if (_target.damage(Math.floor(_user.STR/10))) {
                 _target.bleedDamage += Math.floor(_user.STR/10);
             }
+
+            _user.duel.memorySoundEffects.push("staple");
+            _user.duel.addAnimation("stapled", 60, _target, true, false);
         },
         function(_user, _target = null) { // special move
             _user.duel.addMessage(_target.getName() + " gets cursed by a Crab Oddity.");
 			_target.DEXValue -= 20;
+
+            _user.duel.memorySoundEffects.push("darkMagic");
+            _user.duel.addAnimation("cursed", 60, _target, true, false);
         }
     )
 

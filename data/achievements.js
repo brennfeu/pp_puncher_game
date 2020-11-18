@@ -28,5 +28,10 @@ AchievementManager.loadList([
         "name": "Saved the World? Nop, but I’m a great Lumberjack",
         "description": "Get 1 000 000 000 wood planks",
         "steamName": "WOOD_CUTTER"
+    },
+    { // 6
+        "name": "HACKING TO THE GAME",
+        "description": ":(",
+        "steamName": "HACKER"
     }
 ]);

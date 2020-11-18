@@ -41,6 +41,8 @@ class BigGuy extends Move {
         _target.noDex = 2;
 
         _user.duel.memorySoundEffects.push("flex");
+        _user.duel.addAnimation("intimidates", 60, _user);
+        _user.duel.addAnimation("intimidated", 60, _target);
     }
 }
 
@@ -203,11 +205,17 @@ class EncrustPP extends Move {
             _user.duel.addMessage("...with diamond!");
             _user.addFightingStyle("diamond");
             _user.DEXValue += 10;
+
+            _user.duel.memorySoundEffects.push("mmh");
+            _user.duel.addAnimation("diamond", 60, _user);
         }
         else {
             _user.duel.addMessage("...with crystal!");
             _user.addFightingStyle("crystal");
             _user.DEXValue += 10;
+
+            _user.duel.memorySoundEffects.push("mmh");
+            _user.duel.addAnimation("crystal", 60, _user);
         }
     }
 }
@@ -240,8 +248,9 @@ class HighFiveBro extends Move {
     }
 
     execute(_user, _target = null) {
-        for (var i in _user.duel.getAlliesOf(_user)) {
-            if (_user.duel.getAlliesOf(_user)[i].wantsHighFive && _user.duel.getAlliesOf(_user)[i].highFiveBuff < 2) {
+        var l = _user.duel.getAlliesOf(_user);
+        for (var i in l) {
+            if (l[i].wantsHighFive && l[i].highFiveBuff < 2) {
                 _user.duel.addMessage(_user.getName() + " high fives " + _user.duel.getAlliesOf(_user)[i].getName() + "!");
                 _user.highFiveBuff = 2;
                 _user.duel.getAlliesOf(_user)[i].highFiveBuff = 2;
@@ -259,6 +268,8 @@ class HighFiveBro extends Move {
 
         _user.duel.memorySoundEffects.push("hey");
     }
+
+    //alternateExecute TODO
 }
 
 class Hologram extends Move {
@@ -442,6 +453,9 @@ class RootOfNuisance extends Move {
     execute(_user, _target = null) {
         _user.duel.addMessage(_user.getName() + " abandons the battle!");
 		_user.setSTR(-9999999999);
+
+        _user.duel.addAnimation("kick", 60, _target, true, false);
+        _user.duel.memorySoundEffects.push("thisSucks");
     }
 }
 
@@ -464,7 +478,8 @@ class Save extends Move {
 
         if (deadAllies.length <= 0) {
             _user.duel.addMessage(_user.getName() + " heals himself!");
-            _user.duel.addAnimation("save", 60, _user);
+            _user.duel.addAnimation("ohYeahDouble", 60, _user);
+            _user.duel.memorySoundEffects.push("thisSucks");
             _user.heal(50);
         }
         else {
@@ -613,6 +628,9 @@ class TrapSign extends Move {
         if (_user.readyToBurst) _user.duel.addMessage(_user.getName() + " gets ready to burst!");
         else _user.duel.addMessage(_user.getName() + " is ready to burst!");
         _user.readyToBurst = true;
+
+        _user.duel.addAnimation("ready", 60, _user);
+        _user.duel.memorySoundEffects.push("protect");
     }
 }
 

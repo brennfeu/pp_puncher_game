@@ -47,7 +47,7 @@ const CUTSCENE_LIST = [
         "music": "CinematicIntro",
         "nextSceneKey": "Map",
         "nextSceneData": {
-            "areaSelect": 2
+            "areaSelect": 3
         }
     },
     { // 6 - Out of High School

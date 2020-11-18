@@ -86,6 +86,12 @@ class MapScene extends Scene {
             // init cutscene
             return this.openCutscene(1);
         }
+        else if (ProgressManager.getCurrentVersion() != GAME_VERSION) {
+            var version = ProgressManager.getCurrentVersion();
+            ProgressManager.updateCurrentVersion();
+
+            if (version == "Beta 1.0.10" && ProgressManager.isStepCompleted(8, 6)) return this.openCutscene(6);
+        }
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     update() { try {

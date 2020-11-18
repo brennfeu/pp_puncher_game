@@ -89,7 +89,7 @@ class PartyManager {
             case "Pudding":
                 return "A swedish dude that happened to be very good friend with Brenn. He seems to know a lot about PP Punching, but even him doesn't know why he knows this much.\n\nHis waifu is Mongo.";
             case "Eldon":
-                return "A very old friend of Brenn, master of painting miniatures and related board games. He also played a bunch of tabletop rpg campaigns with Brenn and other of his friends.\n\nHis waifu is Astolfo.";
+                return "A very old friend of Brenn, master of painting miniatures and related board games. He also played a bunch of tabletop rpg campaigns with Brenn and other friends of him.\n\nHis waifu is Astolfo.";
         }
         return "No Description :("
     }

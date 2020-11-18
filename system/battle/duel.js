@@ -297,7 +297,7 @@ class Duel {
         if (validHeroesNb == 0) {
             for (var i in this.enemies) {
                 this.enemies[i].selectMove();
-                this.enemies[i].selectTarget();
+                if (this.enemies[i].chosenMove.newInstance().needsTarget) this.enemies[i].selectTarget();
             }
             return this.triggerAttacks(); // Starts all attacks
         }
@@ -381,11 +381,12 @@ class Duel {
         }
 
         // cheating
-        if (_fighter.currentMovepool.indexOf(_fighter.chosenMove) < 0 &&
-          getRandomPercent() <= _fighter.chosenMove.newInstance().getCheatProb() &&
+        if (_fighter.isHero() && // only heroes cheat:
+          _fighter.currentMovepool.indexOf(_fighter.chosenMove) < 0 && // if not in movepool
+          getRandomPercent() <= _fighter.chosenMove.newInstance().getCheatProb() && // and cheating roll fail
           !this.allowCheating) {
             illegal = true;
-        }
+        } // and cheating is forbidden
 
         // dev cheat always works
         if (_fighter.chosenMove.newInstance().type == "Dev Test") {
