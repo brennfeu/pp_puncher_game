@@ -36,6 +36,15 @@ class Fighter {
         this.DEXTextObject = null; // Gets instanciated by the duel scene
         this.statusIconObjects = [];
     }
+    loadPartyMember(_partyMember) {
+        this.partyMember = _partyMember;
+        for (var i in _partyMember.fightingStyles) {
+            this.addFightingStyle(_partyMember.fightingStyles[i]);
+        }
+        for (var i in _partyMember.gods) {
+            this.godsList.push(GodManager.getGod(_partyMember.gods[i]));
+        }
+    }
 
     getName() {
         var fullname = this.name;
@@ -356,6 +365,7 @@ class Fighter {
         this.shieldOfFaith = false;
         this.hasKamui = false;
         this.lifeFibers = false;
+        this.cannotFailMove = false; // hidden for wyndoella
     }
 
     get STR() {
@@ -852,6 +862,7 @@ class Fighter {
     }
 
     updateTextObjects() {
+        if (this.spriteObject == null) return;
         if (this.isDead()) {
             this.spriteObject.setTint(9474192);
 
@@ -865,6 +876,25 @@ class Fighter {
             this.STRTextObject.setText("STR: " + this.STR);
             this.DEXTextObject.setText("DEX: " + this.DEX);
         }
+    }
+    destroyObjects() {
+        if (this.spriteObject != null) this.spriteObject.destroy();
+        this.spriteObject = null;
+        if (this.STRTextObject != null) this.STRTextObject.destroy();
+        this.STRTextObject = null;
+        if (this.DEXTextObject != null) this.DEXTextObject.destroy();
+        this.DEXTextObject = null;
+
+        for (var j in this.statusIconObjects) {
+            this.statusIconObjects[j].destroy();
+        }
+        this.statusIconObjects = [];
+    }
+    hasGameObj(_obj) {
+        for (var i in Fighter.SPECIAL_OBJECTS) {
+            if (this[Fighter.SPECIAL_OBJECTS[i]] === _obj) return true;
+        }
+        return false;
     }
 
     getDangerLevel() { // used for killer blessing
@@ -889,4 +919,8 @@ class Fighter {
 }
 
 Fighter.idCounter = 0;
-Fighter.SPECIAL_OBJECTS = ["spriteObject", "spriteX", "spriteY", "STRTextObject", "DEXTextObject", "duel"];
+Fighter.SPECIAL_OBJECTS = ["spriteObject", "spriteX", "spriteY", "STRTextObject", "DEXTextObject", "duel", "statusIconObjects"];
+
+// Hero objects
+Fighter.SPECIAL_OBJECTS.push("moveFrameObject");
+Fighter.SPECIAL_OBJECTS.push("moveFrameText");

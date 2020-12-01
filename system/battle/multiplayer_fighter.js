@@ -1,7 +1,5 @@
 class MultiplayerFighter extends Hero {
     constructor(_partyMember) {
-        super(_name);
+        super(_partyMember);
     }
-
-
 }

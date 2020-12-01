@@ -8,17 +8,19 @@ var GAME_CONFIG = {
 	input: {
         gamepad: true
     },
-	scene: [MenuScene, BattleScene, MapScene, AreaScene, CutsceneScene, CrashScene]
+	scene: [MenuScene, BattleScene, MapScene, AreaScene, CutsceneScene, MultiplayerScene, MultiplayerBattleScene, CrashScene]
 };
 
 // phaser.js + credits.html + greenworks.js = 106238 lines of code(source only)
 // CTRL + SHIFT + ALT + L to get total lines of code
 
-const DEV_MODE = false;
-const GAME_VERSION = "Beta 1.1.0"; // Beta x.x --> Release x.x
+const DEV_MODE = true;
+const GAME_VERSION = "Beta 1.1.1"; // Beta x.x --> Release x.x
 
 const DISABLE_MUSIC = DEV_MODE;
 const SCALE_GAME = true;
+
+var CURRENT_SCENE = null; // for console debugging
 
 if (SCALE_GAME) {
 	GAME_CONFIG["scale"] = {
@@ -37,6 +39,9 @@ function getTextSpeed() {
 function getRandomPercent() {
 	var i = Math.floor(Math.random() * 100 + 1);
 	return i;
+}
+function getCurrentTimestamp() {
+	return Math.floor(Date.now() / 1000);
 }
 
 function shuffleArray(array) {

@@ -39,6 +39,7 @@ class Duel {
         this.forceConfusion = false;
         this.allowCheating = false;
         this.forceSatan = false;
+        this.triggeredChaos = false;
 
         // parameters
         this.parameters = {};
@@ -287,20 +288,25 @@ class Duel {
     }
 
     checkAllFightersAttacks() {
+        if (this.getValidHeroesNb() == 0) {
+            this.enemiesSelectTheirMoves();
+            return this.triggerAttacks(); // Starts all attacks
+        }
+    }
+    enemiesSelectTheirMoves() {
+        for (var i in this.enemies) {
+            this.enemies[i].selectMove();
+            if (this.enemies[i].chosenMove != null && this.enemies[i].chosenMove.newInstance().needsTarget) this.enemies[i].selectTarget();
+        }
+    }
+    getValidHeroesNb() {
         var validHeroesNb = 0;
         for (var i in this.heroes) {
             if (this.heroes[i].canPlayThisTurn()) {
                 validHeroesNb += 1;
             }
         }
-
-        if (validHeroesNb == 0) {
-            for (var i in this.enemies) {
-                this.enemies[i].selectMove();
-                if (this.enemies[i].chosenMove.newInstance().needsTarget) this.enemies[i].selectTarget();
-            }
-            return this.triggerAttacks(); // Starts all attacks
-        }
+        return validHeroesNb;
     }
 
     triggerAttacks() {
@@ -353,8 +359,9 @@ class Duel {
             this.mainFighter = this.getAllFighters(true)[this.currentFighterIndex];
             if (this.mainFighter.isAlive() && this.messageList.length > 0) this.addTextSeparator();
 
-            if (this.getAllFighters(true)[this.currentFighterIndex].chosenMove.newInstance().autoPass ||
-                    this.getAllFighters(true)[this.currentFighterIndex].rolledDEX + 10 >= oppDEX ||
+            if (this.mainFighter.chosenMove.newInstance().autoPass ||
+                    this.mainFighter.cannotFailMove ||
+                    this.mainFighter.rolledDEX + 10 >= oppDEX ||
                     (this.checkParam("autoPunch", true) && this.mainFighter.chosenMove == PunchingPP)) {
                 this.launchMove(this.getAllFighters(true)[this.currentFighterIndex]);
                 this.getAllFighters(true)[this.currentFighterIndex].DEXBonus = 0;
@@ -443,6 +450,13 @@ class Duel {
             }
         }
         return liste;
+    }
+    getFighterFromId(_id) {
+        var l = this.getAllFighters();
+        for (var i in l) {
+            if (l[i].id == _id) return l[i];
+        }
+        return null;
     }
 
     getTheme() {
@@ -544,3 +558,5 @@ class Duel {
         this.memoryTurnChange = [];
     }
 }
+
+Duel.SPECIAL_OBJECTS = ["logTextObject", "logTitleObject"];

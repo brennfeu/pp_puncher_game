@@ -31,6 +31,15 @@ QuestManager.loadList([
                 "name": "MOVE PREFERENCES",
                 "description": "ONCE x THINGS HAVE BEEN UNLOCKED",
                 "unlockGameMechanics": [ "Move Preferences" ]
+            },
+            { // 4
+                "name": "MULTIPLAYER TUTORIAL",
+                "description": "FIRST TIME SEEEING THE MULTIPLAYER SCENE"
+            },
+            { // 5
+                "name": "UNLOCKED NG+ QUEST",
+                "description": "ALL OTHER QUESTS HAVE BEEN COMPLETED",
+                "unlockQuests": [ 28 ]
             }
         ]
     },
@@ -217,7 +226,7 @@ QuestManager.loadList([
                 "encounter": "ikeaMonstruosity",
                 "duelParam": { "waifuDetermination": true },
                 "unlockAreas": [ 2 ],
-                "unlockQuests" : [ 6 ],
+                "unlockQuests" : [ 6, 27 ],
                 "unlockQuestSteps": [[12, 1]],
                 "postFightCutscene": 3,
                 "saveWaifu": "Senjougahara"
@@ -914,6 +923,42 @@ QuestManager.loadList([
                 "description": "You know what? Getting a landmine is too much effort. We should get back and get the warning sign, it'll work the same way.",
                 "encounter": "landmineGuards2",
                 "unlockMoves": [ TrapSign ]
+            }
+        ]
+    },
+    { // 27
+        "name": "Otherworlds",
+        "description": "A portal appeared in the Anime Convention. It seems to lead to different alternate realities.",
+        "isMain": true,
+        "areaId": 0,
+
+        "questSteps": [
+            { // 0
+                "name": "Vexovoid",
+                "description": "As you approach the portal. You see a bunch of people coming out of it. Wait, those people are you from another dimension!",
+                "encounter": "oppositeTeam",
+                "unlockGameMechanics": [ "Multiplayer" ]
+            },
+            { // 1
+                "name": "Multiplayer",
+                "description": "Enter the Portal, and punch PPs from other dimensions!",
+                "goToMultiplayerScene": true
+            }
+        ]
+    },
+    { // 28
+        "name": "Wyndoella Bridge",
+        "description": "A new area appeared in the temple. All of it looks like empty space, except for one bridge made of light.",
+        "isMain": true,
+        "areaId": 3,
+        "ignoreMe": true,
+
+        "questSteps": [
+            { // 0
+                "name": "The Overgod",
+                "description": "TODO",
+                "encounter": "wyndoella",
+                "unlockGameMechanics": [ "New Game Plus" ]
             }
         ]
     }

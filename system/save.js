@@ -417,6 +417,8 @@ class ProgressManager {
                 return "Divine creatures that managed to ascend and keep their divine status for a long period of time, Gods are so powerful they transcend space and time. You can worship them, in exchange for powers they grant to you.\n\nYou can select which god to worship in the world map, in the 'PARTY' tab."
             case "Synergies":
                 return "Some Gods work pretty well when combined with each other. If all the required Gods of a synergy are worshipped by someone, that person will immediately get the effect of the synergy."
+            case "Multiplayer":
+                return "Play Online Multiplayer with Strangers! Puts your current team against the one of a stranger or a friend! Be careful, as they may have more unlocks than you do!\n\nMultiplayer can be accessed in the Anime Convention, or using the Bible > Game Mechanics > Multiplayer."
         }
         return "No Description :("
     }
@@ -437,7 +439,6 @@ class ProgressManager {
         return ProgressManager.SAVE_FILES["otherValues"][_valueName];
     }
     static setValue(_valueName, _value) {
-        console.log(_valueName + " / " + _value)
         ProgressManager.SAVE_FILES["otherValues"][_valueName] = _value;
         ProgressManager.updateLocalStorage();
     }

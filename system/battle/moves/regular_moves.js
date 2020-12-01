@@ -56,6 +56,7 @@ class BigSatan extends Move {
     }
 
     execute(_user, _target = null) {
+        _user.duel.triggeredChaos = true;
         _user.duel.addMessage(_user.getName() + " summons Satan's chaotic powers!");
 
         var l = _user.duel.getAllFighters();
@@ -644,6 +645,7 @@ class Yes extends Move {
     }
 
     execute(_user, _target = null) {
+        _user.duel.triggeredChaos = true;
         var random = _user.duel.getRandomFighter();
         var nb = Math.floor(getRandomPercent()/100*_user.getCurrentListOfMoves().length)+1;
 

@@ -672,4 +672,30 @@ DialogueManager.loadList([
             }
         ]
     },
+    { // 37 - Multiplayer Tutorial
+        "dialogueLines": [
+            {
+                "speaker": "PP Arbitrator",
+                "text": "Welcome to the Multiplayer Area!"
+            },
+            {
+                "text": "While you stay this area, you become visible to other people wanting to have a PvP fight. You can view those people on the left side of your screen."
+            },
+            {
+                "text": "On the right are the people that challenges you. You can challenge people by pressing the ENTER control on them on the left side."
+            },
+            {
+                "text": "You can accept a challenge on pressing ENTER on the right side."
+            },
+            {
+                "text": "It is advised to select people that have the same number of unlocks as you do, since that means they are more or less at the same point in the game as you are."
+            },
+            {
+                "text": "PP Points can also be used to measure the number of battles one have won. Depending on how chaotic the battle was, a user may gain more or less PP Points."
+            },
+            {
+                "text": "Well, I wish you good fortune, and a happy PP Punching!"
+            }
+        ]
+    }
 ])

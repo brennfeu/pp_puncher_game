@@ -86,6 +86,9 @@ class QuestSteps {
 
         this.saveWaifu = _data.saveWaifu;
 
+        this.goToMultiplayerScene = _data.goToMultiplayerScene;
+        if (this.goToMultiplayerScene == undefined) this.goToMultiplayerScene = false;
+
         this.unlockNextStep = _data.unlockNextStep;
         if (this.unlockNextStep == undefined) this.unlockNextStep = true;
     }
@@ -137,6 +140,17 @@ class QuestManager {
             }
         }
         return false;
+    }
+
+    static readyForNGP() {
+        var l = [];
+        for (var i in this.QUEST_LIST) {
+            if (!this.QUEST_LIST[i].isCompleted() && !this.QUEST_LIST[i].ignoreMe && ![0, 28].includes(this.QUEST_LIST[i].id)) {
+                console.log(this.QUEST_LIST[i]);
+                return false;
+            }
+        }
+        return true;
     }
 }
 QuestManager.QUEST_LIST = [];

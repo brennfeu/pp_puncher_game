@@ -1,5 +1,7 @@
 class Hero extends Fighter {
     constructor(_partyMember) {
+        if (_partyMember == undefined) return super(""); // for multiplayer JSON gathering
+
         super(_partyMember.name);
 
         var waifuSaved = ProgressManager.getSavedWaifus().length;
@@ -9,12 +11,7 @@ class Hero extends Fighter {
         this.moveFrameObject = null;
         this.moveFrameText = null;
 
-        for (var i in _partyMember.fightingStyles) {
-            this.addFightingStyle(_partyMember.fightingStyles[i]);
-        }
-        for (var i in _partyMember.gods) {
-            this.godsList.push(GodManager.getGod(_partyMember.gods[i]));
-        }
+        this.loadPartyMember(_partyMember);
     }
 
     rollNewMovepool() {
@@ -115,6 +112,7 @@ class Hero extends Fighter {
 
     updateTextObjects() {
         super.updateTextObjects();
+        if (this.spriteObject == null) return;
         if (this.chosenMove == null || this.isDead() || ["heroChoice", "moveChoice", "targetChoice", "movePlaying"].indexOf(this.duel.duelState) < 0) {
             this.moveFrameObject.setY(-1000);
             this.moveFrameText.setY(-1000);
@@ -125,6 +123,14 @@ class Hero extends Fighter {
             this.moveFrameText.setY(this.spriteY-20);
             this.moveFrameText.setText(this.chosenMove.newInstance().name);
         }
+    }
+    destroyObjects() {
+        super.destroyObjects();
+
+        if (this.moveFrameObject != null) this.moveFrameObject.destroy();
+        this.moveFrameObject = null;
+        if (this.moveFrameText != null) this.moveFrameText.destroy();
+        this.moveFrameText = null;
     }
 
     getDangerLevel() { // used for killer blessing

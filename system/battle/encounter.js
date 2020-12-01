@@ -57,6 +57,12 @@ class Encounter {
                 this.addEnemy(new GigaWeeb(), 198);
                 this.addEnemy(new GigaWeeb(), 442);
                 break;
+            case("oppositeTeam"):
+                var l = PartyManager.getCurrentParty();
+                for (var i in l) {
+                    this.addEnemy(new HeroEnemy(l[i]), 0, 0);
+                }
+                break;
 
             // IKEA
             case("ikeaGuards"):
@@ -394,20 +400,14 @@ class Encounter {
                 this.addEnemy(new BossWeeb(), 290);
                 this.addEnemy(new PriestEnemy(), 561);
                 break;
+            case("wyndoella"):
+                this.addEnemy(new WyndoellaBoss());
+                break;
 
             // multiplayer
             case("multiplayer"):
-                if (_otherData.length == 1) {
-                    this.addEnemy(_otherData[0]);
-                }
-                else if (_otherData.length == 2) {
-                    this.addEnemy(_otherData[0], 190);
-                    this.addEnemy(_otherData[1], 450);
-                }
-                else if (_otherData.length == 3) {
-                    this.addEnemy(_otherData[0], 79);
-                    this.addEnemy(_otherData[1]);
-                    this.addEnemy(_otherData[2], 561);
+                for (var i in _otherData) {
+                    this.addEnemy(new MultiplayerEnemy(_otherData[i]));
                 }
                 break;
         }

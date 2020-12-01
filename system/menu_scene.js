@@ -74,9 +74,7 @@ class MenuScene extends Scene {
             if (this.cursor.getCurrentSelect() == 0) {
                 // START
                 this.playSoundSelect();
-
-                var data = {};
-                return this.switchScene("Map", data);
+                return this.switchScene("Map");
             }
             else if (this.cursor.getCurrentSelect() == 1) {
                 // OPTIONS

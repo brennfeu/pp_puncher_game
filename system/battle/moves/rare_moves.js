@@ -31,11 +31,18 @@ class WoodCutting extends Move {
     static saveToSteam() {
         try {
             GREENWORKS.setStat("WOOD", ProgressManager.getValue("wood"));
-            GREENWORKS.storeStats(function(_idk) { if(ProgressManager.getValue("wood") > 1000000000) { AchievementManager.unlockAchievement(5); } }, function(_err) { console.log(_err) });
+            GREENWORKS.storeStats(
+                function(_idk) {
+                    if (ProgressManager.getValue("wood") > 1000000000) {
+                        AchievementManager.unlockAchievement(5);
+                    }
+                },
+                function(_err) {
+                    console.log(_err)
+                }
+            );
         }
-        catch(e) {
-            console.log(e);
-        }
+        catch(e) {}
     }
 }
 

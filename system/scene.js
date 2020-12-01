@@ -3,6 +3,11 @@ class Scene extends Phaser.Scene {
         super(_json);
         this.sceneName = _json.key;
 
+        this.allTextObjects = [];
+        this.allImageObjects = [];
+
+        this.stopQueries = false;
+
         this.isMaintainingKey = false;
         this.isMaintainingKeyMemory = null;
         this.keyTimer = 0;
@@ -55,6 +60,20 @@ class Scene extends Phaser.Scene {
         this.loadingText = null;
     }
 
+    getAllObjects() {
+        for (var i = this.allTextObjects.length - 1; i >= 0; i--) {
+    		if (!this.allTextObjects[i].active) {
+                this.allTextObjects.splice(i, 1);
+    		}
+    	}
+        for (var i = this.allImageObjects.length - 1; i >= 0; i--) {
+    		if (!this.allImageObjects[i].active) {
+                this.allImageObjects.splice(i, 1);
+    		}
+    	}
+        return this.allTextObjects.concat(this.allImageObjects)
+    }
+
     loadImage(_image, _name = _image.substring(0, _image.length - 4)) {
         return this.load.image(_name.replace(/ /g,''), "resources/images/" + _image.replace(/ /g,''));
     }
@@ -63,7 +82,9 @@ class Scene extends Phaser.Scene {
     }
     addImageMiddle(_name, _x, _y) {
         //console.log(_name.replace(/ /g,''))
-        return this.add.image(_x, _y, _name.replace(/ /g,''));
+        var obj = this.add.image(_x, _y, _name.replace(/ /g,''));
+        this.allImageObjects.push(obj);
+        return obj
     }
     getImage(_name) {
         //console.log(_name.replace(/ /g,''));
@@ -134,6 +155,8 @@ class Scene extends Phaser.Scene {
     }
 
     addText(_text, _x, _y, _json = null, _speed = null) {
+        if (false) { console.trace(); console.log(_text); }
+
         if (_json == null) {
             _json = {};
         }
@@ -142,12 +165,18 @@ class Scene extends Phaser.Scene {
         }
         var obj = new TextDict(this, _x, _y, _text, _json, _speed);
         this.add.existing(obj);
+        this.allTextObjects.push(obj);
         return obj;
+    }
+    addTextMiddle(_text, _x, _y, _json = null, _speed = null) {
+
     }
 
     executeQuery(_str, _queryID = null) {
         var _scene = this;
         var _function = this.recieveQuery;
+
+        if (false) { console.log(_queryID); console.log(_str); }
 
         DB_CONNECTION.query(_str, (_error, _result) => {
             if (_error) {
@@ -158,7 +187,7 @@ class Scene extends Phaser.Scene {
                 throw _error;
             }
 
-            _function(_result, _queryID);
+            if (!_scene.stopQueries) _function(_result, _queryID, _scene);
         });
 
         // HOW TO USE:
@@ -336,6 +365,8 @@ class Scene extends Phaser.Scene {
     stopLoadingScreen() {
         this.loadingText.destroy();
         this.loadingText = null;
+
+        CURRENT_SCENE = this;
     }
 
     switchScene(_sceneName, _data) {
@@ -350,6 +381,8 @@ class Scene extends Phaser.Scene {
         this.mainObj = null;
         this.mainObjTint = 0;
         this.forceTint = [];
+
+        this.stopQueries = true;
 
         WoodCutting.saveToSteam();
         try {
@@ -510,9 +543,15 @@ class Scene extends Phaser.Scene {
         }
     }
     checkSpecialUnlocks() {
+        // Move Preferences
         if (ProgressManager.getTotalNbOfUnlocks() >= 25 && !ProgressManager.isStepCompleted(0, 3)) {
             ProgressManager.unlockStep(0, 3);
             this.unlockList.push(["Game Mechanic", "Move Preferences"]);
+        }
+        // NG+
+        if (QuestManager.readyForNGP() && !ProgressManager.isStepCompleted(0, 5)) {
+            return; // REMOVE THAT FOR NG+
+            ProgressManager.unlockStep(0, 5);
         }
     }
     openUnlock() {
@@ -903,7 +942,7 @@ class Scene extends Phaser.Scene {
             }
 
             if (this.justPressedControl("ENTER")) {
-                if (this.sceneName == "Battle" && this.duel.duelState == "moveChoice" && this.cursorA.getCurrentSelect() == 1) {
+                if ((this.sceneName == "Battle" || this.sceneName == "MultiplayerBattle") && this.duel.duelState == "moveChoice" && this.cursorA.getCurrentObject().text == "Moves") {
                     this.selectMove(ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]);
                     this.closeBible();
                     if (!ProgressManager.isStepCompleted(0, 1)) {
@@ -913,7 +952,7 @@ class Scene extends Phaser.Scene {
                     }
                     return;
                 }
-                else if (ProgressManager.isStepCompleted(0, 3) && this.cursorA.getCurrentSelect() == 1) {
+                else if (ProgressManager.isStepCompleted(0, 3) && this.cursorA.getCurrentObject().text == "Moves") {
                     var move = ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]
                     var pref = move.getPreference();
                     if (pref == 0) {
@@ -933,12 +972,16 @@ class Scene extends Phaser.Scene {
                         this.playSoundOK();
                     }
                 }
-                else if (this.sceneName == "Map" && this.cursorA.getCurrentSelect() == 2) {
+                else if (this.sceneName == "Map" && this.cursorA.getCurrentObject().text == "Party Members") {
                     var dialogueLine = PartyManager.getHeroDialogueLine(ProgressManager.getUnlockedPartyMembers()[this.cursorB.getCurrentSelect()].name);
                     if (dialogueLine != null) {
                         this.playSoundOK();
                         this.openDialogue(dialogueLine);
                     }
+                }
+                else if (this.sceneName == "Map" && this.cursorB.getCurrentObject().text == "Multiplayer") {
+                    this.closeBible();
+                    return this.switchScene("Multiplayer");
                 }
             }
         }
@@ -1079,7 +1122,7 @@ class Scene extends Phaser.Scene {
         var texts = [];
         if (this.optionArea == "options") {
             texts = ["Controls", "Audio", "Battle Automatic Text Flow: "];
-            if (this.sceneName == "Battle") {
+            if (this.sceneName == "Battle" || this.sceneName == "MultiplayerBattle") {
                 if (this.duel.duelState == "moveChoice") {
                     texts.push("Open Bible");
                 }
@@ -1351,7 +1394,7 @@ class Scene extends Phaser.Scene {
                         this.selectsStep = true;
                     }
                     else {
-                        ProgressManager.lockStep(q.id, this.stepCursor.getCurrentSelect());
+                        ProgressManager.lockStep(q.id, parseInt(this.stepCursor.getCurrentSelect()));
                     }
                 }
                 else {

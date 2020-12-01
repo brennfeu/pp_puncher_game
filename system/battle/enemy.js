@@ -51,15 +51,6 @@ class Enemy extends Fighter {
         this.spriteY = _y;
     }
 
-    destroyObjects() {
-        this.spriteObject.destroy();
-        this.STRTextObject.destroy();
-        this.DEXTextObject.destroy();
-        for (var j in this.statusIconObjects) {
-            this.statusIconObjects[j].destroy();
-        }
-    }
-
     static newInstance() {
         return eval("new " + this.name + "()");
     }

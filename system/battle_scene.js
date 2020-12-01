@@ -1,6 +1,6 @@
 class BattleScene extends Scene {
-    constructor() { try {
-        super({key:"Battle"});
+    constructor(_key = "Battle") { try {
+        super({key: _key});
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     init(_data) { try {
@@ -81,24 +81,6 @@ class BattleScene extends Scene {
 
         this.addImage("ui/battle/heroes_bar", 0, 561);
 
-        for (var i in this.duel.heroes) {
-            var xValue = 20 + i*300;
-            var yValue = 574;
-            this.duel.heroes[i].spriteObject = this.addText(this.duel.heroes[i].name, xValue, yValue+6, {fontStyle: 'bold'});
-            this.duel.heroes[i].STRTextObject = this.addText("STR: " + this.duel.heroes[i].STR, xValue, yValue+6+37);
-            this.duel.heroes[i].DEXTextObject = this.addText("DEX: " + this.duel.heroes[i].DEX, xValue, yValue+6+63);
-
-            this.duel.heroes[i].moveFrameObject = this.addImage("ui/battle/hero_move_frame", xValue-6, -1000);
-            this.duel.heroes[i].moveFrameText = this.addText("", xValue+1, -1000, {fontSize: '21px'});
-
-            this.duel.heroes[i].spriteX = xValue;
-            this.duel.heroes[i].spriteY = yValue;
-
-            var bf = this.addImage("ui/battle/hero_frame_blocked", xValue, yValue+6);
-            bf.setAlpha(0);
-            this.blockedHeroFrames.push(bf);
-        }
-
         this.duel.logTitleObject = this.addText(this.duel.messageTitle, 810, 13, {fontStyle: 'bold', backgroundColor: "#000"});
         this.duel.logTextObject = this.addText(this.duel.getAllMessages(), 810, 57, {fontSize: '21px', wordWrap: {width: 400, height: 550}}, getTextSpeed());
 
@@ -109,6 +91,7 @@ class BattleScene extends Scene {
         this.playMusic(this.duel.getTheme());
 
         this.stopLoadingScreen();
+        this.checkHeroesObjects();
         this.checkEnemiesObjects();
 
         var q = QuestManager.getQuest(this.currentQuest[0]);
@@ -137,7 +120,30 @@ class BattleScene extends Scene {
             this.duel.memoryDialogues.splice(0, 1);
         }
 
+        // updates placement of opponents
+        if (this.duel.enemies[0].spriteX == undefined || this.duel.enemies[0].spriteX == 0) {
+            if (this.duel.enemies.length == 1) {
+                this.duel.enemies[0].setSpriteCoordinates(320, 75);
+            }
+            else if (this.duel.enemies.length == 2) {
+                this.duel.enemies[0].setSpriteCoordinates(198, 75);
+                this.duel.enemies[1].setSpriteCoordinates(442, 75);
+            }
+            else if (this.duel.enemies.length == 3) {
+                this.duel.enemies[0].setSpriteCoordinates(76, 75);
+                this.duel.enemies[1].setSpriteCoordinates(320, 75);
+                this.duel.enemies[2].setSpriteCoordinates(561, 75);
+            }
+            // TODO 4 enemies
+
+            for (var i in this.duel.enemies) {
+                // resets game objects
+                this.duel.enemies[i].destroyObjects();
+            }
+        }
+
         this.checkEnemiesObjects();
+        this.checkHeroesObjects();
         if (this.duel.getTheme() != this.currentMusic) this.playMusic(this.duel.getTheme());
 
         for (var i in this.duel.getAllFighters()) {
@@ -233,12 +239,12 @@ class BattleScene extends Scene {
             this.cursorTarget.setX(this.duel.enemies[this.currentSelectTarget].spriteX + 20);
             this.cursorTarget.setY(this.duel.enemies[this.currentSelectTarget].spriteY - 22);
 
-            if (this.justPressedControl("RIGHT") || (!this.duel.enemies[this.currentSelectTarget].canPlayThisTurn() && this.selectionDirection == "right")) {
+            if (this.justPressedControl("RIGHT") || (this.duel.enemies[this.currentSelectTarget].isDead() && this.selectionDirection == "right")) {
                 this.currentSelectTarget += 1;
                 this.selectionDirection = "right";
                 this.playSoundOK();
             }
-            else if (this.justPressedControl("LEFT") || (!this.duel.enemies[this.currentSelectTarget].canPlayThisTurn() && this.selectionDirection == "left")) {
+            else if (this.justPressedControl("LEFT") || (this.duel.enemies[this.currentSelectTarget].isDead() && this.selectionDirection == "left")) {
                 this.currentSelectTarget -= 1;
                 this.selectionDirection = "left";
                 this.playSoundOK();
@@ -389,6 +395,17 @@ class BattleScene extends Scene {
                 this.duel.deleteFirstMessage();
             }
         }
+        else if (this.duel.duelState == "waiting") {
+            this.duel.logTitleObject.setText("Waiting...");
+            this.duel.logTextObject.setText("Waiting for the opponent to select his moves...");
+            this.duel.logTextObject.nextFrame();
+
+            if (this.moveList.length > 0) this.updateMovepoolObjects(true);
+
+            for (var i in this.duel.heroes) {
+                this.duel.heroes[i].updateTextObjects();
+            }
+        }
         else if (this.duel.duelState == "victory") {
             this.duel.logTextObject.setText("You won! :)");
             this.duel.logTextObject.nextFrame();
@@ -422,10 +439,7 @@ class BattleScene extends Scene {
 
                 AchievementManager.unlockAchievement(0); // PUNCH_PP
 
-                var data = {};
-                data["areaId"] = this.duel.ogPlace.id;
-                data["currentQuest"] = this.currentQuest;
-                return this.switchScene("Area", data);
+                this.quitScene();
             }
         }
         else if (this.duel.duelState == "defeat") {
@@ -447,10 +461,7 @@ class BattleScene extends Scene {
                     }
                 }
 
-                var data = {};
-                data["areaId"] = this.duel.ogPlace.id;
-                data["currentQuest"] = this.currentQuest;
-                return this.switchScene("Area", data);
+                this.quitScene();
             }
         }
 
@@ -542,6 +553,13 @@ class BattleScene extends Scene {
         return null;
     }
 
+    quitScene() {
+        var data = {};
+        data["areaId"] = this.duel.ogPlace.id;
+        data["currentQuest"] = this.currentQuest;
+        return this.switchScene("Area", data);
+    }
+
     selectMove(_move) {
         this.playSoundSelect();
         this.selectedMove = _move;
@@ -570,16 +588,56 @@ class BattleScene extends Scene {
         // new encounter
         for (var i in this.duel.enemies) {
             if (this.duel.enemies[i].spriteObject != null) continue;
+            this.duel.enemies[i].destroyObjects();
+            this.duel.enemies[i].duel = this.duel;
+
             this.duel.enemies[i].spriteObject = this.addText(this.duel.enemies[i].name, this.duel.enemies[i].spriteX, this.duel.enemies[i].spriteY, {fontStyle: 'bold'});
             this.duel.enemies[i].STRTextObject = this.addText("STR: " + this.duel.enemies[i].STR, this.duel.enemies[i].spriteX, this.duel.enemies[i].spriteY+37);
             this.duel.enemies[i].DEXTextObject = this.addText("DEX: " + this.duel.enemies[i].DEX, this.duel.enemies[i].spriteX, this.duel.enemies[i].spriteY+63);
-            this.duel.enemies[i].duel = this.duel;
+
+            this.duel.enemies[i].spriteObject.fighter = this.duel.enemies[i];
+            this.duel.enemies[i].STRTextObject.fighter = this.duel.enemies[i];
+            this.duel.enemies[i].DEXTextObject.fighter = this.duel.enemies[i];
+        }
+    }
+    checkHeroesObjects() {
+        for (var i in this.duel.heroes) {
+            if (this.duel.heroes[i].spriteObject != null) continue;
+            this.duel.heroes[i].destroyObjects();
+            this.duel.heroes[i].duel = this.duel;
+
+            var xValue = 20 + i*300;
+            var yValue = 574;
+            this.duel.heroes[i].spriteObject = this.addText(this.duel.heroes[i].name, xValue, yValue+6, {fontStyle: 'bold'});
+            this.duel.heroes[i].STRTextObject = this.addText("STR: " + this.duel.heroes[i].STR, xValue, yValue+6+37);
+            this.duel.heroes[i].DEXTextObject = this.addText("DEX: " + this.duel.heroes[i].DEX, xValue, yValue+6+63);
+
+            this.duel.heroes[i].moveFrameObject = this.addImage("ui/battle/hero_move_frame", xValue-6, -1000);
+            this.duel.heroes[i].moveFrameText = this.addText("", xValue+1, -1000, {fontSize: '21px'});
+
+            this.duel.heroes[i].spriteX = xValue;
+            this.duel.heroes[i].spriteY = yValue;
+
+            if (this.blockedHeroFrames.length <= i) {
+                var bf = this.addImage("ui/battle/hero_frame_blocked", xValue, yValue+6);
+                bf.setAlpha(0);
+                this.blockedHeroFrames.push(bf);
+            }
+
+            this.duel.heroes[i].spriteObject.fighter = this.duel.heroes[i];
+            this.duel.heroes[i].STRTextObject.fighter = this.duel.heroes[i];
+            this.duel.heroes[i].DEXTextObject.fighter = this.duel.heroes[i];
+            this.duel.heroes[i].moveFrameObject.fighter = this.duel.heroes[i];
+            this.duel.heroes[i].moveFrameText.fighter = this.duel.heroes[i];
         }
     }
     resetStatusIcons() {
         this.checkEnemiesObjects();
+        this.checkHeroesObjects();
 
         for (var i in this.duel.heroes) {
+            if (this.duel.heroes[i].spriteObject == null) continue;
+
             for (var j in this.duel.heroes[i].statusIconObjects) {
                 this.duel.heroes[i].statusIconObjects[j].destroy();
             }
@@ -601,6 +659,8 @@ class BattleScene extends Scene {
         }
 
         for (var i in this.duel.enemies) {
+            if (this.duel.enemies[i].spriteObject == null) continue;
+
             for (var j in this.duel.enemies[i].statusIconObjects) {
                 this.duel.enemies[i].statusIconObjects[j].destroy();
             }

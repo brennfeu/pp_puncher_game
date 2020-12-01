@@ -50,7 +50,7 @@ class MapScene extends Scene {
             this.areaTexts.push(this.addText(area.getName(), 100+i*263, 120, data));
             if (i <= 2) this.areaPoints.push(this.addImage("ui/map/map_point", 120+i*263, 100));
 
-            this.areaTexts[this.areaTexts.length-1].setX(140+i*253-Math.floor(this.areaTexts[this.areaTexts.length-1].width/2));
+            this.areaTexts[this.areaTexts.length-1].setOrigin(0.5, 0);
         }
 
         var l = ["PARTY", "PP BIBLE", "EXIT"];
@@ -64,7 +64,7 @@ class MapScene extends Scene {
             "horizontal",
             this.areaTexts
         );
-        this.cursor.setFormula(116, 263, 85);
+        this.cursor.setFormula(116, 263, 130);
         this.cursor.setForcedLength(3);
         if (this.cursorStart > 2) {
             this.cursor.currentSelect = 2;
@@ -127,7 +127,7 @@ class MapScene extends Scene {
             if (this.isOnArea) {
                 this.cursor.objList = this.areaTexts;
                 this.cursor.currentOffset = this.cursor.memoryOffset;
-                this.cursor.setFormula(116, 263, 85);
+                this.cursor.setFormula(116, 263, 130);
                 this.cursor.updateObjList();
                 this.cursor.obj.setY(90);
             }

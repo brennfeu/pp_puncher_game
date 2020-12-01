@@ -169,10 +169,15 @@ class AreaScene extends Scene {
 
                 var q = this.loadedQuests[this.questCursor.getCurrentSelect()];
                 var s = ProgressManager.getUnlockedSteps(q.id)[this.stepCursor.getCurrentSelect()];
-                if (s.preFightDialogue != undefined && !ProgressManager.isStepCompleted(q.id, s.id)) {
+
+                // trigger multiplayer?
+                if (s.goToMultiplayerScene) { return this.switchScene("Multiplayer"); }
+                // trigger dialogue?
+                else if (s.preFightDialogue != undefined && !ProgressManager.isStepCompleted(q.id, s.id)) {
                     this.readyForBattle = true;
                     this.openDialogue(s.preFightDialogue);
                 }
+                // trigger battle
                 else {
                     return this.triggerDuel();
                 }

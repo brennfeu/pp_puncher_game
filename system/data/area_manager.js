@@ -60,6 +60,7 @@ class AreaManager {
         AreaManager.AREA_LIST.push(_area);
     }
     static getArea(_id) {
+        if (_id == -1) return AreaManager.Multiplayer_Area;
         return AreaManager.AREA_LIST[_id];
     }
 
@@ -70,3 +71,7 @@ class AreaManager {
     }
 }
 AreaManager.AREA_LIST = [];
+AreaManager.Multiplayer_Area = new Area({
+    "name": "Multiplayer",
+    "description": "You shouldn't be reading this. Read my friend's book instead."
+}, -1)
