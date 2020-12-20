@@ -15,7 +15,7 @@ var GAME_CONFIG = {
 // CTRL + SHIFT + ALT + L to get total lines of code
 
 const DEV_MODE = true;
-const GAME_VERSION = "Beta 1.1.1"; // Beta x.x --> Release x.x
+const GAME_VERSION = "Beta 1.2.0" + (DEV_MODE ? " DEV" : ""); // Beta x.x --> Release x.x
 
 const DISABLE_MUSIC = DEV_MODE;
 const SCALE_GAME = true;

@@ -37,11 +37,11 @@ class Hero extends Fighter {
                         randomMove = commonMoves[i];
                     }
                     // 5% chance to force a liked move to appear --> 25% chance for the whole movepool
-                    else if (getRandomPercent() <= 5 && ProgressManager.getMovesLikely().length > 0) {
+                    else if (this.rollLuckPercentLow() <= 5 && ProgressManager.getMovesLikely().length > 0) {
                         randomMove = randomFromList(ProgressManager.getMovesLikely());
                     }
                     // rare move
-                    else if (getRandomPercent() <= 1 && getRandomPercent() <= 10) {
+                    else if (this.rollLuckPercentLow() <= 1 && this.rollLuckPercentLow() <= 10) {
                         randomMove = this.getRandomMoveFromList(RARE_MOVE_LIST);
                     }
                     // the game is about punching pp, so you're going to punch pp. it's very unlikely not to get this move in the movepool
@@ -62,7 +62,7 @@ class Hero extends Fighter {
                         continue;
                     }
                     // Unliked Moves have 50% chance to reroll the current move
-                    if (getRandomPercent() <= 50 && ProgressManager.getMovesUnlikely().indexOf(randomMove.getClassName()) > -1) {
+                    if (this.rollLuckPercentLow() <= 50 && ProgressManager.getMovesUnlikely().indexOf(randomMove.getClassName()) > -1) {
                         continue;
                     }
 

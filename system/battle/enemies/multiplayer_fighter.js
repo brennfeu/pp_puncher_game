@@ -3,11 +3,15 @@ class HeroEnemy extends Enemy {
         super(_hero.name);
 
         for (var i in _hero) {
-            if (i == "id") continue;
+            if (["id"].indexOf(i) > -1) continue;
             this[i] = _hero[i];
         }
 
         this.currentMovepool = REGULAR_MOVE_LIST;
+    }
+
+    getName() {
+        return "Alt. " + super.getName();
     }
 }
 

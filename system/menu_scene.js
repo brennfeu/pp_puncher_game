@@ -13,9 +13,26 @@ class MenuScene extends Scene {
     preload() { try {
         this.startLoadingScreen();
 
+        // load everything?
         this.loadOptionsResources();
         this.loadDialogueResources();
+        this.loadBibleResources();
+        this.loadUnlockResources();
+        this.loadPartyResources();
+
         this.loadUiSounds();
+        this.loadBattleAnimations();
+        this.loadStatusIcons();
+        this.loadBattleSounds();
+        for (var i in AreaManager.AREA_LIST) {
+            this.loadMusic(AreaManager.AREA_LIST[i].getAreaTheme() + ".mp3");
+            this.loadMusic(AreaManager.AREA_LIST[i].getBattleTheme() + ".mp3");
+            this.loadMusic(AreaManager.AREA_LIST[i].getBossTheme() + ".mp3");
+            this.loadMusic(AreaManager.AREA_LIST[i].getVictoryTheme() + ".mp3");
+        }
+        for (var i in ArtworkManager.ARTWORK_LIST) {
+            this.loadImage(ArtworkManager.ARTWORK_LIST[i].getFullPath());
+        }
 
         this.loadImage("ui/menu/frame.png");
         this.loadMusic("TitleScreen.mp3");

@@ -6,8 +6,6 @@ class Scene extends Phaser.Scene {
         this.allTextObjects = [];
         this.allImageObjects = [];
 
-        this.stopQueries = false;
-
         this.isMaintainingKey = false;
         this.isMaintainingKeyMemory = null;
         this.keyTimer = 0;
@@ -168,9 +166,6 @@ class Scene extends Phaser.Scene {
         this.allTextObjects.push(obj);
         return obj;
     }
-    addTextMiddle(_text, _x, _y, _json = null, _speed = null) {
-
-    }
 
     executeQuery(_str, _queryID = null) {
         var _scene = this;
@@ -180,14 +175,14 @@ class Scene extends Phaser.Scene {
 
         DB_CONNECTION.query(_str, (_error, _result) => {
             if (_error) {
-                console.log("QUERY ERROR :");
+                console.log("QUERY ERROR ON '" + _queryID + "':");
         		console.log(_error);
 
                 QUERY_RESULT = _error;
                 throw _error;
             }
 
-            if (!_scene.stopQueries) _function(_result, _queryID, _scene);
+            if (_scene == CURRENT_SCENE) _function(_result, _queryID, _scene);
         });
 
         // HOW TO USE:
@@ -224,6 +219,9 @@ class Scene extends Phaser.Scene {
         this.loadImage("status/lifeFiber.png");
         this.loadImage("status/confusion.png");
         this.loadImage("status/trapSign.png");
+        this.loadImage("status/possessed.png");
+        this.loadImage("status/luck.png");
+        this.loadImage("status/badLuck.png");
 
         this.loadImage("status/other/depression.png");
         this.loadImage("status/other/fungus.png");
@@ -255,6 +253,7 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/hurtB.mp3");
         this.loadSound("battle/extraLife.mp3");
         this.loadSound("battle/soul_hurt.mp3");
+        this.loadSound("battle/hurtA_demon.mp3");
 
         this.loadSound("battle/punchA.mp3");
         this.loadSound("battle/punchB.mp3");
@@ -279,6 +278,8 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/scream.mp3");
         this.loadSound("battle/salt.mp3");
         this.loadSound("battle/staple.mp3");
+        this.loadSound("battle/laugh.mp3");
+        this.loadSound("battle/cry.mp3");
 
         this.loadSound("battle/uuh.mp3");
     }
@@ -382,8 +383,6 @@ class Scene extends Phaser.Scene {
         this.mainObjTint = 0;
         this.forceTint = [];
 
-        this.stopQueries = true;
-
         WoodCutting.saveToSteam();
         try {
             if (!GREENWORKS.initAPI()) GREENWORKS = null;
@@ -440,6 +439,12 @@ class Scene extends Phaser.Scene {
         this.dialogueObj.setText(line.text);
 
         if (this.sceneName == "Cutscene") this.optionBlackScreen.setAlpha(0);
+
+        if (this.autoSkipSpeed == undefined) {
+            this.autoSkipSpeed = 30;
+            this.autoSkipCountdown = this.autoSkipSpeed;
+            this.autoSkipNb = 0;
+        }
     }
     closeDialogue() {
         this.isInDialogue = false;
@@ -461,10 +466,19 @@ class Scene extends Phaser.Scene {
     }
     dialogueUpdate() {
         this.dialogueObj.nextFrame();
-        if (this.justPressedControl("ENTER")) {
+
+        if ((GlobalVars.get("settings")["battleAutoNext"] || this.sceneName == "MultiplayerBattle") && this.dialogueObj.isShowingFullText()) {
+            this.autoSkipCountdown -= 1;
+        }
+
+        if (this.justPressedControl("ENTER") || this.autoSkipCountdown <= 0) {
             if (!this.dialogueObj.isShowingFullText()) {
                 return this.dialogueObj.showFullText();
             }
+
+            this.autoSkipNb += 1;
+            this.autoSkipCountdown = Math.max(1, this.autoSkipSpeed - this.autoSkipNb);
+            this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/7);
 
             this.currentLine += 1;
             this.dialogueObj.resetCursor();
@@ -537,6 +551,12 @@ class Scene extends Phaser.Scene {
 
             if (s.saveWaifu != undefined) {
                 this.unlockList.push(["Waifu", s.saveWaifu]);
+            }
+
+            if (s.unlockArtworks != undefined) {
+                for (var i in s.unlockArtworks) {
+                    this.unlockList.push(["Artwork", s.unlockArtworks[i]])
+                }
             }
 
             GlobalVars.set("unlocksNext", []);
@@ -626,6 +646,9 @@ class Scene extends Phaser.Scene {
                 break;
             case "God":
                 this.unlockDesc.setText(GodManager.getGod(unlock).name + "\n" + GodManager.getGod(unlock).getDescription());
+                break;
+            case "Artwork":
+                this.unlockDesc.setText(ArtworkManager.getArtwork(unlock).getDescription());
                 break;
         }
     }
@@ -845,7 +868,7 @@ class Scene extends Phaser.Scene {
             if (unlocks.indexOf(l[i]) < 0) continue;
             this.bibleTextsA.push(this.addText(l[i], 85, 84+22*this.bibleTextsA.length));
         }
-        //this.bibleTextsA.push(this.addText("Enemies", 85, 84+22*this.bibleTextsA.length)); // toujours en dernier
+        this.bibleTextsA.push(this.addText("Artworks", 85, 84+22*this.bibleTextsA.length)); // toujours en dernier
 
         this.cursorA = new CustomCursor(
             this.addText(">", 65, -1000),
@@ -862,6 +885,9 @@ class Scene extends Phaser.Scene {
         this.cursorB.setForcedLength(25);
 
         this.bibleStep = 0;
+
+        this.bibleArtwork = null;
+        this.artworkBlackScreen = null;
 
         this.bibleDescription.setText("All the game mechanics you know about!");
         l = ProgressManager.getUnlockedGameMechanics();
@@ -889,6 +915,8 @@ class Scene extends Phaser.Scene {
         this.cursorB.destroy();
         this.cursorB = null;
 
+        this.bibleResetArtwork()
+
         for (var i in this.bibleTextsA) this.bibleTextsA[i].destroy();
         this.bibleTextsA = [];
         for (var i in this.bibleTextsB) this.bibleTextsB[i].destroy();
@@ -911,11 +939,13 @@ class Scene extends Phaser.Scene {
                 this.bibleUpdateDesc();
             }
 
-            if ((this.justPressedControl("ENTER") || this.justPressedControl("RIGHT")) && this.bibleTextsB.length > 0) {
-                this.bibleStep = 1;
-                this.cursorBSelect = 0;
-                this.bibleUpdateDesc();
-                this.playSoundSelect();
+            if (this.justPressedControl("ENTER") || this.justPressedControl("RIGHT")) {
+                if (this.bibleTextsB.length > 0) {
+                    this.bibleStep = 1;
+                    this.cursorBSelect = 0;
+                    this.bibleUpdateDesc();
+                    this.playSoundSelect();
+                }
             }
         }
         else {
@@ -933,6 +963,12 @@ class Scene extends Phaser.Scene {
             }
 
             if (this.justPressedControl("BACK") || this.justPressedControl("LEFT")) {
+                if (this.bibleArtwork != null) {
+                    this.bibleResetArtwork();
+                    this.playSoundOK();
+                    return;
+                }
+
                 this.bibleStep = 0;
                 this.cursorB.obj.setY(-1000); // hide cursorB
                 this.cursorB.currentSelect = 0;
@@ -942,7 +978,11 @@ class Scene extends Phaser.Scene {
             }
 
             if (this.justPressedControl("ENTER")) {
-                if ((this.sceneName == "Battle" || this.sceneName == "MultiplayerBattle") && this.duel.duelState == "moveChoice" && this.cursorA.getCurrentObject().text == "Moves") {
+                if (this.bibleArtwork != null) {
+                    this.bibleResetArtwork();
+                    this.playSoundOK();
+                }
+                else if ((this.sceneName == "Battle" || this.sceneName == "MultiplayerBattle") && this.duel.duelState == "moveChoice" && this.cursorA.getCurrentObject().text == "Moves") {
                     this.selectMove(ProgressManager.getUnlockedMoves()[this.cursorB.getCurrentSelect()]);
                     this.closeBible();
                     if (!ProgressManager.isStepCompleted(0, 1)) {
@@ -983,6 +1023,13 @@ class Scene extends Phaser.Scene {
                     this.closeBible();
                     return this.switchScene("Multiplayer");
                 }
+                else if (this.cursorA.getCurrentObject().text == "Artworks") {
+                    var artwork = ProgressManager.getUnlockedArtworks()[this.cursorB.getCurrentSelect()];
+                    this.artworkBlackScreen = this.addImage("ui/blackScreen");
+                    this.artworkBlackScreen.setAlpha(0.5)
+                    this.bibleArtwork = this.addImageMiddle(artwork.getFullPath().substring(0, artwork.getFullPath().length - 4), 600, 337);
+                    this.playSoundOK();
+                }
             }
         }
 
@@ -993,9 +1040,11 @@ class Scene extends Phaser.Scene {
     bibleUpdateDesc() {
         if (this.bibleStep == 0) {
             var l = [];
-            if (this.cursorA.getCurrentSelect() == this.bibleTextsA.length-1 && false) {
-                // when I'll do the enemies tab
-                this.bibleDescription.setText("Every opponent you managed to beat.");
+            if (this.cursorA.getCurrentSelect() == this.bibleTextsA.length-1) {
+                // artworks
+                this.bibleDescription.setText("Some random artworks of things you've come across.");
+                var a = ProgressManager.getUnlockedArtworks();
+                for (var i in a) l[i] = a[i].name;
             }
             else if (this.cursorA.getCurrentSelect() == 0) {
                 this.bibleDescription.setText("All the game mechanics you know about!");
@@ -1047,9 +1096,10 @@ class Scene extends Phaser.Scene {
             this.cursorB.obj.setY(-1000); // hide cursor
         }
         else {
-            if (this.cursorA.getCurrentSelect() == this.bibleTextsA.length-1 && false) {
-                // when I'll do the enemies tab
-                this.bibleDescription.setText("");
+            if (this.cursorA.getCurrentSelect() == this.bibleTextsA.length-1) {
+                // artworks
+                var artwork = ProgressManager.getUnlockedArtworks()[this.cursorB.getCurrentSelect()];
+                this.bibleDescription.setText(artwork.getDescription());
             }
             else if (this.cursorA.getCurrentSelect() == 0) {
                 var gm = ProgressManager.getUnlockedGameMechanics()[this.cursorB.getCurrentSelect()];
@@ -1080,6 +1130,14 @@ class Scene extends Phaser.Scene {
                 var synergy = ProgressManager.getUnlockedSynergies()[this.cursorB.getCurrentSelect()];
                 this.bibleDescription.setText(synergy.getDescription());
             }
+        }
+    }
+    bibleResetArtwork() {
+        if (this.bibleArtwork != null) {
+            this.bibleArtwork.destroy();
+            this.artworkBlackScreen.destroy();
+            this.bibleArtwork = null;
+            this.artworkBlackScreen = null;
         }
     }
 

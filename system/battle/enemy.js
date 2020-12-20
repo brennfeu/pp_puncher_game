@@ -7,6 +7,8 @@ class Enemy extends Fighter {
             SawBlade, Steel, Yes, ShieldMove ];
 
         this.isBoss = false;
+
+        this.hasSpecialLuck = false;
     }
 
     getCurrentListOfMoves() {
@@ -18,8 +20,8 @@ class Enemy extends Fighter {
         var l = this.currentMovepool.slice();
 
         // gods moves
-        if (this.regularCharges > 0) l.push(RegularPriestMove);
-        if (this.specialCharges > 0) l.push(SpecialPriestMove);
+        if (this.regularCharges > 0 && this.godsList.length > 0) l.push(RegularPriestMove);
+        if (this.specialCharges > 0 && this.godsList.length > 0) l.push(SpecialPriestMove);
 
         return l;
     }
@@ -28,14 +30,15 @@ class Enemy extends Fighter {
     }
 
     selectMove() {
-        if (this.getCurrentListOfMoves().indexOf(SpecialPriestMove) > -1 && this.godsList.length > 0) {
+        var l = this.getCurrentListOfMoves();
+        if (l.indexOf(SpecialPriestMove) > -1 && this.godsList.length > 0) {
             return this.chosenMove = SpecialPriestMove;
         }
-        else if (this.getCurrentListOfMoves().indexOf(RegularPriestMove) > -1 && this.godsList.length > 0) {
+        else if (l.indexOf(RegularPriestMove) > -1 && this.godsList.length > 0) {
             return this.chosenMove = RegularPriestMove;
         }
 
-        this.chosenMove = randomFromList(this.getCurrentListOfMoves());
+        this.chosenMove = randomFromList(l);
     }
 
     selectTarget() {

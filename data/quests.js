@@ -1,5 +1,5 @@
 QuestManager.loadList([
-    { // 0
+    { // 0 - SPECIAL UNLOCKS
         "name": "SPECIAL UNLOCKS",
         "description": "Shouldn't appear in the final game",
         "isMain": false,
@@ -14,7 +14,8 @@ QuestManager.loadList([
                 "unlockMoves": [ PunchingPP, PunchingPPReallyHard, Hologram, FlexBro, HighFiveBro ],
                 "unlockAreas": [ 0 ],
                 "unlockQuests": [ 1 ],
-                "unlockGameMechanics": [ "Game Mechanics", "Moves" ]
+                "unlockGameMechanics": [ "Game Mechanics", "Moves" ],
+                "unlockArtworks": [ "Brenn", "Espinoza", "Weeb" ]
             },
             { // 1
                 "name": "CHEATING",
@@ -43,7 +44,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 1
+    { // 1 - Tutorial
         "name": "Tutorial",
         "description": "Learn how to punch pp while trying to escape the anime convention!",
         "isMain": true,
@@ -85,7 +86,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 2
+    { // 2 - Truffle Chaos
         "name": "Truffle Chaos",
         "description": "This shady russian guy is standing there in the convention. You only noticed him after your battle against the Weeb Boss",
         "isMain": false,
@@ -101,7 +102,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 3
+    { // 3 - PP Training
         "name": "PP Training",
         "description": "Pudding's home has been invaded! This sounds like neat training to learn new pp punch moves.",
         "isMain": true,
@@ -162,7 +163,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 4
+    { // 4 - The Beginning
         "name": "The Beginning",
         "description": "Senjougahara has been spotted in the IKEA's basement! This is the first waifu you found, you have to succeed!",
         "isMain": true,
@@ -222,7 +223,7 @@ QuestManager.loadList([
             },
             { // 9
                 "name": "The Ritual",
-                "description": "You see Senjougahara tied up in the background. As you enter the room, furnitures start floating and assembling into one big monstruosity. Being so close to your goal fills you with determination.",
+                "description": "You see Senjougahara tied up in the background. As you enter the room, furnitures start floating and assembling into one big monstrosity. Being so close to your goal fills you with determination.",
                 "encounter": "ikeaMonstruosity",
                 "duelParam": { "waifuDetermination": true },
                 "unlockAreas": [ 2 ],
@@ -233,7 +234,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 5
+    { // 5 - DIKEA Machines
         "name": "IKEA Machines",
         "description": "This whole area of the IKEA is full of defense systems. It'll be difficult to go through.",
         "isMain": false,
@@ -258,7 +259,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 6
+    { // 6 - School of Cock
         "name": "School of Cock",
         "description": "Students here seems okay with sharing their knowledge with you, as long as you manage to beat them.",
         "isMain": true,
@@ -318,7 +319,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 7
+    { // 7 - PP Harem
         "name": "PP Harem",
         "description": "Save PP Arbitrator's harem by punching the PP of everyone who's a part of it! You have no idea if this will help though, but it might be fun.",
         "isMain": true,
@@ -360,7 +361,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 8
+    { // 8 - Rescue Mission
         "name": "Rescue Mission",
         "description": "Ryuko has been spotted in the High School! This is a rescue mission! She must be retrieved!",
         "isMain": true,
@@ -413,7 +414,7 @@ QuestManager.loadList([
             },
         ]
     },
-    { // 9
+    { // 9 - Gym Club
         "name": "Gym Club",
         "description": "The gym club is now open!",
         "isMain": false,
@@ -433,7 +434,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 10
+    { // 10 - Board Game Club
         "name": "Board Game Club",
         "description": "The board game club is now open!",
         "isMain": false,
@@ -456,7 +457,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 11
+    { // 11 - Versatility
         "name": "Versatility",
         "description": "A dere escaped high school and took refuge in the anime convention. She must be terminated!",
         "isMain": false,
@@ -472,7 +473,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 12
+    { // 12 - Arcade Mode
         "name": "Arcade Mode",
         "description": "Allows you to play multiple battles without being interrupted!",
         "isMain": false,
@@ -517,7 +518,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 13
+    { // 13 - TODO Yandere Dev Questline
         "name": "TODO",
         "description": "A new game finally released after 23 years of development. It's so successful people are acting like the main character of this game.",
         "isMain": false,
@@ -547,7 +548,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 14
+    { // 14 - Bling Bling Weebs
         "name": "Bling Bling Weebs",
         "description": "A bunch of rich people joined the convention. You don't know if they are here for the weeb shit, or to make fun of weebs, but you do know you can punch their PP.",
         "isMain": false,
@@ -573,7 +574,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 15
+    { // 15 - Lumberjack Job
         "name": "Lumberjack Job",
         "description": "Just in case you wanted to max out the lumberjack job instead of punching pp, well you can do that here.",
         "isMain": false,
@@ -589,7 +590,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 16
+    { // 16 - Temple Gates
         "name": "Temple Gates",
         "description": "This is the entry of the Allfaiths Temple. Your goal is to reach the center of the building, where Eldon usually is.",
         "isMain": true,
@@ -631,7 +632,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 17
+    { // 17 - Trials of Faith
         "name": "Trials of Faith",
         "description": "The next waifu, Priestess, is in this temple. She is at the end of this corridor, though you feel a holy presence watching you.",
         "isMain": true,
@@ -642,7 +643,7 @@ QuestManager.loadList([
                 "name": "Faith",
                 "description": "Everything around you turns white. As you try to continue to walk, you hurt yourself against an invisible wall. Behold, the faith you hold onto the Gods of this world.",
                 "encounter": "faith",
-                "unlockQuests": [ 18, 19, 20, 21, 22 ],
+                "unlockQuests": [ 18, 19, 20, 21, 22, 30 ],
                 "inFightDialogue": 26,
                 "unlockGameMechanics": [ "Gods" ],
                 "unlockMoves": [ RegularPriestMove, SpecialPriestMove ],
@@ -678,13 +679,14 @@ QuestManager.loadList([
                 "description": "Did you think it would be that easy? Here comes the last trial. Prove your faith, and you shall be rewareded.",
                 "encounter": "faithForReal",
                 "duelParam": { "waifuDetermination": true },
+                "unlockQuests": [ 29 ],
                 "unlockQuestSteps": [ [12, 3] ],
                 "saveWaifu": "Priestess",
                 "postFightCutscene": 5
             }
         ]
     },
-    { // 18
+    { // 18 - Alters of B
         "name": "Altars of B",
         "description": "This area of the temple is dedicated to the Holy Brenn Trinity.",
         "isMain": true,
@@ -701,6 +703,7 @@ QuestManager.loadList([
                 "name": "Country Music Brenn",
                 "description": "To truly understand Country Music Brenn, you must fight clerics that worship Country Music Brenn.",
                 "encounter": "countryBrennClerics",
+                "unlockArtworks": [ "Country Music Brenn" ],
                 "unlockGods" : [ "Country Music Brenn" ]
             },
             { // 2
@@ -717,7 +720,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 19
+    { // 19 - Altars of P
         "name": "Altars of P",
         "description": "This area of the temple is dedicated to the Unholy Pudding Trinity.",
         "isMain": true,
@@ -750,7 +753,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 20
+    { // 20 - Altars of E
         "name": "Altars of E",
         "description": "This area of the temple is dedicated to the Eldon Duality.",
         "isMain": true,
@@ -777,7 +780,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 21
+    { // 21 - Another Way
         "name": "Another Way",
         "description": "What if there was a way to worship waifus as gods? The answer probably lies somewhere in this temple.",
         "isMain": false,
@@ -797,7 +800,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 22
+    { // 22 - True Clerics
         "name": "True Clerics",
         "description": "Being able to pray one god is useful, but not enough. You must learn to have multiple gods by your side.",
         "isMain": true,
@@ -831,7 +834,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 23
+    { // 23 - Synergies
         "name": "Synergies",
         "description": "Learn to combine Gods effectively.",
         "isMain": true,
@@ -855,7 +858,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 24
+    { // 24 - Cheater Gate
         "name": "Cheater Gate",
         "description": "The original swedish pilgrims that made the IKEA are angry about how you treat their brothers! Give them a good punch in the PP.",
         "isMain": false,
@@ -879,7 +882,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 25
+    { // 25 - Eye of Truth
         "name": "Eye of Truth",
         "description": "The Eye of Truth needs your help! As an all-seeing eye, he saw unspeakable things he wishes to forget! Fetch the Ultimate Bleach to free him from this curse.",
         "isMain": false,
@@ -901,12 +904,13 @@ QuestManager.loadList([
                 "description": "Those Giga Weebs are going to drink the Ultimate Bleach, thinking this is old milk. Stop them before they commit the sin of drinking this holy bleach!",
                 "encounter": "gigaWeebs",
                 "postFightDialogue": 33,
+                "unlockArtworks": [ "Eye of Truth" ],
                 "unlockMoves": [ EyeOfTruth ]
             }
             // TODO last step unlocked after relics to keep the bleach (fight against eye of truth?)
         ]
     },
-    { // 26
+    { // 26 - Explosive Traps
         "name": "Explosive Traps",
         "description": "Watch out! This area of the IKEA has landmines hidden all over the place. We just have to steal one, it might be useful.",
         "isMain": false,
@@ -926,7 +930,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 27
+    { // 27 - Otherworlds
         "name": "Otherworlds",
         "description": "A portal appeared in the Anime Convention. It seems to lead to different alternate realities.",
         "isMain": true,
@@ -946,7 +950,7 @@ QuestManager.loadList([
             }
         ]
     },
-    { // 28
+    { // 28 - TODO Wyndoella Bridge
         "name": "Wyndoella Bridge",
         "description": "A new area appeared in the temple. All of it looks like empty space, except for one bridge made of light.",
         "isMain": true,
@@ -959,6 +963,64 @@ QuestManager.loadList([
                 "description": "TODO",
                 "encounter": "wyndoella",
                 "unlockGameMechanics": [ "New Game Plus" ]
+            }
+        ]
+    },
+    { // 29 - Hell Gate
+        "name": "Hell Gate",
+        "description": "A Hell Gate opened in the temple! \"Dealt with a Hell Gate and punched demonic PP.\" would sound great in your resume, wouldn't it?",
+        "isMain": false,
+        "areaId": 3,
+
+        "questSteps": [
+            { // 0
+                "name": "D Minor",
+                "description": "Minor demons are known for not being authorized to order alcohol in a bar, and vote. This bit of knowledge sadly won't help you in your battle.",
+                "encounter": "minorDemon"
+            },
+            { // 1
+                "name": "Demon Souls",
+                "description": "All that's left of the Hell Gate are 3 demonic souls. If only you could reproduce their evil laugh, that would be EPIC.",
+                "encounter": "3demonicSouls",
+                "unlockMoves": [ LaughingSoul ]
+            }
+        ]
+    },
+    { // 30 - No Bullying
+        "name": "No Bullying",
+        "description": "A kid is getting bullied in the school. You have no idea what a young kid is doing here, but you gotta help him.",
+        "isMain": false,
+        "areaId": 2,
+
+        "questSteps": [
+            { // 0
+                "name": "Isaac",
+                "description": "The poor kid is lying on the ground, crying, as 3 students kick him repeatedly. Make the bullies pay with their blood!",
+                "encounter": "3AnimeHighSchoolers",
+                "postFightDialogue": 38,
+                "unlockQuests": [ 31 ]
+            }
+        ]
+    },
+    { // 31 - A Home for Isaac
+        "name": "A Home for Isaac",
+        "description": "Convince the swedish in the IKEA to have Isaac stay in here in peace. Convincing by PP Punching of course.",
+        "isMain": false,
+        "areaId": 1,
+
+        "questSteps": [
+            { // 0
+                "name": "Unhappy Residents",
+                "description": "The people here doesn't look happy to see you. The havoc you caused here has been noticed. The Managers want to have a talk with you.",
+                "encounter": "managerGang"
+            },
+            { // 1
+                "name": "Double Trouble",
+                "description": "Now that you've beaten up people, they start listening to you. You probably will be able to ask a room for Isaac.",
+                "encounter": "dualMonstruosity",
+                "preFightDialogue": 39,
+                "postFightDialogue": 40,
+                "unlockGods": [ "STFU Isaac" ]
             }
         ]
     }

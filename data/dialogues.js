@@ -289,7 +289,7 @@ DialogueManager.loadList([
         "dialogueLines": [
             {
                 "speaker": "Art",
-                "text": " - Pudding (Game Icon / Achievements)\n - Brenn (Status Icons)"
+                "text": " - Pudding (Game Icon / Achievements)\n - Brenn (Status Icons)\n - And more (see the artwork descriptions in the PP Bible)"
             },
             {
                 "speaker": "OG Bot Designer",
@@ -695,6 +695,107 @@ DialogueManager.loadList([
             },
             {
                 "text": "Well, I wish you good fortune, and a happy PP Punching!"
+            }
+        ]
+    },
+    { // 38 - Isaac
+        "dialogueLines": [
+            {
+                "speaker": "Isaac",
+                "text": "Thank you! You saved me!"
+            },
+            {
+                "text": "Can I ask for your help again please?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Uhh"
+            },
+            {
+                "speaker": "Eldon",
+                "text": "Sure, what do you need help for?"
+            },
+            {
+                "speaker": "Isaac",
+                "text": "My family was killed by that big bad guy that sniffed my arm many years ago..."
+            },
+            {
+                "text": "I thought he was in prison, so he must have escaped more or less recently."
+            },
+            {
+                "text": "Do you know where I could live now...?"
+            },
+            {
+                "speaker": "Pudding",
+                "text": "I think the IKEA has a lot of room to spare. We'll have to convince the others though."
+            }
+        ]
+    },
+    { // 39 - Dual Monstruosity Challenge
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "Ok, you listen to us now."
+            },
+            {
+                "text": "We just want this little fellow to have a room here."
+            },
+            {
+                "text": "Or we can just punch everyone in here, your choice."
+            },
+            {
+                "speaker": "Ikea Manager",
+                "text": "As if we were going to accept that. We've got a surprised for you."
+            }
+        ]
+    },
+    { // 40 - Isaac now has a home :D
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "Your turn now?"
+            },
+            {
+                "speaker": "Ikea Manager",
+                "text": "Oh shit. Isaac can stay here, we'll give him food and everything needed."
+            },
+            {
+                "speaker": "Isaac",
+                "text": "Oh thanks! But what are you going to do now Mister?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Imma beat up the guy that sniffed your arm. Imma punch his PP so hard he'll regret being born."
+            }
+        ]
+    },
+    { // 41 - Could not find multiplayer fighter in list
+        "dialogueLines": [
+            {
+                "speaker": "PP Arbitrator",
+                "text": "I couldn't find that guy in the people you can challenge. Please try again :("
+            }
+        ]
+    },
+    { // 42 - Connection lost?
+        "dialogueLines": [
+            {
+                "speaker": "PP Arbitrator",
+                "text": "Either you or your opponent seems to have connection issues..."
+            },
+            {
+                "text": "If it's you, you'll be redirected back to the main map. I would suggest checking your internet connection and restarting the game."
+            },
+            {
+                "text": "If not, you'll automatically win the fight."
+            }
+        ]
+    },
+    { // 43 - Time's Up!
+        "dialogueLines": [
+            {
+                "speaker": "PP Arbitrator",
+                "text": "Time's up!"
             }
         ]
     }

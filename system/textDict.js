@@ -29,8 +29,8 @@ class TextDict extends Phaser.GameObjects.Text {
         if (!this.isShowingFullText()) {
             this.speedCursor += 1;
             if (this.speedCursor >= this.speed) {
+                this.currentTextCursor += this.speedCursor-this.speed+1;
                 this.speedCursor = 0;
-                this.currentTextCursor += 1;
 
                 txt = txt.substring(0, this.currentTextCursor);
                 this.setText(txt, false, false);
@@ -60,7 +60,7 @@ class TextDict extends Phaser.GameObjects.Text {
             }
         }
 
-        return txt
+        return txt.split("|").join("\n").split("`").join("'");
     }
     static addDict(_wordToChange, _wordThatReplaces) {
         TextDict.DICT[_wordToChange] = _wordThatReplaces;

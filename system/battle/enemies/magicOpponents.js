@@ -22,7 +22,7 @@ class SpiritGuardian extends EnergyCreature {
         this.currentMovepool = [ MoveManager.createMove(function execute(_user, _target = null) {
             _user.duel.addMessage(_user.getName() + " attacks " + _target.getName() + "!");
 
-            if (_target.damage(Math.floor(_user.STR/5), "attack", _user) && getRandomPercent() <= 33) {
+            if (_target.damage(Math.floor(_user.STR/5), "attack", _user) && _target.rollLuckPercentHigh() <= 33) {
                 _user.duel.addMessage(_target.getName() + " is frightened!");
                 _target.noDex = 2;
             }
@@ -141,5 +141,16 @@ class SynergySpirit extends EnergyCreature {
         for (var i in s.requiredGods) {
             this.godsList.push(s.requiredGods[i]);
         }
+    }
+}
+
+class DemonicSoul extends EnergyCreature {
+    constructor(_name = "Demonic Soul") {
+        super(_name);
+
+        this.STRValue = 80;
+        this.DEXValue = 30;
+
+        this.currentMovepool = [ LaughingSoul ];
     }
 }

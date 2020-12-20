@@ -33,6 +33,7 @@ class Duel {
         this.turnCount = 0;
 
         // effects
+        this.forcedDuelEffects = null;
         this.steelProtection = false;
         this.noDexModifier = false;
         this.illegalLegal = false;
@@ -95,7 +96,6 @@ class Duel {
         }
 
         this.setTitle("DUEL START");
-        this.addMessage("TIME FOR A DUEL");
 
         // when saving waifus
         if (this.checkParam("waifuDetermination", true)) {
@@ -314,8 +314,13 @@ class Duel {
         this.setTitle("ATTACKS");
         this.resetLog();
 
-        for (var i in this.getAllFighters()) {
-            this.getAllFighters()[i].rollDEX();
+        var l = this.getAllFighters();
+        for (var i in l) {
+            if (l[i].possessCountdown > 0 && l[i].possessedBy != null && l[i].possessedBy.isAlive()) {
+                l[i].chosenMove = l[i].possessedBy.chosenMove;
+                l[i].chosenTarget = l[i].possessedBy.chosenTarget;
+            }
+            l[i].rollDEX();
         }
 
         this.currentFighterIndex = 0;
@@ -384,13 +389,16 @@ class Duel {
 
         // illegal percentage
         if (!this.illegalLegal) {
-            illegal = _fighter.chosenMove.newInstance().illegal > getRandomPercent();
+            illegal = _fighter.chosenMove.newInstance().illegal > _fighter.rollLuckPercentLow();
+            if (_fighter.badLuck && _fighter.chosenMove.newInstance().illegal > 0) {
+                illegal = true;
+            }
         }
 
         // cheating
         if (_fighter.isHero() && // only heroes cheat:
           _fighter.currentMovepool.indexOf(_fighter.chosenMove) < 0 && // if not in movepool
-          getRandomPercent() <= _fighter.chosenMove.newInstance().getCheatProb() && // and cheating roll fail
+          _fighter.rollLuckPercentLow() <= _fighter.chosenMove.newInstance().getCheatProb() && // and cheating roll fail
           !this.allowCheating) {
             illegal = true;
         } // and cheating is forbidden
@@ -401,6 +409,7 @@ class Duel {
         }
 
         if (illegal) {
+            _fighter.increaseLuck();
             this.addMessage(_fighter.getName() + " is doing illegal stuff! He looses 20 DEX and 10 STR.");
             this.addAnimation("illegal", 60, _fighter);
             this.memorySoundEffects.push("lightning");
@@ -489,7 +498,7 @@ class Duel {
     }
 
     addMessage(_message) {
-        this.messageList.push(_message);
+        this.messageList.push(_message.split("\n").join("|"));
     }
     getAllMessages() {
         var str = "";
@@ -522,6 +531,8 @@ class Duel {
         this.logTitleObject.setText(this.messageTitle);
     }
     getDuelEffects() {
+        if (this.forcedDuelEffects != null) return this.forcedDuelEffects;
+        
         var txt = "";
         if (this.steelProtection) {
             txt += "- Damages are reduced to 10%.\n"

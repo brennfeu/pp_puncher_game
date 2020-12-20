@@ -129,8 +129,8 @@ class PartyManager {
 }
 
 PartyManager.HEROES_LIST = [];
-var l = ["Brenn", "Pudding", "Eldon", "Valurin", "Country Music Brenn"];
-for (var i in l) PartyManager.addPartyMember(l[i]);
+const PARTY_MEMBER_NAMES = ["Brenn", "Pudding", "Eldon", "Valurin", "Country Music Brenn"];
+for (var i in PARTY_MEMBER_NAMES) PartyManager.addPartyMember(PARTY_MEMBER_NAMES[i]);
 // TODO: Eye of Truth moves for all these guys
 
 if (JSON.parse(localStorage.getItem("partyMembers")) == null) PartyManager.updateLocalStorage();

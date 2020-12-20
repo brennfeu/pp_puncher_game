@@ -3,10 +3,13 @@ class MultiplayerDuel extends Duel {
         super(_heroes, new Encounter("multiplayer", _enemies), AreaManager.Multiplayer_Area);
 
         this.isHost = _isHost;
+        this.idHost = null; // init later
         this.hasRecievedAttacks = false;
 
         this.readyToSendToDB = false;
         this.readyToRecieveFromDB = false;
+
+        this.memoryJSON = null; // non host only
     }
 
     checkAllFightersAttacks() {
@@ -15,6 +18,8 @@ class MultiplayerDuel extends Duel {
 
             if (this.isHost) {
                 if (this.hasRecievedAttacks) {
+                    console.log("HEY")
+                    console.trace();
                     this.triggerAttacks();
                 }
             }
@@ -89,6 +94,7 @@ class MultiplayerDuel extends Duel {
     }
     getMusicArea() {
         var area = 0; // default == anime convention
+
         // dikea = gay
         // TODO
         // high school = ?
@@ -96,17 +102,17 @@ class MultiplayerDuel extends Duel {
         // allfaiths temple = when someone has charges
         var l = this.getAllFighters();
         for (var i in l) {
-            if (l[i].regularCharge > 0 || l[i].specialCharge > 0) {
+            if (l[i].regularCharges > 0 || l[i].specialCharges > 0) {
                 area = 3;
             }
         }
-
         // TODO other areas
 
         return AreaManager.getArea(area);
     }
 
     getWinPoints() {
+        var nb = 0;
         // TODO poopoo universe = 0 points, I'm sorry but that's how it works
 
         for (var i in this.heroes) {
@@ -118,10 +124,10 @@ class MultiplayerDuel extends Duel {
         }
 
         if (this.triggeredChaos) {
-			nb += Math.floor(this.MOVE_COUNT/100)
+			nb += Math.floor(this.moveCount/100)
 		}
 		else {
-			nb += Math.floor(this.MOVE_COUNT/10)
+			nb += Math.floor(this.moveCount/10)
 		}
 
         return nb;
@@ -154,6 +160,8 @@ class MultiplayerDuel extends Duel {
         return JSON.stringify(json);
     }
     setJSON(_json) {
+        //console.log(_json); console.trace();
+
         var isHost = this.isHost
         if (!isHost) this.reverseHeroesAndEnemies();
 
@@ -170,7 +178,7 @@ class MultiplayerDuel extends Duel {
             }
         }
 
-        BrennStyleJSON.setJSON(this, JSON.parse(_json));
+        BrennStyleJSON.setJSON(this, _json);
         this.isHost = isHost;
 
         for (var i in this.heroes) {
@@ -183,6 +191,7 @@ class MultiplayerDuel extends Duel {
         for (var i in l) {
             l[i].destroyObjects();
         }
+        this.forcedDuelEffects = null;
 
         if (!isHost) this.reverseHeroesAndEnemies();
     }

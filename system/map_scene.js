@@ -21,12 +21,6 @@ class MapScene extends Scene {
     preload() { try {
         this.startLoadingScreen();
 
-        this.loadOptionsResources();
-        this.loadDialogueResources();
-        this.loadPartyResources();
-        this.loadUnlockResources();
-        this.loadUiSounds();
-
         this.loadImage("ui/map/log_frame.png");
         this.loadImage("ui/map/opt_frame.png");
         this.loadImage("ui/map/map_point.png");

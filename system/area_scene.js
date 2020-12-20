@@ -30,16 +30,9 @@ class AreaScene extends Scene {
     preload() { try {
         this.startLoadingScreen();
 
-        this.loadOptionsResources();
-        this.loadDialogueResources();
-        this.loadUnlockResources();
-        this.loadUiSounds();
-
         this.loadImage("ui/area/log_frame.png");
         this.loadImage("ui/area/name_frame.png");
         this.loadImage("ui/area/quest_frame.png");
-
-        this.loadMusic(this.area.getAreaTheme() + ".mp3");
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     create() { try {
@@ -160,6 +153,7 @@ class AreaScene extends Scene {
                 this.playSoundOK();
             }
 
+            // what are you doing step cursor? uwu
             if (this.stepCursor.update()) {
                 this.updateDesc();
             }

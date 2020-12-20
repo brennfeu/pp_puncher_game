@@ -83,6 +83,7 @@ class QuestSteps {
         this.unlockFightingStyles = _data.unlockFightingStyles;
         this.unlockEvents = _data.unlockEvents;
         this.unlockGods = _data.unlockGods;
+        this.unlockArtworks = _data.unlockArtworks;
 
         this.saveWaifu = _data.saveWaifu;
 
@@ -146,7 +147,6 @@ class QuestManager {
         var l = [];
         for (var i in this.QUEST_LIST) {
             if (!this.QUEST_LIST[i].isCompleted() && !this.QUEST_LIST[i].ignoreMe && ![0, 28].includes(this.QUEST_LIST[i].id)) {
-                console.log(this.QUEST_LIST[i]);
                 return false;
             }
         }

@@ -177,6 +177,17 @@ class Encounter {
                 this.addEnemy(new LandMineGuard(undefined, true), 198);
                 this.addEnemy(new LandMineGuard(undefined, true), 442);
                 break;
+            case("managerGang"):
+                this.addEnemy(new IkeaManager(), 76);
+                this.addEnemy(new IkeaManager());
+                this.addEnemy(new IkeaManager(), 561);
+                break;
+            case("dualMonstruosity"):
+                this.addEnemy(new IkeaMonstruosity(), 158);
+                this.addEnemy(new IkeaMonstruosity(), 462);
+                this.enemyList[0].nextPhase = null;
+                this.enemyList[1].nextPhase = null;
+                break;
 
             // high school
             case("2tier4students"):
@@ -402,6 +413,14 @@ class Encounter {
                 break;
             case("wyndoella"):
                 this.addEnemy(new WyndoellaBoss());
+                break;
+            case("minorDemon"):
+                this.addEnemy(new MinorDemon());
+                break;
+            case("3demonicSouls"):
+                this.addEnemy(new DemonicSoul(), 76);
+                this.addEnemy(new DemonicSoul());
+                this.addEnemy(new DemonicSoul(), 561);
                 break;
 
             // multiplayer

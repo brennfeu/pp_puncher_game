@@ -1,3 +1,4 @@
+// UNLOCKED
 class AdaptPP extends Move {
     constructor() {
         super();
@@ -28,6 +29,7 @@ class AdaptPP extends Move {
     }
 }
 
+// UNLOCKED
 class BigGuy extends Move {
     constructor() {
         super();
@@ -46,6 +48,7 @@ class BigGuy extends Move {
     }
 }
 
+// TO UNLOCK
 class BigSatan extends Move {
     constructor() {
         super();
@@ -79,6 +82,7 @@ class BigSatan extends Move {
     }
 }
 
+// UNLOCKED
 class Boomerang extends Move {
     constructor() {
         super();
@@ -96,6 +100,7 @@ class Boomerang extends Move {
     }
 }
 
+// UNLOCKED
 class BrocketeerDive extends Move {
     constructor() {
         super();
@@ -117,6 +122,7 @@ class BrocketeerDive extends Move {
     }
 }
 
+// UNLOCKED
 class BronanSlam extends Move {
     constructor() {
         super();
@@ -134,6 +140,7 @@ class BronanSlam extends Move {
     }
 }
 
+// UNLOCKED
 class Bullet extends Move {
     constructor() {
         super();
@@ -160,6 +167,7 @@ class Bullet extends Move {
     }
 }
 
+// UNLOCKED
 class DeadBro extends Move {
     constructor() {
         super();
@@ -185,6 +193,7 @@ class DeadBro extends Move {
     }
 }
 
+// UNLOCKED
 class EncrustPP extends Move {
     constructor() {
         super();
@@ -221,6 +230,7 @@ class EncrustPP extends Move {
     }
 }
 
+// UNLOCKED
 class FlexBro extends Move {
     constructor() {
         super();
@@ -239,6 +249,7 @@ class FlexBro extends Move {
     }
 }
 
+// UNLOCKED
 class HighFiveBro extends Move {
     constructor() {
         super();
@@ -273,6 +284,7 @@ class HighFiveBro extends Move {
     //alternateExecute TODO
 }
 
+// UNLOCKED
 class Hologram extends Move {
     constructor() {
         super();
@@ -290,6 +302,7 @@ class Hologram extends Move {
     }
 }
 
+// UNLOCKED
 class InterrogationPoint extends Move {
     constructor() {
         super();
@@ -313,6 +326,7 @@ class InterrogationPoint extends Move {
     }
 }
 
+// UNLOCKED
 class Kick extends Move {
     constructor() {
         super();
@@ -335,6 +349,37 @@ class Kick extends Move {
     }
 }
 
+// UNLOCKED
+class LaughingSoul extends Move {
+    constructor() {
+        super();
+        this.name = "Laughing Soul";
+        this.description = "Uses a random gods' regular and special moves.";
+        this.illegal = 20;
+    }
+
+    execute(_user, _target = null) {
+        var randomGod = shuffleArray(ProgressManager.getUnlockedGods())[0];
+        _user.duel.addMessage(_user.getName() + " summonds the powers of " + randomGod.name + ".");
+
+        var storedMoveA = {};
+        storedMoveA["user"] = _user;
+        storedMoveA["move"] = randomGod.getRegularAttackAsMove();
+        storedMoveA["target"] = _target;
+        var storedMoveB = {};
+        storedMoveB["user"] = _user;
+        storedMoveB["move"] = randomGod.getSpecialAttackAsMove();
+        storedMoveB["target"] = _target;
+
+        _user.duel.memoryMoves.push(storedMoveA);
+        _user.duel.memoryMoves.push(storedMoveB);
+
+        _user.duel.addAnimation("laugh", 60, _user);
+        _user.duel.memorySoundEffects.push("laugh");
+    }
+}
+
+// UNLOCKED
 class Pig extends Move {
     constructor() {
         super();
@@ -366,6 +411,7 @@ class Pig extends Move {
     }
 }
 
+// UNLOCKED
 class PregnantBro extends Move {
     constructor() {
         super();
@@ -391,6 +437,7 @@ class PregnantBro extends Move {
     }
 }
 
+// UNLOCKED
 class PunchingPP extends Move {
     constructor() {
         super();
@@ -407,6 +454,7 @@ class PunchingPP extends Move {
     }
 }
 
+// UNLOCKED
 class PunchingPPReallyHard extends Move {
     constructor() {
         super();
@@ -424,6 +472,7 @@ class PunchingPPReallyHard extends Move {
     }
 }
 
+// UNLOCKED
 class RedPill extends Move {
     constructor() {
         super();
@@ -443,6 +492,7 @@ class RedPill extends Move {
     }
 }
 
+// TO UNLOCK
 class RootOfNuisance extends Move {
     constructor() {
         super();
@@ -455,11 +505,39 @@ class RootOfNuisance extends Move {
         _user.duel.addMessage(_user.getName() + " abandons the battle!");
 		_user.setSTR(-9999999999);
 
-        _user.duel.addAnimation("kick", 60, _target, true, false);
+        _user.duel.addAnimation("adios", 60, _user);
         _user.duel.memorySoundEffects.push("thisSucks");
     }
 }
 
+// TO UNLOCK
+class SatanMove extends Move {
+    constructor() {
+        super();
+        this.name = "Satan";
+        this.description = "Possess the enemy's PP, he will use the next attack as you, on the same target, in the next turn.";
+        this.dexChange = -10;
+    }
+
+    execute(_user, _target = null) {
+        if (_target.possessCountdown > 0 && _target.possessedBy != null && _target.possessedBy.isAlive()) {
+            if (_target.possessedBy.STR > _user.STR) {
+                _user.duel.addMessage(_user.getName() + " cannot break " + _target.possessedBy.getName() + "'s possession on' " + _target.getName());
+                return;
+            }
+            _user.duel.addMessage(_user.getName() + " breaks " + _target.possessedBy.getName() + "'s possession on' " + _target.getName());
+        }
+
+        _user.duel.addMessage(_user.getName() + " possesses " + _target.getName());
+        _target.possessedBy = _user;
+        _target.possessCountdown = 2;
+
+        _user.duel.addAnimation("possessed", 60, _target, true, false);
+        _user.duel.memorySoundEffects.push("darkMagic");
+    }
+}
+
+// TO UNLOCK
 class Save extends Move {
     constructor() {
         super();
@@ -496,6 +574,7 @@ class Save extends Move {
     }
 }
 
+// UNLOCKED
 class SawBlade extends Move {
     constructor() {
         super();
@@ -506,7 +585,7 @@ class SawBlade extends Move {
     execute(_user, _target = null) {
         _user.duel.addMessage(_user.getName() + " cuts " + _target.getName() + "'s PP!");
         _target.bleedDamage += Math.floor(_user.STR/15);
-        if (getRandomPercent() <= 10 && !_target.hasFightingStyle("scarred")) {
+        if (_target.rollLuckPercentLow() <= 10 && !_target.hasFightingStyle("scarred")) {
             _user.duel.addMessage(_target.getName() + " gets a scarred PP!");
             _target.addFightingStyle("scarred");
             _target.DEXValue += 10;
@@ -518,6 +597,7 @@ class SawBlade extends Move {
     }
 }
 
+// UNLOCKED
 class Scout extends Move {
     constructor() {
         super();
@@ -546,6 +626,7 @@ class Scout extends Move {
     }
 }
 
+// TO UNLOCK
 class ShieldMove extends Move {
     constructor() {
         super();
@@ -568,6 +649,7 @@ class ShieldMove extends Move {
     }
 }
 
+// UNLOCKED
 class Steel extends Move {
     constructor() {
         super();
@@ -593,6 +675,7 @@ class Steel extends Move {
     }
 }
 
+// UNLOCKED
 class TurkeyBomb extends Move {
     constructor() {
         super();
@@ -615,6 +698,7 @@ class TurkeyBomb extends Move {
     }
 }
 
+// UNLOCKED
 class TrapSign extends Move {
     constructor() {
         super();
@@ -635,6 +719,7 @@ class TrapSign extends Move {
     }
 }
 
+// UNLOCKED
 class Yes extends Move {
     constructor() {
         super();
@@ -647,15 +732,15 @@ class Yes extends Move {
     execute(_user, _target = null) {
         _user.duel.triggeredChaos = true;
         var random = _user.duel.getRandomFighter();
-        var nb = Math.floor(getRandomPercent()/100*_user.getCurrentListOfMoves().length)+1;
+        var nb = Math.floor(random.rollLuckPercentHigh()/100*_user.getCurrentListOfMoves().length)+1;
 
         var all = _user.duel.getAllFighters();
         for (var i in all) {
-            if (all[i].truffleFriendly || (getRandomPercent() <= 20 && all[i].eldritchFriendly)) {
+            if (all[i].truffleFriendly || (all[i].rollLuckPercentLow() <= 20 && all[i].eldritchFriendly)) {
                 random = all[i];
             }
         }
-        if (_user.truffleFriendly || (getRandomPercent() <= 20 && _user.eldritchFriendly)) {
+        if (_user.truffleFriendly || (_user.rollLuckPercentLow() <= 20 && _user.eldritchFriendly)) {
             random = _user;
         }
 
@@ -683,6 +768,7 @@ class Yes extends Move {
 
 const REGULAR_MOVE_LIST = [AdaptPP, BigGuy, BigSatan, Boomerang, BrocketeerDive, BronanSlam,
     Bullet, DeadBro, EncrustPP, FlexBro, HighFiveBro,
-    Hologram, InterrogationPoint, Kick, Pig, PregnantBro, PunchingPP, PunchingPPReallyHard,
+    Hologram, InterrogationPoint, Kick, LaughingSoul,
+    Pig, PregnantBro, PunchingPP, PunchingPPReallyHard,
     RedPill, RootOfNuisance, Save, SawBlade, Scout,
     ShieldMove, Steel, TrapSign, TurkeyBomb, Yes];

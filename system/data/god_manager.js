@@ -18,6 +18,27 @@ class God {
 
         return txt;
     }
+
+    getRegularAttackAsMove() {
+        var move = MoveManager.createMove(function(_user, _target = null, _godName = this.__proto__.constructor.godName) {
+            var g = GodManager.getGod(_godName);
+            _user.duel.addMessage(g.name + " answers his calls!");
+            g.normalMove(_user, _target);
+        });
+        move.godName = this;
+
+        return move;
+    }
+    getSpecialAttackAsMove() {
+        var move = MoveManager.createMove(function(_user, _target = null, _godName = this.__proto__.constructor.godName) {
+            var g = GodManager.getGod(_godName);
+            _user.duel.addMessage(g.name + " answers his calls!");
+            g.specialMove(_user, _target);
+        });
+        move.godName = this;
+
+        return move;
+    }
 }
 class RegularGod extends God {
     constructor(_name, _description, _normalMoveFunction, _specialMoveFunction) {

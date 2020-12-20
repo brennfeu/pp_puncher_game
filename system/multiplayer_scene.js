@@ -10,10 +10,6 @@ class MultiplayerScene extends Scene {
     preload() { try {
         this.startLoadingScreen();
 
-        this.loadOptionsResources();
-        this.loadDialogueResources();
-        this.loadUiSounds();
-
         this.loadImage("ui/multiplayer/big_frame.png");
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
@@ -73,7 +69,7 @@ class MultiplayerScene extends Scene {
         this.challengeList = [];
 
         this.stopLoadingScreen();
-        //this.playMusic("TitleScreen");
+        this.playMusic("AnimeConvention_area");
 
         this.reloadsList1();
         this.executeQuery("DELETE FROM OnlineDuel WHERE idHost = " + this.currentUserId + " OR idInvited = " + this.currentUserId);
@@ -113,6 +109,8 @@ class MultiplayerScene extends Scene {
                 return this.quitScene();
             }
             else if (this.justPressedControl("RIGHT") && this.table2List.length > 0) {
+                this.cursor1.obj.setY(-1000);
+                this.cursor1.currentSelect = 0; this.cursor1.currentOffset = 0;
                 return this.selectsLeft = false;
             }
 
@@ -127,6 +125,7 @@ class MultiplayerScene extends Scene {
                 else if (this.cursor1.getCurrentSelect() == this.table1List.length-2) {
                     return this.reloadsList1();
                 }
+                else if (this.peopleList.length == 0) return;
 
                 this.executeQuery(
                     "INSERT INTO OnlineChallenge (idChallenger, idChallenged, timestamp, challengerData) " +
@@ -134,7 +133,7 @@ class MultiplayerScene extends Scene {
                         this.currentUserId + "', '" +
                         this.peopleList[this.cursor1.getCurrentSelect()].id + "', '" +
                         getCurrentTimestamp() + "', '" +
-                        this.getChallengerData() +
+                        JSON.stringify(this.getChallengerData()).split("'").join("`").slice(1,-1) +
                     "')"
                 );
             }
@@ -153,6 +152,8 @@ class MultiplayerScene extends Scene {
                 return this.quitScene();
             }
             else if (this.justPressedControl("LEFT") && this.table1List.length > 0) {
+                this.cursor2.obj.setY(-1000);
+                this.cursor2.currentSelect = 0; this.cursor2.currentOffset = 0;
                 return this.selectsLeft = true;
             }
 
@@ -167,6 +168,7 @@ class MultiplayerScene extends Scene {
                 else if (this.cursor2.getCurrentSelect() == this.table2List.length-2) {
                     return this.reloadsList2();
                 }
+                else if (this.challengeList.length == 0) return;
 
                 return this.triggerDuel(this.challengeList[this.cursor2.getCurrentSelect()].idChallenger, true)
             }
@@ -291,6 +293,7 @@ class MultiplayerScene extends Scene {
             this.table1List.push(this.addText(txt, 65, 62 + this.table1List.length*22));
         }
 
+        if (this.table1List.length == 0) this.table1List.push(this.addText("No one is online right now :(", 65, 62));
         this.table1List.push(this.addText("", 65, 62 + this.table1List.length*22));
         this.table1List.push(this.addText("Refresh List", 65, 62 + this.table1List.length*22));
         this.table1List.push(this.addText("Quit", 65, 62 + this.table1List.length*22));
@@ -315,6 +318,7 @@ class MultiplayerScene extends Scene {
             this.table2List.push(this.addText(txt, 65+40+550, 62 + this.table2List.length*22));
         }
 
+        if (this.table2List.length == 0) this.table2List.push(this.addText("No one is challenging you", 65+40+550, 62));
         this.table2List.push(this.addText("", 65+40+550, 62 + this.table2List.length*22));
         this.table2List.push(this.addText("Refresh List", 65+40+550, 62 + this.table2List.length*22));
         this.table2List.push(this.addText("Quit", 65+40+550, 62 + this.table2List.length*22));
@@ -330,7 +334,11 @@ class MultiplayerScene extends Scene {
                     challenge = this.challengeList[j];
                 }
             }
-            if (challenge == null) return console.log("No challenge :(");
+            if (challenge == null) {
+                this.reloadsList1();
+                this.openDialogue(41);
+                return;
+            }
         } // gathers challenge data
 
         // update DB

@@ -20,6 +20,8 @@ class Fighter {
 
         // effects
         this.resetStatus();
+        this.forcedStatus = null;
+        this.specialLuck = 0;
 
         // movepool
         this.currentMovepool = [];
@@ -49,7 +51,7 @@ class Fighter {
     getName() {
         var fullname = this.name;
         if (this.genderBender) {
-            fullname = "GenderBender " + fullname;
+            fullname += "ia";
         }
         return fullname;
     }
@@ -124,6 +126,9 @@ class Fighter {
         return txt;
     }
     getAllStatus() {
+        // multiplayer forced status
+        if (this.forcedStatus != null) return this.forcedStatus;
+
         var list = [];
         // Only Icons
         if (this.regularCharges > 0 && this.godsList.length > 0) {
@@ -218,6 +223,12 @@ class Fighter {
             status["icon"] = "lifeFiber";
             list.push(status);
         }
+        if (this.luck > 0) {
+            var status = {};
+            status["display"] = " - Luck Stacks: " + this.luck;
+            status["icon"] = "luck";
+            list.push(status);
+        }
         if (this.pigHeal > 0) {
             var status = {};
             status["display"] = " - Hog Squeezer: " + this.pigHeal;
@@ -263,6 +274,13 @@ class Fighter {
             status["icon"] = "special/killerBlessing";
             list.push(status);
         }
+        if (this.possessCountdown > 0 && this.possessedBy != null && this.possessedBy.isAlive()) {
+            var status = {};
+            status["display"] = " - Possessed by " + this.possessedBy.getName();
+            if (this.possessCountdown > 1) status["display"] += (" for: " + this.possessCountdown + " turns");
+            status["icon"] = "possessed";
+            list.push(status);
+        }
         // Countdowns
         if (this.turkeyBomb > 0) {
             var status = {};
@@ -277,6 +295,12 @@ class Fighter {
             list.push(status);
         }
         // Permanent Buffs
+        if (this.badLuck) {
+            var status = {};
+            status["display"] = " - Bad Luck";
+            status["icon"] = "badLuck";
+            list.push(status);
+        }
         if (this.hasBoner) {
             var status = {};
             status["display"] = " - Big Boner Mmmmmmh...";
@@ -345,6 +369,8 @@ class Fighter {
         this.isSilenced = false;
         this.saltyWounds = false;
         this.confusion = 0;
+        this.possessedBy = null; this.possessCountdown = 0;
+        this.badLuck = false;
 
         if (_onlyBadStatus) return;
         // resets good status
@@ -366,6 +392,7 @@ class Fighter {
         this.hasKamui = false;
         this.lifeFibers = false;
         this.cannotFailMove = false; // hidden for wyndoella
+        this.luck = 0;
     }
 
     get STR() {
@@ -600,6 +627,7 @@ class Fighter {
         this.waifuDetermination = Math.max(0, this.waifuDetermination-1);
         this.backFromDeath = Math.max(0, this.backFromDeath-1);
         this.confusion = Math.max(0, this.confusion-1);
+        this.possessCountdown = Math.max(0, this.possessCountdown-1); if (this.possessCountdown <= 0) this.possessedBy = null;
     }
     checkNextPhase() {
         if (this.isAlive()) return;
@@ -640,8 +668,22 @@ class Fighter {
             }
             return;
         }
+
+        // more than once?
+        var nbActions = this.nbActions;
+        if (this.boomerang > 0) nbActions += nbActions;
+        for (var i=0; i < nbActions-1; i++) {
+            var storedMove = {};
+            storedMove["user"] = this;
+            storedMove["move"] = _move;
+            storedMove["target"] = _target;
+            this.duel.memoryMoves.unshift(storedMove);
+        }
+
         var willBurst = _target != null && _target.isAlive() && _target.readyToBurst;
         _move.newInstance().execute(this, _target);
+
+        if (_target != null) _target.increaseLuck();
 
         // burst
         if (willBurst) {
@@ -652,16 +694,6 @@ class Fighter {
                 l[i].noDex = 2;
             }
             this.duel.memorySoundEffects.push("explosion");
-        }
-
-        var nbActions = this.nbActions;
-        if (this.boomerang > 0) nbActions += nbActions;
-        for (var i=0; i < nbActions-1; i++) {
-            var storedMove = {};
-            storedMove["user"] = this;
-            storedMove["move"] = _move;
-            storedMove["target"] = _target;
-            this.duel.memoryMoves.unshift(storedMove);
         }
     }
     rollDEX() {
@@ -687,6 +719,9 @@ class Fighter {
     }
 
     canPlayThisTurn() {
+        if (this.possessCountdown > 0 && this.possessedBy != null && this.possessedBy.isAlive()) {
+            return false;
+        }
         if (this.chosenMove != null) {
             return false;
         }
@@ -760,8 +795,9 @@ class Fighter {
         else if (_type == "attack") {
             // critical hit
             var criticalChance = 5 + _opponent.lifeFibers*5; // %
-            if (getRandomPercent() <= criticalChance) {
+            if (_opponent.rollLuckPercentLow() <= criticalChance) {
                 this.duel.addMessage("Critical Hit!");
+                this.increaseLuck();
                 _value = _value*2;
             }
 
@@ -773,7 +809,7 @@ class Fighter {
             if (_opponent.backFromDeath > 0 && _value > 0) {
                 _value = _value*2;
             }
-            if (_opponent.hasFightingStyle("scarred") > 0 && _value > 0 && getRandomPercent() <= 10) {
+            if (_opponent.hasFightingStyle("scarred") > 0 && _value > 0 && this.rollLuckPercentLow() <= 10) {
                 this.duel.addMessage(_opponent.getName() + "'s PP scar scares " + this.getName() + "!");
                 this.noDex = 2;
             }
@@ -859,6 +895,43 @@ class Fighter {
             if (this.godsList[i].type == _godType) return true;
         }
         return false;
+    }
+
+    increaseLuck(_value = 3) {
+        this.specialLuck += _value;
+    }
+    decreaseLuck(_value = 3) {
+        this.specialLuck -= _value;
+        if (this.specialLuck <= 0) this.specialLuck = 0;
+    }
+    getLuck() {
+        var a = this.specialLuck + this.luck;
+
+        if (this.backFromDeath > 0) {
+            a += 10;
+        }
+
+        return a;
+    }
+    rollLuckPercentHigh() {
+        var roll = getRandomPercent()+this.getLuck();
+        if (roll >= 100) roll = 100;
+        this.checkLuck();
+        if (roll < 10) this.increaseLuck();
+        return roll;
+    }
+    rollLuckPercentLow() {
+        var roll = getRandomPercent()-this.getLuck();
+        if (roll <= 0) roll = 0;
+        this.checkLuck();
+        if (roll > 90) this.increaseLuck();
+        return roll;
+    }
+    checkLuck(_nbTimes = 20) {
+        if (_nbTimes <= 0) return;
+
+        if (getRandomPercent() >= this.specialLuck) this.decreaseLuck(1);
+        this.checkLuck(_nbTimes-1);
     }
 
     updateTextObjects() {

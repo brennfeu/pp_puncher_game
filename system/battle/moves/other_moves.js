@@ -21,14 +21,8 @@ class RegularPriestMove extends Move {
         _user.regularCharges = Math.max(0, _user.regularCharges-1);
         for (var i in _user.godsList) {
             var storedMove = {};
-            var move = MoveManager.createMove(function(_user, _target = null, _godIndex = this.__proto__.constructor.godIndex) {
-                _user.duel.addMessage(_user.godsList[_godIndex].name + " answers his calls!");
-                _user.godsList[_godIndex].normalMove(_user, _target);
-            });
-            move.godIndex = i;
-
             storedMove["user"] = _user;
-            storedMove["move"] = move
+            storedMove["move"] = _user.godsList[i].getRegularAttackAsMove();
             storedMove["target"] = _target;
             _user.duel.memoryMoves.push(storedMove);
         }
@@ -58,14 +52,8 @@ class SpecialPriestMove extends Move {
         _user.specialCharges = Math.max(0, _user.specialCharges-1);
         for (var i in _user.godsList) {
             var storedMove = {};
-            var move = MoveManager.createMove(function(_user, _target = null, _godIndex = this.__proto__.constructor.godIndex) {
-                _user.duel.addMessage(_user.godsList[_godIndex].name + " answers his calls!");
-                _user.godsList[_godIndex].specialMove(_user, _target);
-            });
-            move.godIndex = i;
-
             storedMove["user"] = _user;
-            storedMove["move"] = move
+            storedMove["move"] = _user.godsList[i].getSpecialAttackAsMove();
             storedMove["target"] = _target;
             _user.duel.memoryMoves.push(storedMove);
         }

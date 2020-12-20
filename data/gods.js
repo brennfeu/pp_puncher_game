@@ -7,7 +7,7 @@ GodManager.loadList([
         "Brenn",
         [
             "Wait, is that you...?",
-            "Adds this.STR/10 haemorrhage to the opponent.",
+            "Adds this.STR/10 haemorrhage to the target.",
             "Gets an extra life."
         ],
         function(_user, _target = null) { // regular move
@@ -135,7 +135,7 @@ GodManager.loadList([
         ],
         function(_user, _target = null) { // regular move
             _user.duel.addMessage(_user.getName() + " tries to scare " + _target.getName() + "!");
-            if (getRandomPercent() <= 50 + _user.STR - _target.STR) {
+            if (_user.rollLuckPercentLow() <= 50 + _user.STR - _target.STR) {
                 _target.damage(100, "inner");
             }
             else {
@@ -240,9 +240,44 @@ GodManager.loadList([
             _user.duel.memorySoundEffects.push("punchB");
         }
     ),
+    new RegularGod(
+        "STFU Isaac",
+        [
+            "The very first victim of Espinoza. His trauma was so powerful he became a god.",
+            "Gets 1/20 STR of every fighter.",
+            "Curses the target with bad luck, making all his illegal moves caught by PP Arbitrator."
+        ],
+        function(_user, _target = null) { // regular move
+            _user.duel.addMessage(_user.getName() + " starts to cry!");
+            var l = _user.duel.getAllFighters();
+            var nb = 0;
+            for (var i in l) {
+                if (l[i].isDead() || l[i].id == _user.id) continue;
+                var value = Math.floor(l[i].STR/20);
+                _user.duel.addMessage(l[i].getName() + " shares some of his STR with " + _user.getName() + "!");
+                l[i].STRValue -= value;
+                _user.heal(value);
+                nb += 1;
+            }
+            if (nb == 0) {
+                _user.duel.addMessage("But no one is willing to share some STR...");
+            }
+
+            _user.duel.addAnimation("cry", 60, _user);
+            _user.duel.memorySoundEffects.push("cry");
+        },
+        function(_user, _target = null) { // special move
+            _user.duel.addMessage(_user.getName() + " curses " + _target.getName() + " with bad luck!");
+            _target.badLuck = true;
+            _target.luck = 0;
+
+            _user.duel.addAnimation("cursed", 60, _target);
+            _user.duel.memorySoundEffects.push("darkMagic");
+        }
+    ),
 
     // Waifus
-    // TOUSE description for a waifu "An isekai girl that got isekai-ed into the PP Punch universe."
+    // TOUSE description for a waifu "An isekai girl that got isekai-ed into the PP Punch multiverse."
     new Waifu(
         "Priestess",
         [

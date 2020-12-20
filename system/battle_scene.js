@@ -40,19 +40,13 @@ class BattleScene extends Scene {
 
         this.blockedHeroFrames = [];
 
-        this.autoSkipSpeed = 60;
+        this.autoSkipSpeed = 30;
         this.autoSkipCountdown = this.autoSkipSpeed;
         this.autoSkipNb = 0;
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     preload() { try {
         this.startLoadingScreen();
-
-        this.loadOptionsResources();
-        this.loadDialogueResources();
-        this.loadBibleResources();
-        this.loadUnlockResources();
-        this.loadUiSounds();
 
         this.loadImage("ui/cursor.png");
         this.loadImage("ui/battle/hero_frame_blocked.png");
@@ -61,14 +55,6 @@ class BattleScene extends Scene {
         this.loadImage("ui/battle/heroes_bar.png");
         this.loadImage("ui/battle/move_frame.png");
         this.loadImage("ui/battle/event_bar.png");
-
-        this.loadBattleAnimations();
-        this.loadStatusIcons();
-        this.loadBattleSounds();
-
-        this.loadMusic(this.duel.place.getBattleTheme() + ".mp3");
-        this.loadMusic(this.duel.place.getBossTheme() + ".mp3");
-        this.loadMusic(this.duel.place.getVictoryTheme() + ".mp3");
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     create() { try {
@@ -121,7 +107,7 @@ class BattleScene extends Scene {
         }
 
         // updates placement of opponents
-        if (this.duel.enemies[0].spriteX == undefined || this.duel.enemies[0].spriteX == 0) {
+        if (this.duel.enemies.length == 0 || this.duel.enemies[0].spriteX == undefined || this.duel.enemies[0].spriteX == 0) {
             if (this.duel.enemies.length == 1) {
                 this.duel.enemies[0].setSpriteCoordinates(320, 75);
             }
@@ -146,9 +132,7 @@ class BattleScene extends Scene {
         this.checkHeroesObjects();
         if (this.duel.getTheme() != this.currentMusic) this.playMusic(this.duel.getTheme());
 
-        for (var i in this.duel.getAllFighters()) {
-            this.duel.getAllFighters()[i].updateTextObjects();
-        }
+        for (var i in this.duel.getAllFighters()) this.duel.getAllFighters()[i].updateTextObjects();
         for (var i in this.duel.heroes) {
             if (this.duel.heroes[i].canPlayThisTurn()) {
                 this.blockedHeroFrames[i].setAlpha(0);
@@ -157,6 +141,42 @@ class BattleScene extends Scene {
                 this.blockedHeroFrames[i].setAlpha(0.5);
             }
         }
+
+        for (var i in this.duel.memoryAnimations) {
+            if (this.duel.memoryAnimations[i].animObject == null) {
+                if (this.duel.memoryAnimations[i].fighter == undefined || this.duel.memoryAnimations[i].fighter == null) {
+                    console.log("Warning: Animation User is null");
+                    console.log(this.duel.memoryAnimations[i]);
+                    continue;
+                }
+
+                var animX = this.duel.memoryAnimations[i].fighter.spriteX - 30;
+                var animY = this.duel.memoryAnimations[i].fighter.spriteY;
+                if (this.duel.memoryAnimations[i].randomized) {
+                    animX += Math.floor(getRandomPercent()*this.duel.memoryAnimations[i].fighter.spriteObject.width/100);
+                    animY += Math.floor(getRandomPercent()*this.duel.memoryAnimations[i].fighter.spriteObject.height/100);
+                }
+                else {
+                    animX += Math.floor(this.duel.memoryAnimations[i].fighter.spriteObject.width/2);
+                    animY += Math.floor(this.duel.memoryAnimations[i].fighter.spriteObject.height/2);
+                }
+                if (this.duel.memoryAnimations[i].isAbove) {
+                    animY -= this.duel.memoryAnimations[i].fighter.spriteObject.height + 50;
+                }
+                var color = "fff";
+                this.duel.memoryAnimations[i].animObject = this.addText("<"+this.duel.memoryAnimations[i].image+">", animX, animY, {"fontStyle": "bold", "fontSize": "28px", "backgroundColor": "#000", "color": "#"+color});
+            }
+            this.duel.memoryAnimations[i].duration -= 1;
+            if (this.duel.memoryAnimations[i].duration < 0) {
+                this.duel.memoryAnimations[i].animObject.destroy();
+            }
+        }
+        this.duel.memoryAnimations = this.duel.memoryAnimations.filter(anim => anim.duration >= 0);
+        for (var i in this.duel.memorySoundEffects) {
+            if (this.duel.memorySoundEffects[i] == null) continue;
+            this.playSound("battle/" + this.duel.memorySoundEffects[i]);
+        }
+        this.duel.memorySoundEffects = [];
 
         if (this.duel.duelState == "") {
             this.duel.startDuel();
@@ -289,7 +309,7 @@ class BattleScene extends Scene {
 
             if (this.moveList.length > 0) this.updateMovepoolObjects(true);
 
-            if (GlobalVars.get("settings")["battleAutoNext"] && this.duel.logTextObject.isShowingFullText()) {
+            if ((GlobalVars.get("settings")["battleAutoNext"] || this.sceneName == "MultiplayerBattle") && this.duel.logTextObject.isShowingFullText()) {
                 this.autoSkipCountdown -= 1;
             }
 
@@ -304,7 +324,7 @@ class BattleScene extends Scene {
                 this.resetStatusIcons();
                 this.autoSkipNb += 1;
                 this.autoSkipCountdown = Math.max(1, this.autoSkipSpeed - this.autoSkipNb);
-                this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/5);
+                this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/7);
             }
 
             while (this.duel.logTextObject.height > Math.min(500, this.duelStatusFrame.y-60)) {
@@ -315,7 +335,7 @@ class BattleScene extends Scene {
             this.duel.logTextObject.setText(this.duel.getAllMessages());
             this.duel.logTextObject.nextFrame();
 
-            if (GlobalVars.get("settings")["battleAutoNext"] && this.duel.logTextObject.isShowingFullText()) {
+            if ((GlobalVars.get("settings")["battleAutoNext"] || this.sceneName == "MultiplayerBattle") && this.duel.logTextObject.isShowingFullText()) {
                 this.autoSkipCountdown -= 1;
             }
 
@@ -330,7 +350,7 @@ class BattleScene extends Scene {
                 this.resetStatusIcons();
                 this.autoSkipNb += 1;
                 this.autoSkipCountdown = Math.max(1, this.autoSkipSpeed - this.autoSkipNb);
-                this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/5);
+                this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/7);
             }
 
             while (this.duel.logTextObject.height > Math.min(500, this.duelStatusFrame.y-60)) {
@@ -339,10 +359,6 @@ class BattleScene extends Scene {
         }
         else if (this.duel.duelState == "eventPlay") {
             this.duel.logTextObject.setText(this.duel.getAllMessages());
-
-            if (GlobalVars.get("settings")["battleAutoNext"] && this.duel.logTextObject.isShowingFullText()) {
-                this.autoSkipCountdown -= 1;
-            }
 
             if (this.lastDuelEvent != this.duel.lastEvent && !this.duel.hasParam("forceEvent") && !this.duel.hasParam("forceBasicEvents")) {
                 this.eventBackground = this.addImage("ui/blackScreen");
@@ -360,12 +376,26 @@ class BattleScene extends Scene {
                 return;
             }
 
-            if (!this.isShowingEvent) this.duel.logTextObject.nextFrame();
+            if (this.isShowingEvent) {
+                if (GlobalVars.get("settings")["battleAutoNext"] || this.sceneName == "MultiplayerBattle") {
+                    this.autoSkipCountdown -= 0.5;
+                }
+            }
+            else {
+                this.duel.logTextObject.nextFrame();
+                if ((GlobalVars.get("settings")["battleAutoNext"] || this.sceneName == "MultiplayerBattle") && this.duel.logTextObject.isShowingFullText()) {
+                    this.autoSkipCountdown -= 1;
+                }
+            }
 
             if (this.justPressedControl("ENTER") || this.autoSkipCountdown <= 0) {
                 if (!GlobalVars.get("settings")["battleAutoNext"]) {
                     this.playSoundSelect();
                 }
+
+                this.autoSkipNb += 1;
+                this.autoSkipCountdown = Math.max(1, this.autoSkipSpeed - this.autoSkipNb);
+                this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/7);
 
                 if (this.isShowingEvent) {
                     this.eventTitleObj.destroy();
@@ -386,9 +416,6 @@ class BattleScene extends Scene {
                     this.resetStatusIcons();
                     this.lastDuelEvent = null;
                 }
-
-                this.autoSkipNb += 1;
-                this.autoSkipCountdown = Math.max(1, this.autoSkipSpeed - this.autoSkipNb);
             }
 
             while (this.duel.logTextObject.height > Math.min(500, this.duelStatusFrame.y-60)) {
@@ -396,14 +423,48 @@ class BattleScene extends Scene {
             }
         }
         else if (this.duel.duelState == "waiting") {
-            this.duel.logTitleObject.setText("Waiting...");
-            this.duel.logTextObject.setText("Waiting for the opponent to select his moves...");
-            this.duel.logTextObject.nextFrame();
-
             if (this.moveList.length > 0) this.updateMovepoolObjects(true);
 
-            for (var i in this.duel.heroes) {
-                this.duel.heroes[i].updateTextObjects();
+            if (this.duel.isHost || (this.duel.getAllMessages().length == 0 && !((this.hostUpdateCounter+1) in this.nonHostUpdates))) {
+                this.duel.logTitleObject.setText("Waiting...");
+                this.duel.logTextObject.setText("Waiting for the opponent to select his moves...");
+                this.duel.logTextObject.nextFrame();
+            }
+            else {
+                if (this.duel.logTextObject.isShowingFullText()) {
+                    this.autoSkipCountdown -= 1;
+                }
+
+                if (this.justPressedControl("ENTER") || this.autoSkipCountdown <= 0) {
+                    if ((this.hostUpdateCounter+1) in this.nonHostUpdates) {
+                        this.hostUpdateCounter += 1;
+                        this.duel.logTextObject.showFullText();
+                        this.setUpdateJSON(this.nonHostUpdates[this.hostUpdateCounter]);
+
+                        this.autoSkipNb += 1;
+                        this.autoSkipCountdown = Math.max(1, this.autoSkipSpeed - this.autoSkipNb);
+                        this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/7);
+
+                        this.resetStatusIcons();
+                    }
+                    else if (this.hostUpdateCounter == this.lastHostUpdateCounter && this.duel.memoryJSON != null) {
+                        this.duel.setJSON(this.duel.memoryJSON);
+                        this.duel.memoryJSON = null;
+                        this.duel.messageList = [];
+                        this.forceNewTurn = true;
+                    }
+
+                    for (var i in this.duel.heroes) {
+                        this.duel.heroes[i].updateTextObjects();
+                    }
+                    return;
+                }
+
+                this.duel.logTextObject.setText(this.duel.getAllMessages());
+                this.duel.logTextObject.nextFrame();
+                while (this.duel.logTextObject.height > Math.min(500, this.duelStatusFrame.y-60)) {
+                    this.duel.deleteFirstMessage();
+                }
             }
         }
         else if (this.duel.duelState == "victory") {
@@ -439,7 +500,7 @@ class BattleScene extends Scene {
 
                 AchievementManager.unlockAchievement(0); // PUNCH_PP
 
-                this.quitScene();
+                return this.quitScene();
             }
         }
         else if (this.duel.duelState == "defeat") {
@@ -454,6 +515,9 @@ class BattleScene extends Scene {
                 }
             }
 
+            // fade out audio
+            if (!DEV_MODE) this.musicPlayer.setVolume(this.musicPlayer.volume - 0.01);
+
             if (this.justPressedControl("ENTER")) {
                 for (var i in this.duel.heroes) {
                     if (this.duel.heroes[i].chosenMove == Yes) {
@@ -461,45 +525,9 @@ class BattleScene extends Scene {
                     }
                 }
 
-                this.quitScene();
+                return this.quitScene();
             }
         }
-
-        for (var i in this.duel.memoryAnimations) {
-            if (this.duel.memoryAnimations[i].animObject == null) {
-                if (this.duel.memoryAnimations[i].fighter == undefined || this.duel.memoryAnimations[i].fighter == null) {
-                    console.log("Warning: Animation User is null");
-                    console.log(this.duel.memoryAnimations[i]);
-                    continue;
-                }
-
-                var animX = this.duel.memoryAnimations[i].fighter.spriteX - 30;
-                var animY = this.duel.memoryAnimations[i].fighter.spriteY;
-                if (this.duel.memoryAnimations[i].randomized) {
-                    animX += Math.floor(getRandomPercent()*this.duel.memoryAnimations[i].fighter.spriteObject.width/100);
-                    animY += Math.floor(getRandomPercent()*this.duel.memoryAnimations[i].fighter.spriteObject.height/100);
-                }
-                else {
-                    animX += Math.floor(this.duel.memoryAnimations[i].fighter.spriteObject.width/2);
-                    animY += Math.floor(this.duel.memoryAnimations[i].fighter.spriteObject.height/2);
-                }
-                if (this.duel.memoryAnimations[i].isAbove) {
-                    animY -= this.duel.memoryAnimations[i].fighter.spriteObject.height + 50;
-                }
-                var color = "fff";
-                this.duel.memoryAnimations[i].animObject = this.addText("<"+this.duel.memoryAnimations[i].image+">", animX, animY, {"fontStyle": "bold", "fontSize": "28px", "backgroundColor": "#000", "color": "#"+color});
-            }
-            this.duel.memoryAnimations[i].duration -= 1;
-            if (this.duel.memoryAnimations[i].duration < 0) {
-                this.duel.memoryAnimations[i].animObject.destroy();
-            }
-        }
-        this.duel.memoryAnimations = this.duel.memoryAnimations.filter(anim => anim.duration >= 0);
-        for (var i in this.duel.memorySoundEffects) {
-            if (this.duel.memorySoundEffects[i] == null) continue;
-            this.playSound("battle/" + this.duel.memorySoundEffects[i]);
-        }
-        this.duel.memorySoundEffects = [];
 
         var duelStatusText = this.duel.getDuelEffects();
         if (duelStatusText == "") {
@@ -544,11 +572,15 @@ class BattleScene extends Scene {
     }
 
     getMainObj() {
+        if (this.getMainObjParent() != null) return this.getMainObjParent().spriteObject;
+        return null;
+    }
+    getMainObjParent() {
         if (["heroChoice", "moveChoice", "targetChoice"].indexOf(this.duel.duelState) > -1) {
-            return this.duel.heroes[this.currentSelectHero].spriteObject;
+            return this.duel.heroes[this.currentSelectHero];
         }
         else if (["movePlaying", "turnChange"].indexOf(this.duel.duelState) > -1) {
-            return this.duel.mainFighter.spriteObject;
+            return this.duel.mainFighter;
         }
         return null;
     }

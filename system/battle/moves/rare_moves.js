@@ -17,7 +17,7 @@ class WoodCutting extends Move {
         var currentWood = ProgressManager.getValue("wood");
         if (currentWood == undefined) currentWood = 0;
 
-        var nb = Math.floor(getRandomPercent()/10)+1;
+        var nb = Math.floor(_user.rollLuckPercentHigh()/10)+1;
         var total = currentWood;
         nb += Math.floor((_user.STR+total)/19);
         ProgressManager.setValue("wood", total + nb);

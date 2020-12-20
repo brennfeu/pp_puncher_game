@@ -302,6 +302,32 @@ class ProgressManager {
         ProgressManager.GodsCache = l;
         return l;
     }
+    static getUnlockedArtworks() {
+        if (ProgressManager.ArtworksCache != null) return ProgressManager.ArtworksCache;
+
+        var l = [];
+        var steps = ProgressManager.getCompletedSteps();
+        for (var i in steps) {
+            if (steps[i].unlockArtworks != undefined) {
+                var artworks = steps[i].unlockArtworks;
+                for (var j in artworks) {
+                    l.push(ArtworkManager.getArtwork(artworks[j]));
+                }
+            }
+        }
+
+        l = l.sort(
+            function (a, b) {
+                var na = a.id;
+                var nb = b.id;
+                if (na < nb) return -1;
+                else if (na > nb) return 1;
+                return 0;
+            }
+        );
+        ProgressManager.ArtworksCache = l;
+        return l;
+    }
 
     static getSavedWaifus() {
         if (ProgressManager.SavedWaifusCache != null) return ProgressManager.SavedWaifusCache;
@@ -329,6 +355,7 @@ class ProgressManager {
         ProgressManager.FightingStylesCache = null;
         ProgressManager.EventsCache = null;
         ProgressManager.GodsCache = null;
+        ProgressManager.ArtworksCache = null;
 
         ProgressManager.SavedWaifusCache = null;
     }

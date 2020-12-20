@@ -18,10 +18,6 @@ class CutsceneScene extends Scene {
     preload() { try {
         this.startLoadingScreen();
 
-        this.loadOptionsResources();
-        this.loadDialogueResources();
-        this.loadUiSounds();
-
         this.loadImage("ui/other/cutscene_frame.png");
         if (this.music != undefined) this.loadMusic(this.music + ".mp3");
     } catch(e) { TRIGGER_ERROR(this, e) } }
