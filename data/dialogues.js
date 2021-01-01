@@ -682,7 +682,7 @@ DialogueManager.loadList([
                 "text": "While you stay this area, you become visible to other people wanting to have a PvP fight. You can view those people on the left side of your screen."
             },
             {
-                "text": "On the right are the people that challenges you. You can challenge people by pressing the ENTER control on them on the left side."
+                "text": "On the right are the people that challenges you. You can challenge people by pressing the ENTER control on them on the left side. You can only challenge one person at a time."
             },
             {
                 "text": "You can accept a challenge on pressing ENTER on the right side."

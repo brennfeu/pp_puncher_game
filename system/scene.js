@@ -119,11 +119,22 @@ class Scene extends Phaser.Scene {
         this.musicPlayer.play(config);
     }
     resetMusicTimers() {
+        if (DISABLE_MUSIC) return;
         Scene.musicTimers = {};
     }
     stopMusic() {
+        if (DISABLE_MUSIC) return;
         Scene.musicTimers[this.currentMusic] = this.musicPlayer.seek;
         this.musicPlayer.stop();
+    }
+    musicFadeOut() {
+        if (DISABLE_MUSIC) return;
+        var sound = this.musicPlayer;
+        this.tweens.add({
+            targets:  sound,
+            volume:   0,
+            duration: 10000
+        });
     }
     loadSound(_audio, _name = _audio.substring(0, _audio.length - 4)) {
         var l = [];
@@ -167,7 +178,9 @@ class Scene extends Phaser.Scene {
         return obj;
     }
 
-    executeQuery(_str, _queryID = null) {
+    executeQuery(_str, _queryID = null) { // DEPRECATED
+        throw "Tried to use executeQuery. This shouldn't be used anymore, or only for testing purposes."
+
         var _scene = this;
         var _function = this.recieveQuery;
 
@@ -188,6 +201,58 @@ class Scene extends Phaser.Scene {
         // HOW TO USE:
         // have a recieveQuery(_results, _queryID) function in your scene
         // _queryID helps knowing what was the purpose of the query, so the function could have a switch:case for each queryID
+    }
+    sendQuery(_str, _queryID = null, _param = {}) {
+        // HOW TO USE:
+        // have a recieveQuery(_results, _queryID) function in your scene
+        // _queryID helps knowing what was the purpose of the query, so the function could have a switch:case for each queryID
+
+        var _scene = this;
+        var _function = this.recieveQuery;
+        _param["version"] = GAME_VERSION;
+        _param["password"] = SERVER_PASSWORD;
+
+        var _headers = new Headers();
+        _headers.append("Content-Type", "application/json");
+
+        var requestOptions = {
+          method: 'POST',
+          headers: _headers,
+          body: JSON.stringify(_param),
+          redirect: 'follow'
+        };
+
+        fetch(SERVER_URL + _str, requestOptions)
+          .then(_result => {
+                //console.log(_result)
+                _result.text().then(
+                    _finalResult => {
+                        if (_finalResult[0] == "<") {
+                            // error :(
+                            console.log("Error on " + _str);
+                            console.log(_finalResult);
+                            return;
+                        }
+
+                        //if (DEV_MODE) console.log(_finalResult);
+                        var fixedResult = _finalResult.split('\\"').join('"').split('\\"').join('"').split('\\"').join('"')
+                        fixedResult = fixedResult.split('"{').join('{').split('}"').join('}')
+                        //if (DEV_MODE) console.log(fixedResult);
+                        try {
+                            var result = JSON.parse(fixedResult);
+                            //if (DEV_MODE) console.log(result);
+                            _function(result, _queryID, _scene)
+                        }
+                        catch(e) {
+                            console.log("Error on: ");
+                            console.log(fixedResult);
+                            console.log(e)
+                        }
+                    }
+                )
+          })
+          .then(a => {})
+          .catch(error => console.log('error', error));
     }
 
     loadMovesImages() {
@@ -478,7 +543,7 @@ class Scene extends Phaser.Scene {
 
             this.autoSkipNb += 1;
             this.autoSkipCountdown = Math.max(1, this.autoSkipSpeed - this.autoSkipNb);
-            this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/7);
+            if (this.sceneName == "Battle" || this.sceneName == "MultiplayerBattle") this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/7);
 
             this.currentLine += 1;
             this.dialogueObj.resetCursor();

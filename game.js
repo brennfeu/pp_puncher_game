@@ -14,10 +14,12 @@ var GAME_CONFIG = {
 // phaser.js + credits.html + greenworks.js = 106238 lines of code(source only)
 // CTRL + SHIFT + ALT + L to get total lines of code
 
-const DEV_MODE = true;
-const GAME_VERSION = "Beta 1.2.0" + (DEV_MODE ? " DEV" : ""); // Beta x.x --> Release x.x
+const DEV_MODE = false;
+const GAME_VERSION = (DEV_MODE ? "DEV " : "") + "Beta 1.2.0"; // Beta x.x --> Release x.x
+//const GAME_VERSION = "beta2";
 
-const DISABLE_MUSIC = DEV_MODE;
+const DEV_TEST_MUSIC = false;
+const DISABLE_MUSIC = DEV_MODE && !DEV_TEST_MUSIC;
 const SCALE_GAME = true;
 
 var CURRENT_SCENE = null; // for console debugging

@@ -4,8 +4,9 @@ class MultiplayerBattleScene extends BattleScene {
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     init(_data) { try {
+        //console.log(_data)
         if (_data["isHost"]) {
-            var challengerData = JSON.parse(_data["challengerData"]);
+            var challengerData = _data["challengerData"];
             _data["duel"] = new MultiplayerDuel(
                 PartyManager.getCurrentParty(),
                 challengerData["initParty"],
@@ -15,7 +16,7 @@ class MultiplayerBattleScene extends BattleScene {
         }
         else {
             var duel = new MultiplayerDuel([], [], false);
-            duel.setJSON(JSON.parse(_data["duelString"]));
+            duel.setJSON(_data["duelString"]);
             _data["duel"] = duel;
         }
 
@@ -51,46 +52,6 @@ class MultiplayerBattleScene extends BattleScene {
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     update() { try {
-        var timerValue = this.lastRegisteredTimestamp + 60 - getCurrentTimestamp();
-
-        // takes too much time?
-        if (this.autoWinTimestamp != null && this.duel.duelState != "victory") {
-            if (this.autoWinTimestamp + 30 < getCurrentTimestamp()) return this.switchScene("Map");
-        }
-        else if (timerValue > 0 && ["heroChoice", "moveChoice", "targetChoice"].indexOf(this.duel.duelState) > -1 && !this.stopSayinTimesUp) {
-            for (var i in this.duel.heroes) {
-                if (this.duel.heroes[i].chosenMove == null) this.duel.heroes[i].chosenMove = Wait;
-            }
-
-            if (this.duel.isHost) {
-                this.duel.duelState = "waiting";
-                this.duel.checkAllFightersAttacks();
-                this.lastRegisteredTimestamp = getCurrentTimestamp();
-            }
-            else {
-                this.sendToDatabase();
-                this.duel.duelState = "waiting";
-            }
-
-            this.stopSayinTimesUp = true;
-            return this.openDialogue(43);
-        }
-        else if (this.lastRegisteredTimestamp + 60*2+30 < getCurrentTimestamp() && this.duel.duelState == "waiting") {
-            // auto-win if has internet
-            this.executeQuery("SELECT idHost FROM OnlineDuel", "autoWin");
-            this.autoWinTimestamp = getCurrentTimestamp();
-            return this.openDialogue(42);
-        }
-        else if (this.duel.duelState != "waiting") this.stopSayinTimesUp = false;
-
-        if (["heroChoice", "moveChoice", "targetChoice", "waiting"].indexOf(this.duel.duelState) > -1 && timerValue > 0) {
-            this.timerObject.setText(timerValue);
-            this.timerObject.setAlpha(1);
-        }
-        else {
-            this.timerObject.setAlpha(0);
-        }
-
         // host sends to db
         if (this.duel.readyToSendToDB && this.duel.duelState == "heroChoice" && !(this.hasNewStuff() || this.duel.memoryMoves.length > 0)) {
             this.duel.readyToSendToDB = false;
@@ -99,20 +60,17 @@ class MultiplayerBattleScene extends BattleScene {
 
         if (this.duel.isHost && this.hasNewStuff()) {
             this.hostUpdateCounter += 1;
-            this.executeQuery(
-                "INSERT INTO OnlineDuelUpdate (idHost, id, duelString) " +
-                "VALUES ('" +
-                    this.currentUserId + "', '" +
-                    this.hostUpdateCounter + "', '{" +
-                    JSON.stringify(this.getUpdateJSON()).split("'").join("`").slice(1,-1) + "}')"
-            );
+            this.sendQuery("addDuelUpdate", undefined, {
+                "myId": this.currentUserId,
+                "hostUpdateCounter": this.hostUpdateCounter,
+                "duelString": "{" + JSON.stringify(this.getUpdateJSON()).split("'").join("`").slice(1,-1) + "}"
+            })
         }
         if (!this.duel.isHost && this.duel.duelState == "waiting" && this.nonHostUpdateTimestamp + 5 <= getCurrentTimestamp()) {
-            this.executeQuery(
-                "SELECT * FROM OnlineDuelUpdate " +
-                "WHERE idHost = " + this.duel.idHost + " AND id > " + this.hostUpdateCounter,
-                "nonHostUpdate"
-            );
+            this.sendQuery("getDuelUpdate", "nonHostUpdate", {
+                "idHost": this.duel.idHost,
+                "hostUpdateCounter": this.hostUpdateCounter
+            })
             this.nonHostUpdateTimestamp = getCurrentTimestamp();
         }
 
@@ -146,18 +104,59 @@ class MultiplayerBattleScene extends BattleScene {
         if (this.lastPingTimestamp + 3 <= getCurrentTimestamp()) {
             if (this.duel.isHost) {
                 // check if opponents sent his attacks
-                this.executeQuery("SELECT * FROM OnlineDuel " +
-                    "WHERE idHost = '" + this.currentUserId + "' " +
-                    "AND lastUpdate > " + this.lastUpdateTimestamp + " " +
-                    "AND fullDuelString = FALSE", "readAttacks");
+                this.sendQuery("nonHostAttacks", "readAttacks", {
+                    "myId": this.currentUserId,
+                    "lastUpdateTimestamp": this.lastUpdateTimestamp
+                })
             }
             else if (this.duel.duelState == "waiting") {
-                this.executeQuery("SELECT * FROM OnlineDuel " +
-                    "WHERE idInvited = '" + this.currentUserId + "' " +
-                    "AND timestamp > " + this.lastRegisteredTimestamp, "updateDuel");
+                this.sendQuery("updatedDuel", "updateDuel", {
+                    "myId": this.currentUserId,
+                    "timestamp": this.lastRegisteredTimestamp
+                })
             }
 
             this.lastPingTimestamp = getCurrentTimestamp();
+        }
+
+        // takes too much time?
+        var timerValue = this.lastRegisteredTimestamp + 40 - getCurrentTimestamp();
+        if (false) {} // bool = disable timer?
+        else if (this.autoWinTimestamp != null && this.duel.duelState != "victory") {
+            if (this.autoWinTimestamp + 30 < getCurrentTimestamp()) return this.switchScene("Map");
+        }
+        else if (timerValue < 0 && ["heroChoice", "moveChoice", "targetChoice"].indexOf(this.duel.duelState) > -1 && !this.stopSayinTimesUp) {
+            for (var i in this.duel.heroes) {
+                if (this.duel.heroes[i].chosenMove == null) this.duel.heroes[i].chosenMove = Wait;
+            }
+
+            if (this.duel.isHost) {
+                this.duel.duelState = "waiting";
+                this.duel.checkAllFightersAttacks();
+                this.lastRegisteredTimestamp = getCurrentTimestamp();
+            }
+            else {
+                this.sendToDatabase();
+                this.duel.duelState = "waiting";
+            }
+
+            this.stopSayinTimesUp = true;
+            return this.openDialogue(43);
+        }
+        else if (this.lastRegisteredTimestamp + 120 < getCurrentTimestamp() && this.duel.duelState == "waiting") {
+            // auto-win if has internet
+            this.sendQuery("everyoneOnline", "autoWin");
+            this.autoWinTimestamp = getCurrentTimestamp();
+            return this.openDialogue(42);
+        }
+        else if (this.duel.duelState != "waiting") this.stopSayinTimesUp = false;
+
+        if (["heroChoice", "moveChoice", "targetChoice"].indexOf(this.duel.duelState) > -1 && timerValue >= 0) {
+            this.timerObject.setText("" + timerValue);
+            this.timerObject.setAlpha(1);
+        }
+        else {
+            this.timerObject.setAlpha(0);
         }
 
         super.update();
@@ -200,31 +199,29 @@ class MultiplayerBattleScene extends BattleScene {
 
         if (this.duel.isHost) {
             this.lastRegisteredTimestamp = getCurrentTimestamp();
-            this.executeQuery(
-                "UPDATE OnlineDuel SET " +
-                    "timestamp = '" + this.lastRegisteredTimestamp + "', " +
-                    "duelString = '" + JSON.stringify(this.duel.getJSON()).split("'").join("`").slice(1,-1) + "', " +
-                    "lastUpdate = '" + this.hostUpdateCounter + "', " +
-                    "fullDuelString = TRUE " +
-                "WHERE idHost = '" + this.currentUserId + "'"
-            );
+            this.sendQuery("updateDuel", undefined, {
+                "myId": this.currentUserId,
+                "duelString": JSON.stringify(this.duel.getJSON()).split("'").join("`").slice(1,-1),
+                "lastUpdate": this.hostUpdateCounter,
+                "fullDuelString": true,
+                "timestamp": this.lastRegisteredTimestamp
+            });
         }
         else {
-            this.executeQuery(
-                "UPDATE OnlineDuel SET " +
-                    "timestamp = '" + (this.lastRegisteredTimestamp+3) + "', " +
-                    "duelString = '{" + JSON.stringify(this.duel.getAttackJSON()).split("'").join("`").slice(1,-1) + "}', " +
-                    "fullDuelString = FALSE " +
-                "WHERE idInvited = '" + this.currentUserId + "'"
-            );
+            this.sendQuery("updateDuel", undefined, {
+                "myId": this.currentUserId,
+                "duelString": "{" + JSON.stringify(this.duel.getAttackJSON()).split("'").join("`").slice(1,-1) + "}",
+                "fullDuelString": false,
+                "timestamp": this.lastRegisteredTimestamp+3
+            });
         }
     }
     getFromDatabase() {
         if (this.duel.isHost) {
-            this.executeQuery("SELECT * FROM OnlineDuel WHERE idHost = '" + this.currentUserId + "'", "updateDuel");
+            this.sendQuery("duelFromHost", "joinDuel", {"myId": this.currentUserId});
         }
         else if (this.duel.readyToRecieveFromDB) {
-            this.executeQuery("SELECT * FROM OnlineDuel WHERE idInvited = '" + this.currentUserId + "'", "updateDuel");
+            this.sendQuery("duelFromInvite", "joinDuel", {"myId": this.currentUserId});
         }
     }
 
@@ -283,6 +280,7 @@ class MultiplayerBattleScene extends BattleScene {
         }
 
         for (var i in json["logObj"]) {
+            if (i == "currentTextCursor" && json["logObj"][i] != 0) continue;
             this.duel.logTextObject[i] = json["logObj"][i];
         }
 
@@ -304,32 +302,32 @@ class MultiplayerBattleScene extends BattleScene {
         switch(_queryID) {
             case("updateDuel"):
                 // update the duel - NON HOST
-                if (_results.length == 0) return;
-                if (!_results[0].fullDuelString) return;
+                if (_results == null) return;
+                if (!_results.fullDuelString) return;
                 if (_this.duel.memoryJSON != null) return;
-                _this.lastRegisteredTimestamp = _results[0].timestamp;
-                _this.duel.memoryJSON = JSON.parse(_results[0].duelString);
+                _this.lastRegisteredTimestamp = _results.timestamp;
+                _this.duel.memoryJSON = _results.duelString;
                 _this.duel.readyToRecieveFromDB = false;
-                _this.lastHostUpdateCounter = _results[0].lastUpdate;
+                _this.lastHostUpdateCounter = _results.lastUpdate;
                 _this.resetStatusIcons();
                 _this.autoWinTimestamp = null;
                 return;
             case("nonHostUpdate"):
                 // update during turn
                 for (var i in _results) {
-                    _this.nonHostUpdates[_results[i].id] = JSON.parse(_results[i].duelString);
+                    _this.nonHostUpdates[_results[i].id] = _results[i].duelString;
                 }
                 _this.autoWinTimestamp = null;
                 return;
 
             case("readAttacks"):
                 // update the duel - HOST
-                if (_results.length == 0 || ["heroChoice", "moveChoice", "targetChoice", "waiting"].indexOf(_this.duel.duelState) < 0) return;
-                if (_results[0].fullDuelString) return;
-                _this.duel.setAttackJSON(_results[0].duelString);
+                if (_results == null || ["heroChoice", "moveChoice", "targetChoice", "waiting"].indexOf(_this.duel.duelState) < 0) return;
+                if (_results.fullDuelString) return;
+                _this.duel.setAttackJSON(_results.duelString);
                 _this.duel.checkAllFightersAttacks();
                 _this.autoWinTimestamp = null;
-                _this.lastUpdateTimestamp = _results[0].lastUpdate
+                _this.lastUpdateTimestamp = _results.lastUpdate
                 return;
 
             case("autoWin"):

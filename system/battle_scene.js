@@ -22,7 +22,7 @@ class BattleScene extends Scene {
         this.moveList = [];
         this.moveFrame = null;
 
-        this.selectionDirection = "";
+        this.selectionDirection = "right";
 
         this.cursorHero = null;
         this.cursorMove = null;
@@ -30,6 +30,7 @@ class BattleScene extends Scene {
         this.currentSelectHero = 0; // array id of the current selection
         this.currentSelectMove = 0; // array id of the current selection
         this.currentSelectTarget = 0; // array id of the current selection
+        this.isTargettingHeroes = false;
 
         this.selectedHero = null;
         this.selectedMove = null;
@@ -256,28 +257,59 @@ class BattleScene extends Scene {
         }
         else if (this.duel.duelState == "targetChoice") {
             this.duel.setTitle("TARGET CHOICE");
-            this.cursorTarget.setX(this.duel.enemies[this.currentSelectTarget].spriteX + 20);
-            this.cursorTarget.setY(this.duel.enemies[this.currentSelectTarget].spriteY - 22);
+            this.cursorTarget.setX(this.getSelectedTarget().spriteX + 20);
+            this.cursorTarget.setY(this.getSelectedTarget().spriteY - 22);
 
-            if (this.justPressedControl("RIGHT") || (this.duel.enemies[this.currentSelectTarget].isDead() && this.selectionDirection == "right")) {
+            if (this.justPressedControl("RIGHT") || ((this.getSelectedTarget().isDead() || this.getSelectedTarget().id == this.duel.heroes[this.currentSelectHero].id) && this.selectionDirection == "right")) {
                 this.currentSelectTarget += 1;
                 this.selectionDirection = "right";
                 this.playSoundOK();
             }
-            else if (this.justPressedControl("LEFT") || (this.duel.enemies[this.currentSelectTarget].isDead() && this.selectionDirection == "left")) {
+            else if (this.justPressedControl("LEFT") || ((this.getSelectedTarget().isDead() || this.getSelectedTarget().id == this.duel.heroes[this.currentSelectHero].id) && this.selectionDirection == "left")) {
                 this.currentSelectTarget -= 1;
                 this.selectionDirection = "left";
                 this.playSoundOK();
             }
 
-            if (this.currentSelectTarget < 0) {
-                this.currentSelectTarget += this.duel.enemies.length;
+            if (!this.isTargettingHeroes) {
+                if (this.currentSelectTarget < 0) {
+                    this.currentSelectTarget += this.duel.enemies.length;
+                }
+                if (this.currentSelectTarget >= this.duel.enemies.length) {
+                    this.currentSelectTarget -= this.duel.enemies.length;
+                }
+
+                if (this.justPressedControl("DOWN")) {
+                    var nbValid = 0;
+                    for (var i in this.duel.heroes) {
+                        if (this.duel.heroes[i].isAlive() && i != this.currentSelectHero) nbValid += 1;
+                    }
+
+                    if (nbValid > 0) {
+                        if (this.duel.heroes.length <= this.currentSelectTarget) this.currentSelectTarget = this.duel.heroes.length-1;
+                        this.isTargettingHeroes = true;
+
+                        return;
+                    }
+                }
             }
-            if (this.currentSelectTarget >= this.duel.enemies.length) {
-                this.currentSelectTarget -= this.duel.enemies.length;
+            else {
+                if (this.currentSelectTarget < 0) {
+                    this.currentSelectTarget += this.duel.heroes.length;
+                }
+                if (this.currentSelectTarget >= this.duel.heroes.length) {
+                    this.currentSelectTarget -= this.duel.heroes.length;
+                }
+
+                if (this.justPressedControl("UP")) {
+                    if (this.duel.enemies.length <= this.currentSelectTarget) this.currentSelectTarget = this.duel.enemies.length-1;
+                    this.isTargettingHeroes = false;
+
+                    return;
+                }
             }
 
-            this.duel.logTextObject.setText(this.duel.enemies[this.currentSelectTarget].getDescription(), true);
+            this.duel.logTextObject.setText(this.getSelectedTarget().getDescription(), true);
 
             if (this.justPressedControl("BACK")) {
                 this.playSoundSelect();
@@ -288,7 +320,7 @@ class BattleScene extends Scene {
                 this.playSoundSelect();
                 this.duel.duelState = "heroChoice";
 
-                this.duel.fighterSelectsMove(this.selectedHero, this.selectedMove, this.duel.enemies[this.currentSelectTarget]);
+                this.duel.fighterSelectsMove(this.selectedHero, this.selectedMove, this.getSelectedTarget());
                 this.selectedHero = null;
                 this.selectedMove = null;
 
@@ -313,7 +345,7 @@ class BattleScene extends Scene {
                 this.autoSkipCountdown -= 1;
             }
 
-            if (this.justPressedControl("ENTER") || this.autoSkipCountdown <= 0) {
+            if ((this.justPressedControl("ENTER") && this.sceneName != "MultiplayerBattle") || this.autoSkipCountdown <= 0) {
                 if (!this.duel.logTextObject.isShowingFullText()) {
                     return this.duel.logTextObject.showFullText();
                 }
@@ -339,7 +371,7 @@ class BattleScene extends Scene {
                 this.autoSkipCountdown -= 1;
             }
 
-            if (this.justPressedControl("ENTER") || this.autoSkipCountdown <= 0) {
+            if ((this.justPressedControl("ENTER") && this.sceneName != "MultiplayerBattle") || this.autoSkipCountdown <= 0) {
                 if (!this.duel.logTextObject.isShowingFullText()) {
                     return this.duel.logTextObject.showFullText();
                 }
@@ -388,7 +420,7 @@ class BattleScene extends Scene {
                 }
             }
 
-            if (this.justPressedControl("ENTER") || this.autoSkipCountdown <= 0) {
+            if ((this.justPressedControl("ENTER") && this.sceneName != "MultiplayerBattle") || this.autoSkipCountdown <= 0) {
                 if (!GlobalVars.get("settings")["battleAutoNext"]) {
                     this.playSoundSelect();
                 }
@@ -435,7 +467,7 @@ class BattleScene extends Scene {
                     this.autoSkipCountdown -= 1;
                 }
 
-                if (this.justPressedControl("ENTER") || this.autoSkipCountdown <= 0) {
+                if (this.autoSkipCountdown <= 0) {
                     if ((this.hostUpdateCounter+1) in this.nonHostUpdates) {
                         this.hostUpdateCounter += 1;
                         this.duel.logTextObject.showFullText();
@@ -444,6 +476,7 @@ class BattleScene extends Scene {
                         this.autoSkipNb += 1;
                         this.autoSkipCountdown = Math.max(1, this.autoSkipSpeed - this.autoSkipNb);
                         this.duel.logTextObject.speed = getTextSpeed() - Math.floor(this.autoSkipNb/7);
+                        if (this.duel.memoryJSON != null) this.duel.logTextObject.speed -= 2;
 
                         this.resetStatusIcons();
                     }
@@ -508,15 +541,13 @@ class BattleScene extends Scene {
             this.duel.logTextObject.nextFrame();
 
             if (this.forceTint.length == 0) {
+                this.musicFadeOut();
                 for (var i in this.duel.enemies) {
                     if (this.duel.enemies[i].isAlive()) {
                         this.addToForceTint(this.duel.enemies[i].spriteObject);
                     }
                 }
             }
-
-            // fade out audio
-            if (!DEV_MODE) this.musicPlayer.setVolume(this.musicPlayer.volume - 0.01);
 
             if (this.justPressedControl("ENTER")) {
                 for (var i in this.duel.heroes) {
@@ -555,7 +586,9 @@ class BattleScene extends Scene {
             this.moveList[i].destroy();
         }
         this.moveList = [];
-        if (_reset) return this.moveFrame.setY(-1000);
+        if (_reset) {
+            return this.moveFrame.setY(-1000);
+        }
 
         try {
             var l = this.duel.heroes[this.currentSelectHero].currentMovepool;
@@ -583,6 +616,11 @@ class BattleScene extends Scene {
             return this.duel.mainFighter;
         }
         return null;
+    }
+
+    getSelectedTarget() {
+        if (this.isTargettingHeroes) return this.duel.heroes[this.currentSelectTarget];
+        return this.duel.enemies[this.currentSelectTarget];
     }
 
     quitScene() {

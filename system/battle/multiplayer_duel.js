@@ -18,8 +18,6 @@ class MultiplayerDuel extends Duel {
 
             if (this.isHost) {
                 if (this.hasRecievedAttacks) {
-                    console.log("HEY")
-                    console.trace();
                     this.triggerAttacks();
                 }
             }
@@ -210,7 +208,7 @@ class MultiplayerDuel extends Duel {
         return json;
     }
     setAttackJSON(_json) {
-        var json = JSON.parse(_json);
+        var json = _json;
         var l = this.getAllFighters();
 
         for (var i in json) {

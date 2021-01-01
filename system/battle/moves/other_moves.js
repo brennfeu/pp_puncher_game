@@ -123,6 +123,28 @@ class Wait extends Move {
         _user.duel.addMessage(_user.getName() + " does nothing...");
     }
 }
+class KillParty extends Move {
+    constructor() {
+        super();
+        this.name = "Kill Party";
+        this.description = "Dev Test, all party members have -9999999 HP.";
+        this.priority = true;
+        this.autoPass = true;
+        this.needsTarget = false;
+        this.type = "Dev Test";
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " uses the power of being a dev!");
+
+        for (var i in _user.duel.heroes) {
+            _user.duel.heroes[i].STRValue = -99999999;
+            _user.duel.addMessage(_user.duel.heroes[i].getName() + " dies!");
+        }
+
+        _user.duel.memorySoundEffects.push("darkMagic");
+    }
+}
 
 // special moves that shouldn't appear in game
 class TriggerNextPhase extends Move {
@@ -155,6 +177,6 @@ class TriggerNextPhase extends Move {
 }
 
 var l = [];
-if (DEV_MODE) l=l.concat([ InstaKill, MegaBuff, Wait ]);
+if (DEV_MODE) l=l.concat([ InstaKill, MegaBuff, Wait, KillParty ]);
 
 const OTHER_MOVE_LIST = [ RegularPriestMove, SpecialPriestMove ].concat(l);
