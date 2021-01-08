@@ -79,13 +79,13 @@ class Scene extends Phaser.Scene {
         return this.addImageMiddle(_name, _x, _y).setOrigin(0, 0);
     }
     addImageMiddle(_name, _x, _y) {
-        //console.log(_name.replace(/ /g,''))
+        Logger.log(_name.replace(/ /g,''), "sceneAddStuff")
         var obj = this.add.image(_x, _y, _name.replace(/ /g,''));
         this.allImageObjects.push(obj);
         return obj
     }
     getImage(_name) {
-        //console.log(_name.replace(/ /g,''));
+        Logger.log(_name.replace(/ /g,''), "sceneAddStuff")
         return this.textures.get(_name.replace(/ /g,'')).getSourceImage();
     }
 
@@ -164,7 +164,7 @@ class Scene extends Phaser.Scene {
     }
 
     addText(_text, _x, _y, _json = null, _speed = null) {
-        if (false) { console.trace(); console.log(_text); }
+        Logger.log(_text, "sceneAddStuff")
 
         if (_json == null) {
             _json = {};
@@ -184,12 +184,11 @@ class Scene extends Phaser.Scene {
         var _scene = this;
         var _function = this.recieveQuery;
 
-        if (false) { console.log(_queryID); console.log(_str); }
+        Logger.log(_queryID + " / " + _str, "queries")
 
         DB_CONNECTION.query(_str, (_error, _result) => {
             if (_error) {
-                console.log("QUERY ERROR ON '" + _queryID + "':");
-        		console.log(_error);
+                Logger.warning("QUERY ERROR ON " + _queryID, _error);
 
                 QUERY_RESULT = _error;
                 throw _error;
@@ -224,35 +223,28 @@ class Scene extends Phaser.Scene {
 
         fetch(SERVER_URL + _str, requestOptions)
           .then(_result => {
-                //console.log(_result)
                 _result.text().then(
                     _finalResult => {
                         if (_finalResult[0] == "<") {
                             // error :(
-                            console.log("Error on " + _str);
-                            console.log(_finalResult);
+                            Logger.warning("Error on " + _str, _finalResult);
                             return;
                         }
 
-                        //if (DEV_MODE) console.log(_finalResult);
                         var fixedResult = _finalResult.split('\\"').join('"').split('\\"').join('"').split('\\"').join('"')
                         fixedResult = fixedResult.split('"{').join('{').split('}"').join('}')
-                        //if (DEV_MODE) console.log(fixedResult);
                         try {
                             var result = JSON.parse(fixedResult);
-                            //if (DEV_MODE) console.log(result);
                             _function(result, _queryID, _scene)
                         }
                         catch(e) {
-                            console.log("Error on: ");
-                            console.log(fixedResult);
-                            console.log(e)
+                            Logger.warning("Error on: " + fixedResult, e)
                         }
                     }
                 )
           })
           .then(a => {})
-          .catch(error => console.log('error', error));
+          .catch(error => Logger.warning('error', error));
     }
 
     loadMovesImages() {
@@ -448,6 +440,8 @@ class Scene extends Phaser.Scene {
         this.mainObjTint = 0;
         this.forceTint = [];
 
+        Logger.log("Switched scene to '" + _sceneName + "'", "switchScene");
+
         WoodCutting.saveToSteam();
         try {
             if (!GREENWORKS.initAPI()) GREENWORKS = null;
@@ -457,7 +451,7 @@ class Scene extends Phaser.Scene {
         return this.scene.start(_sceneName, _data);
     }
     closeGame() {
-        DB_CONNECTION.end((err) => {});
+        //DB_CONNECTION.end((err) => {});
         window.close();
     }
 

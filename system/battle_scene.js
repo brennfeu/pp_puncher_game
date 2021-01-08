@@ -146,8 +146,7 @@ class BattleScene extends Scene {
         for (var i in this.duel.memoryAnimations) {
             if (this.duel.memoryAnimations[i].animObject == null) {
                 if (this.duel.memoryAnimations[i].fighter == undefined || this.duel.memoryAnimations[i].fighter == null) {
-                    console.log("Warning: Animation User is null");
-                    console.log(this.duel.memoryAnimations[i]);
+                    Logger.warning("Animation User is null", this.duel.memoryAnimations[i]);
                     continue;
                 }
 

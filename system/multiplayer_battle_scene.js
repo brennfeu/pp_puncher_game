@@ -4,7 +4,7 @@ class MultiplayerBattleScene extends BattleScene {
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     init(_data) { try {
-        //console.log(_data)
+        Logger.log(_data, "data")
         if (_data["isHost"]) {
             var challengerData = _data["challengerData"];
             _data["duel"] = new MultiplayerDuel(
@@ -296,8 +296,7 @@ class MultiplayerBattleScene extends BattleScene {
     }
 
     recieveQuery(_results, _queryID, _this) {
-        if (false) { console.log(_queryID); console.log(_results); }
-        //if (_queryID != null) console.log(_queryID);
+        Logger.log(_queryID, "recievedQuery", _results);
 
         switch(_queryID) {
             case("updateDuel"):
@@ -331,7 +330,7 @@ class MultiplayerBattleScene extends BattleScene {
                 return;
 
             case("autoWin"):
-                console.log("multiplayer auto-win");
+                Logger.log("Multiplayer Auto-win", "multiplayerTime");
                 _this.duel.triggerVictory();
                 _this.quitScene();
                 return;

@@ -26,6 +26,6 @@ class MultiplayerEnemy extends HeroEnemy {
         }
     }
 
-    selectTarget() { console.log("Warning: MultiplayerEnemy " + this.name + " tried to select a target!"); }
-    selectHero() { console.log("Warning: MultiplayerEnemy " + this.name + " tried to select a move!"); }
+    selectTarget() { Logger.warning("MultiplayerEnemy " + this.name + " tried to select a target!"); }
+    selectHero() { Logger.warning("MultiplayerEnemy " + this.name + " tried to select a move!"); }
 }

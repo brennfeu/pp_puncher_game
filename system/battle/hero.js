@@ -94,8 +94,7 @@ class Hero extends Fighter {
 
             tries += 1;
         }
-        console.log("Warning: Could not find an unlocked move from the following list:");
-        console.log(_list);
+        Logger.warning("Could not find an unlocked move from the following list", _list);
         return null;
     }
     getForcedMovepool() {

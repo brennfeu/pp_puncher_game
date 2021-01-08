@@ -96,7 +96,7 @@ class CustomCursor {
             this.skipEmpty(1);
         }
         else {
-            console.log("Warning, non-vertical cursor tried to go down.")
+            Logger.warning("Non-vertical cursor tried to go down.")
         }
     }
     goUp() {
@@ -106,7 +106,7 @@ class CustomCursor {
             this.skipEmpty(-1);
         }
         else {
-            console.log("Warning, non-vertical cursor tried to go up.")
+            Logger.warning("Non-vertical cursor tried to go up.")
         }
     }
     goRight() {
@@ -116,7 +116,7 @@ class CustomCursor {
             this.skipEmpty(1);
         }
         else {
-            console.log("Warning, non-horizontal cursor tried to go right.")
+            Logger.warning("Non-horizontal cursor tried to go right.")
         }
     }
     goLeft() {
@@ -126,7 +126,7 @@ class CustomCursor {
             this.skipEmpty(-1);
         }
         else {
-            console.log("Warning, non-horizontal cursor tried to go left.")
+            Logger.warning("Non-horizontal cursor tried to go left.")
         }
     }
 

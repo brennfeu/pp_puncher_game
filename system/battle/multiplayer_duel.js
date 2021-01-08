@@ -158,7 +158,7 @@ class MultiplayerDuel extends Duel {
         return JSON.stringify(json);
     }
     setJSON(_json) {
-        //console.log(_json); console.trace();
+        Logger.log("Set JSON", "json", _json);
 
         var isHost = this.isHost
         if (!isHost) this.reverseHeroesAndEnemies();
@@ -248,13 +248,12 @@ class MultiplayerDuel extends Duel {
 
 class BrennStyleJSON {
     static exportJSON(_obj) {
-        //console.log("NEW OBJ: " + _obj.constructor.name)
+        Logger.log("NEW OBJ: " + _obj.constructor.name, "jsonExport")
         var json = {};
 
         for (var i in _obj) {
             if (Duel.SPECIAL_OBJECTS.indexOf(i) > -1) continue;
-            if (Fighter.SPECIAL_OBJECTS.indexOf(i) > -1) continue;
-            //console.log(_obj.constructor.name + ": " + i);
+            if (Fighter.SPECIAL_OBJECTS.indexOf(i) > -1) continue;s
             var subJSON = BrennStyleJSON.exportSingle(_obj[i]);
             if (subJSON != null) json[i] = subJSON;
         }

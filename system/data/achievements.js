@@ -21,8 +21,7 @@ class AchievementManager {
             GREENWORKS.activateAchievement(AchievementManager.getAchievement(_id).steamName, function(){}, function(){});
         }
         catch(e) {
-            console.log("Error Trying to Unlock an Achievement");
-            console.log(e)
+            Logger.warning("Error Trying to Unlock an Achievement", e)
         }
     }
 

@@ -840,7 +840,7 @@ class Fighter {
             }
         }
         else {
-            console.log("Warning: Damage type was incorrect: <" + _type + ">.")
+            Logger.warning("Damage type was incorrect: <" + _type + ">.")
         }
 
         // character protections

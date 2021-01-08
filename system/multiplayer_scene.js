@@ -26,7 +26,7 @@ class MultiplayerScene extends Scene {
 
             // so each instance has a different ID
             if (DEV_MODE) userId = getRandomPercent()*getRandomPercent()*getRandomPercent();
-            console.log("User ID: " + userId);
+            Logger.log("User ID: " + userId, "multiplayer");
         }
         catch(e) {
             // TODO show error message and go back
@@ -224,7 +224,7 @@ class MultiplayerScene extends Scene {
     }
 
     recieveQuery(_results, _queryID, _this) {
-        if (false) { console.log(_queryID); console.log(_results); }
+        Logger.log(_queryID, "recievedQuery", _results);
 
         switch(_queryID) {
             case("joinDuel"):
