@@ -253,7 +253,7 @@ class BrennStyleJSON {
 
         for (var i in _obj) {
             if (Duel.SPECIAL_OBJECTS.indexOf(i) > -1) continue;
-            if (Fighter.SPECIAL_OBJECTS.indexOf(i) > -1) continue;s
+            if (Fighter.SPECIAL_OBJECTS.indexOf(i) > -1) continue;
             var subJSON = BrennStyleJSON.exportSingle(_obj[i]);
             if (subJSON != null) json[i] = subJSON;
         }

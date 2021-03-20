@@ -279,6 +279,18 @@ class Scene extends Phaser.Scene {
         this.loadImage("status/possessed.png");
         this.loadImage("status/luck.png");
         this.loadImage("status/badLuck.png");
+        this.loadImage("status/livingGod.png");
+        this.loadImage("status/blind.png");
+        this.loadImage("status/madness.png");
+        this.loadImage("status/bleachEmpty.png");
+        this.loadImage("status/bleachFull.png");
+        this.loadImage("status/acidArmor.png");
+        this.loadImage("status/curse.png");
+        this.loadImage("status/troll.png");
+        this.loadImage("status/scalyScars.png");
+        this.loadImage("status/blueFire.png");
+        this.loadImage("status/regularChargeTimer.png");
+        this.loadImage("status/specialChargeTimer.png");
 
         this.loadImage("status/other/depression.png");
         this.loadImage("status/other/fungus.png");
@@ -286,6 +298,16 @@ class Scene extends Phaser.Scene {
         this.loadImage("status/other/defensive.png");
         this.loadImage("status/other/scary.png");
         this.loadImage("status/other/faithShield.png");
+        this.loadImage("status/other/inquisitor.png");
+        this.loadImage("status/other/armor.png");
+        this.loadImage("status/other/specialArmor.png");
+        this.loadImage("status/other/godOfDeath.png");
+        this.loadImage("status/other/promotionPawn.png");
+        this.loadImage("status/other/promotionRook.png");
+        this.loadImage("status/other/promotionQueen.png");
+        this.loadImage("status/other/promotionBishop.png");
+        this.loadImage("status/other/promotionKnight.png");
+        this.loadImage("status/other/promotionKing.png");
 
         this.loadImage("status/special/killerBlessing.png");
         this.loadImage("status/special/waifuDetermination.png");
@@ -311,6 +333,7 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/extraLife.mp3");
         this.loadSound("battle/soul_hurt.mp3");
         this.loadSound("battle/hurtA_demon.mp3");
+        this.loadSound("battle/hurtA_alien.mp3");
 
         this.loadSound("battle/punchA.mp3");
         this.loadSound("battle/punchB.mp3");
@@ -337,6 +360,9 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/staple.mp3");
         this.loadSound("battle/laugh.mp3");
         this.loadSound("battle/cry.mp3");
+        this.loadSound("battle/acid.mp3");
+        this.loadSound("battle/drink.mp3");
+        this.loadSound("battle/flames.mp3");
 
         this.loadSound("battle/uuh.mp3");
     }
@@ -416,6 +442,8 @@ class Scene extends Phaser.Scene {
     }
 
     startLoadingScreen() {
+        CURRENT_SCENE = this;
+
         var txt = "LOADING...";
         if (getRandomPercent() <= 1) txt = "¯\\_(ツ)_/¯";
         this.loadingText = this.addText(txt, 1000, 650, {fontStyle: 'bold', fontSize: '30px'});
@@ -424,7 +452,10 @@ class Scene extends Phaser.Scene {
         this.loadingText.destroy();
         this.loadingText = null;
 
-        CURRENT_SCENE = this;
+        if (!CHECK_STEAM() && SHOW_STEAM_ERROR) {
+            this.openDialogue(48);
+            SHOW_STEAM_ERROR = false;
+        }
     }
 
     switchScene(_sceneName, _data) {
@@ -440,13 +471,22 @@ class Scene extends Phaser.Scene {
         this.mainObjTint = 0;
         this.forceTint = [];
 
-        Logger.log("Switched scene to '" + _sceneName + "'", "switchScene");
-
-        WoodCutting.saveToSteam();
         try {
-            if (!GREENWORKS.initAPI()) GREENWORKS = null;
+            GREENWORKS.setStat("COMP_AREAS", ProgressManager.getNbCompletedAreas());
+            GREENWORKS.storeStats(
+                function(_idk) {
+                    if (ProgressManager.getNbCompletedAreas() >= 13) {
+                        AchievementManager.unlockAchievement(9); // World Tour
+                    }
+                },
+                function(_err) {
+                    console.log(_err)
+                }
+            );
         }
         catch(e) {}
+
+        Logger.log("Switched scene to '" + _sceneName + "'", "switchScene");
 
         return this.scene.start(_sceneName, _data);
     }
@@ -527,7 +567,7 @@ class Scene extends Phaser.Scene {
         this.dialogueObj.nextFrame();
 
         if ((GlobalVars.get("settings")["battleAutoNext"] || this.sceneName == "MultiplayerBattle") && this.dialogueObj.isShowingFullText()) {
-            this.autoSkipCountdown -= 1;
+            this.autoSkipCountdown -= 0.125;
         }
 
         if (this.justPressedControl("ENTER") || this.autoSkipCountdown <= 0) {
@@ -572,53 +612,61 @@ class Scene extends Phaser.Scene {
             var s = q.getStep(GlobalVars.get("unlocksNext")[1]);
 
             // unlock screen
-            if (s.unlockGameMechanics != undefined) {
-                for (var i in s.unlockGameMechanics) {
-                    this.unlockList.push(["Game Mechanic", s.unlockGameMechanics[i]])
-                }
-            }
-            if (s.unlockPartyMembers != undefined) {
-                for (var i in s.unlockPartyMembers) {
-                    this.unlockList.push(["Party Member", s.unlockPartyMembers[i]])
-                }
-            }
-            if (s.unlockAreas != undefined) {
-                for (var i in s.unlockAreas) {
-                    this.unlockList.push(["Area", s.unlockAreas[i]])
-                }
-            }
-            if (s.unlockFightingStyles != undefined) {
-                for (var i in s.unlockFightingStyles) {
-                    this.unlockList.push(["Fighting Style", s.unlockFightingStyles[i]])
-                }
-            }
-            if (s.unlockMoves != undefined) {
-                for (var i in s.unlockMoves) {
-                    this.unlockList.push(["Move", s.unlockMoves[i]])
-                }
-            }
-            if (s.unlockEvents != undefined) {
-                for (var i in s.unlockEvents) {
-                    this.unlockList.push(["Event", s.unlockEvents[i]])
-                }
-            }
-            if (s.unlockGods != undefined) {
-                for (var i in s.unlockGods) {
-                    this.unlockList.push(["God", s.unlockGods[i]])
-                }
-            }
-
-            if (s.saveWaifu != undefined) {
-                this.unlockList.push(["Waifu", s.saveWaifu]);
-            }
-
-            if (s.unlockArtworks != undefined) {
-                for (var i in s.unlockArtworks) {
-                    this.unlockList.push(["Artwork", s.unlockArtworks[i]])
-                }
-            }
+            this.addUnlocksFromStep(s);
 
             GlobalVars.set("unlocksNext", []);
+        }
+    }
+    addUnlocksFromStep(s, _bought = false) {
+        if (s.unlockGameMechanics != undefined) {
+            for (var i in s.unlockGameMechanics) {
+                this.unlockList.push(["Game Mechanic", s.unlockGameMechanics[i], _bought])
+            }
+        }
+        if (s.unlockPartyMembers != undefined) {
+            for (var i in s.unlockPartyMembers) {
+                this.unlockList.push(["Party Member", s.unlockPartyMembers[i], _bought])
+            }
+        }
+        if (s.unlockAreas != undefined) {
+            for (var i in s.unlockAreas) {
+                this.unlockList.push(["Area", s.unlockAreas[i], _bought])
+            }
+        }
+        if (s.unlockFightingStyles != undefined) {
+            for (var i in s.unlockFightingStyles) {
+                this.unlockList.push(["Fighting Style", s.unlockFightingStyles[i], _bought])
+            }
+        }
+        if (s.unlockRelics != undefined) {
+            for (var i in s.unlockRelics) {
+                this.unlockList.push(["Relic", s.unlockRelics[i], _bought])
+            }
+        }
+        if (s.unlockMoves != undefined) {
+            for (var i in s.unlockMoves) {
+                this.unlockList.push(["Move", s.unlockMoves[i], _bought])
+            }
+        }
+        if (s.unlockEvents != undefined) {
+            for (var i in s.unlockEvents) {
+                this.unlockList.push(["Event", s.unlockEvents[i], _bought])
+            }
+        }
+        if (s.unlockGods != undefined) {
+            for (var i in s.unlockGods) {
+                this.unlockList.push(["God", s.unlockGods[i], _bought])
+            }
+        }
+
+        if (s.saveWaifu != undefined) {
+            this.unlockList.push(["Waifu", s.saveWaifu]);
+        }
+
+        if (s.unlockArtworks != undefined) {
+            for (var i in s.unlockArtworks) {
+                this.unlockList.push(["Artwork", s.unlockArtworks[i], _bought])
+            }
         }
     }
     checkSpecialUnlocks() {
@@ -632,6 +680,18 @@ class Scene extends Phaser.Scene {
             return; // REMOVE THAT FOR NG+
             ProgressManager.unlockStep(0, 5);
         }
+
+        // Shop
+        try {
+            var lastShopUnlock = ProgressManager.getCompletedSteps(34).length;
+            var step = QuestManager.getStep(34, lastShopUnlock)
+            if (step.ppCoinsPrice <= ProgressManager.getValue("PP_Coins")) {
+                ProgressManager.unlockStep(34, lastShopUnlock);
+                this.addUnlocksFromStep(step, true);
+                ProgressManager.setValue("PP_Coins", ProgressManager.getValue("PP_Coins")-step.ppCoinsPrice);
+            }
+        }
+        catch(e) {}
     }
     openUnlock() {
         this.isInUnlock = true;
@@ -676,6 +736,9 @@ class Scene extends Phaser.Scene {
     updateUnlockDesc() {
         var unlockType = this.unlockList[0][0];
         var unlock = this.unlockList[0][1];
+        var bought = this.unlockList[0][2];
+        if (bought) bought = "\n\nBought from the Weeb Shop.";
+        else bought = "";
 
         if (unlockType == "Waifu") {
             this.unlockTitle.setText(unlockType + " Saved");
@@ -686,28 +749,31 @@ class Scene extends Phaser.Scene {
         this.unlockTitle.setText(unlockType + " Unlocked");
         switch(unlockType) {
             case "Party Member":
-                this.unlockDesc.setText(unlock + "\n\n" + PartyManager.getHeroDescription(unlock));
+                this.unlockDesc.setText(unlock + "\n\n" + PartyManager.getHeroDescription(unlock) + bought);
                 break;
             case "Game Mechanic":
-                this.unlockDesc.setText(unlock + "\n\n" + ProgressManager.getMechanicDescription(unlock));
+                this.unlockDesc.setText(unlock + "\n\n" + ProgressManager.getMechanicDescription(unlock) + bought);
                 break;
             case "Move":
-                this.unlockDesc.setText(unlock.newInstance().getDescription());
+                this.unlockDesc.setText(unlock.newInstance().getDescription() + bought);
                 break;
             case "Area":
-                this.unlockDesc.setText(AreaManager.getArea(unlock).name + "\n\n" + AreaManager.getArea(unlock).description);
+                this.unlockDesc.setText(AreaManager.getArea(unlock).name + "\n\n" + AreaManager.getArea(unlock).description + bought);
                 break;
             case "Fighting Style":
-                this.unlockDesc.setText(unlock + "\n\n" + FightingStyles.getDesc(unlock));
+                this.unlockDesc.setText(unlock + "\n\n" + FightingStyles.getDesc(unlock) + bought);
                 break;
             case "Event":
-                this.unlockDesc.setText(EventManager.getEvent(unlock).getDescription());
+                this.unlockDesc.setText(EventManager.getEvent(unlock).getDescription() + bought);
                 break;
             case "God":
-                this.unlockDesc.setText(GodManager.getGod(unlock).name + "\n" + GodManager.getGod(unlock).getDescription());
+                this.unlockDesc.setText(GodManager.getGod(unlock).name + "\n" + GodManager.getGod(unlock).getDescription() + bought);
                 break;
             case "Artwork":
-                this.unlockDesc.setText(ArtworkManager.getArtwork(unlock).getDescription());
+                this.unlockDesc.setText(ArtworkManager.getArtwork(unlock).getDescription() + bought);
+                break;
+            case "Relic":
+                this.unlockDesc.setText(RelicManager.getRelic(unlock).getDescription(true) + bought);
                 break;
         }
     }
@@ -921,13 +987,14 @@ class Scene extends Phaser.Scene {
         this.bibleDescriptionTitle = this.addText("DESCRIPTION", 759, 84, {fontStyle: 'bold'});
         this.bibleDescription = this.addText("", 759, 130, {fontSize: '21px', wordWrap: {width: 400, height: 550}});
 
-        var l = ["Game Mechanics", "Moves", "Party Members", "Fighting Styles", "Events", "Gods", "Synergies", "Stånds"];
+        var l = ["Game Mechanics", "Moves", "Party Members", "Fighting Styles", "Events", "Gods", "Synergies", "Relics", "Stånds"];
         var unlocks = ProgressManager.getUnlockedGameMechanics();
         for (var i in l) {
             if (unlocks.indexOf(l[i]) < 0) continue;
             this.bibleTextsA.push(this.addText(l[i], 85, 84+22*this.bibleTextsA.length));
         }
-        this.bibleTextsA.push(this.addText("Artworks", 85, 84+22*this.bibleTextsA.length)); // toujours en dernier
+        this.bibleTextsA.push(this.addText("Artworks", 85, 84+22*this.bibleTextsA.length)); // toujours en avant-dernier
+        this.bibleTextsA.push(this.addText("Achievements", 85, 84+22*this.bibleTextsA.length)); // toujours en dernier
 
         this.cursorA = new CustomCursor(
             this.addText(">", 65, -1000),
@@ -1049,6 +1116,7 @@ class Scene extends Phaser.Scene {
                         ProgressManager.unlockStep(0, 1);
                         this.unlockList.push(["Game Mechanic", "Cheating"])
                     }
+                    AchievementManager.unlockAchievement(6); // Hacking to the Game
                     return;
                 }
                 else if (ProgressManager.isStepCompleted(0, 3) && this.cursorA.getCurrentObject().text == "Moves") {
@@ -1100,6 +1168,11 @@ class Scene extends Phaser.Scene {
         if (this.bibleStep == 0) {
             var l = [];
             if (this.cursorA.getCurrentSelect() == this.bibleTextsA.length-1) {
+                this.bibleDescription.setText("A list of all achievements you acquired. If different from steam achievements, try and connect to steam, and launch the game again.");
+                var a = AchievementManager.ACHIEVEMENT_LIST;
+                for (var i in a) l[i] = a[i].getName();
+            }
+            else if (this.cursorA.getCurrentSelect() == this.bibleTextsA.length-2) {
                 // artworks
                 this.bibleDescription.setText("Some random artworks of things you've come across.");
                 var a = ProgressManager.getUnlockedArtworks();
@@ -1143,6 +1216,11 @@ class Scene extends Phaser.Scene {
                 var a = ProgressManager.getUnlockedSynergies();
                 for (var i in a) l[i] = a[i].name;
             }
+            else if (this.cursorA.getCurrentSelect() == 7) {
+                this.bibleDescription.setText("All the Relics you've acquired up until now!");
+                var a = ProgressManager.getUnlockedRelics();
+                for (var i in a) l[i] = a[i].name;
+            }
 
             for (var i in this.bibleTextsB) this.bibleTextsB[i].destroy();
             this.bibleTextsB = [];
@@ -1156,6 +1234,10 @@ class Scene extends Phaser.Scene {
         }
         else {
             if (this.cursorA.getCurrentSelect() == this.bibleTextsA.length-1) {
+                var a = AchievementManager.ACHIEVEMENT_LIST[this.cursorB.getCurrentSelect()];
+                this.bibleDescription.setText(a.getDescription());
+            }
+            else if (this.cursorA.getCurrentSelect() == this.bibleTextsA.length-2) {
                 // artworks
                 var artwork = ProgressManager.getUnlockedArtworks()[this.cursorB.getCurrentSelect()];
                 this.bibleDescription.setText(artwork.getDescription());
@@ -1188,6 +1270,10 @@ class Scene extends Phaser.Scene {
             else if (this.cursorA.getCurrentSelect() == 6) {
                 var synergy = ProgressManager.getUnlockedSynergies()[this.cursorB.getCurrentSelect()];
                 this.bibleDescription.setText(synergy.getDescription());
+            }
+            else if (this.cursorA.getCurrentSelect() == 7) {
+                var relic = ProgressManager.getUnlockedRelics()[this.cursorB.getCurrentSelect()];
+                this.bibleDescription.setText(relic.getDescription());
             }
         }
     }
@@ -1278,6 +1364,8 @@ class Scene extends Phaser.Scene {
                     GlobalVars.updateSettings();
                 }
                 else if (texts[this.optionCurrentSelect] == "Reset Data") {
+                    if (ProgressManager.getPercentageCompletion() >= 100) AchievementManager.unlockAchievement(8); // Why
+
                     localStorage.removeItem("controls");
                     localStorage.removeItem("settings");
                     localStorage.removeItem("savefile");
@@ -1505,10 +1593,6 @@ class Scene extends Phaser.Scene {
                 if (this.selectsStep) {
                     if (!ProgressManager.isStepCompleted(q.id, this.stepSelect)) {
                         ProgressManager.unlockStep(q.id, parseInt(this.stepCursor.getCurrentSelect()));
-
-                        this.selectsStep = false;
-                        this.updateDesc();
-                        this.selectsStep = true;
                     }
                     else {
                         ProgressManager.lockStep(q.id, parseInt(this.stepCursor.getCurrentSelect()));

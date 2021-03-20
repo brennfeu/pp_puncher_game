@@ -19,19 +19,16 @@ class MoveManager {
         return l;
     }
 
-    static createMove(_function, _data) {
+    static createMove(_function) {
         var move = class extends Move {
             constructor() {
                 super();
 
                 this.execute = _function;
-                for (var i in _data) {
-                    this[i] = _data[i];
-                }
             }
         };
 
-        MoveManager.MOVE_LIST.push(move);
+        //MoveManager.MOVE_LIST.push(move);
         return move;
     }
 

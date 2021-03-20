@@ -252,6 +252,11 @@ class ProgressManager {
         }
         l = l.sort(
             function (a, b) {
+                var sa = EventManager.getEvent(a).onlyStart;
+                var sb = EventManager.getEvent(b).onlyStart;
+                if (sa && !sb) return -1;
+                else if (sb && !sa) return 1;
+
                 var na = EventManager.getEvent(a).name.toUpperCase();
                 var nb = EventManager.getEvent(b).name.toUpperCase();
                 if (na < nb) return -1;
@@ -328,6 +333,39 @@ class ProgressManager {
         ProgressManager.ArtworksCache = l;
         return l;
     }
+    static getUnlockedRelics() {
+        if (ProgressManager.RelicsCache != null) return ProgressManager.RelicsCache;
+
+        var l = [];
+        var steps = ProgressManager.getCompletedSteps();
+        for (var i in steps) {
+            if (steps[i].unlockRelics != undefined) {
+                var artworks = steps[i].unlockRelics;
+                for (var j in artworks) {
+                    l.push(RelicManager.getRelic(artworks[j]));
+                }
+            }
+        }
+
+        l = l.sort(
+            function (a, b) {
+                // TODO update with other members
+                var l = ["Brenn", "Pudding", "Eldon", "Valurin", "Country Music Brenn", "Otasan"];
+                var ta = l.indexOf(a.wielder.name);
+                var tb = l.indexOf(b.wielder.name);
+                if (ta < tb) return -1;
+                else if (ta > tb) return 1;
+
+                var na = a.name;
+                var nb = b.name;
+                if (na < nb) return -1;
+                else if (na > nb) return 1;
+                return 0;
+            }
+        );
+        ProgressManager.RelicsCache = l;
+        return l;
+    }
 
     static getSavedWaifus() {
         if (ProgressManager.SavedWaifusCache != null) return ProgressManager.SavedWaifusCache;
@@ -356,6 +394,7 @@ class ProgressManager {
         ProgressManager.EventsCache = null;
         ProgressManager.GodsCache = null;
         ProgressManager.ArtworksCache = null;
+        ProgressManager.RelicsCache = null;
 
         ProgressManager.SavedWaifusCache = null;
     }
@@ -370,10 +409,27 @@ class ProgressManager {
         nb += ProgressManager.getUnlockedEvents().length;
         nb += ProgressManager.getUnlockedGods().length;
         nb += ProgressManager.getUnlockedSynergies().length;
+        nb += ProgressManager.getUnlockedRelics().length;
         return nb;
     }
     static canAddNewMovePref() {
         return Math.floor(ProgressManager.getTotalNbOfUnlocks()/10) >  ProgressManager.SAVE_FILES["movePreferences"].length;
+    }
+    static getPercentageCompletion() {
+        var l = QuestManager.QUEST_LIST;
+        var total = 0;
+        var unlocked = 0;
+
+        for (var i in l) {
+            if (l[i].areaId == -1) continue;
+            for (var j in l[i].questSteps) {
+                total += 1;
+                if (ProgressManager.isStepCompleted(l[i].id, j)) unlocked += 1;
+                else console.log(i + "/" + j);
+            }
+        }
+
+        return Math.floor(unlocked/total*100);
     }
 
     static getMovesLikely() {
@@ -437,7 +493,7 @@ class ProgressManager {
             case "Cheating":
                 return "When selecting a move, you can open the bible and select the move you want. PP Arbitrator doesn't always notices this, but when he does, he makes sure you get a penalty (-20 DEX and -10 STR).";
             case "Fighting Styles":
-                return "Fighting styles are permanent effects you can obtain in battle or start with. Equipping one grants a starting advantage, but getting one in battle grants a +10 DEX bonus.\n\nYou can have as many as you wants.\nYou can equip the fighting styles in the world map, in the 'PARTY' tab.";
+                return "Fighting styles are permanent effects you can obtain in battle or start with. Equipping one grants a starting advantage, but getting one in battle grants a +10 DEX bonus on top of the fighting styles' effects.\n\nYou can have as many as you wants.\nYou can equip the fighting styles in the world map, in the 'PARTY' tab.";
             case "Events":
                 return "Events have a random chance to occur every turn, and unleash their randomness. Some of them cannot appear before a specific amount of moves have been played.";
             case "Gods":
@@ -446,6 +502,14 @@ class ProgressManager {
                 return "Some Gods work pretty well when combined with each other. If all the required Gods of a synergy are worshipped by someone, that person will immediately get the effect of the synergy."
             case "Multiplayer":
                 return "Play Online Multiplayer with Strangers! Puts your current team against the one of a stranger or a friend! Be careful, as they may have more unlocks than you do!\n\nMultiplayer can be accessed in the Anime Convention, or using the Bible > Game Mechanics > Multiplayer."
+            case "Alternative Talks":
+                return "PP Arbitrator's way of talking can be altered by different means. This will affect every text shown on screen (as every text on screen is reported by PP Arbitrator)."
+            case "Relics":
+                return "Powerful items that grants unique powers to their wielder. Wielders do not choose relics, but relics choose their wielder, so you can't force someone to use a relic, as the relic just won't work."
+            case "PP Coins":
+                var price = "Shop is empty, you bought everything!";
+                try { price = "Next Item Price: " + QuestManager.getStep(34, ProgressManager.getCompletedSteps(34).length).ppCoinsPrice } catch(e) {}
+                return "Another random cryptocurrency, except the amount automatically increments whenever an opponent takes damage. Buying stuff is automatic, you don't have to worry about going to the shop and select an item to buy it.\n\nAmount of PP Coins: " + ProgressManager.getValue("PP_Coins") + "\n" + price;
         }
         return "No Description :("
     }

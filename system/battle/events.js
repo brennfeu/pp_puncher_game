@@ -1,18 +1,22 @@
 class Event {
-    constructor(_id, _name, _description, _function, _likeness = 1, _nbMoveRequired = 0) {
+    constructor(_id, _name, _description, _function, _likeness = 1, _nbMoveRequired = 0, _onlyStart = false) {
         this.id = _id;
         this.name = _name;
         this.description = _description;
         this.effectFunction = _function;
         this.likeness = _likeness;
         this.nbMoveRequired = _nbMoveRequired;
+        this.onlyStart = _onlyStart;
     }
 
     getDescription() {
         var txt = this.name + "\n\n";
         txt += this.description + "\n\n";
         txt += "Chance to appear: " + this.likeness + "%";
-        if (this.nbMoveRequired > 0) {
+        if (this.onlyStart) {
+            txt += "\nMay only trigger at the start of a duel.";
+        }
+        else if (this.nbMoveRequired > 0) {
             txt += "\nRequired Moves: " + this.nbMoveRequired;
         }
         return txt;
@@ -20,8 +24,11 @@ class Event {
 }
 
 class EventManager {
-    static addEvent(_name, _description, _function, _likeness = 1, _nbMoveRequired = 0) {
-        EventManager.EVENT_LIST.push(new Event(EventManager.EVENT_LIST.length, _name,_description,  _function, _likeness, _nbMoveRequired));
+    static addEvent(_name, _description, _function, _likeness = 1, _nbMoveRequired = 0, _onlyStart = false) {
+        EventManager.EVENT_LIST.push(new Event(EventManager.EVENT_LIST.length, _name,_description,  _function, _likeness, _nbMoveRequired, _onlyStart));
+    }
+    static addStartEvent(_name, _description, _function, _likeness = 1) {
+        EventManager.addEvent(_name, _description, _function, _likeness, undefined, true);
     }
 
     static getEvent(_id) {
@@ -107,3 +114,35 @@ EventManager.addEvent(
     },
     1
 ); // 18
+EventManager.addEvent(
+    "PP Inquisition", // 7
+    "The fighter with the lowest STR gains the Inquisitor buff, which grants an additional STR/10 damage done to people with higher STR.",
+    function(_duel) {
+        _duel.addMessage("The PP Inquisition is here to help the weak!");
+        var l = _duel.getAllFighters();
+        var alive = [];
+        for (var i in l) {
+            if (l[i].isAlive() && !l[i].isInquisitor) alive.push(l[i]);
+        }
+
+        if (alive.length == 0) return _duel.addMessage("But no one here is weak! Good job bros, may you punch PP in the name of Wyndoella!");
+
+        var lowest = alive[0];
+        for (var i in alive) {
+            if (lowest.STR > alive[i].STR) lowest = alive[i];
+        }
+
+        _duel.addMessage(lowest.getName() + " becomes an Inquisitor! May you punch PP in the name of Wyndoella!");
+        lowest.isInquisitor = true;
+    },
+    1
+); // 19
+EventManager.addStartEvent(
+    "Christian Game", // 8
+    "Activates christian mode for the whole battle.",
+    function(_duel) {
+        _duel.addMessage("Let's be a bit more friendly! :)");
+        _duel.christianText = true;
+    },
+    5
+); // (alt) 1 - 5

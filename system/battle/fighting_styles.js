@@ -30,6 +30,8 @@ class FightingStyles {
                 return "-20 DEX, +1 move slot.";
             case "Small PP":
                 return "+5 DEX, but you have to live with the fact you have a small PP. Does not have a respective move (can only be acquired as a starting bonus).";
+            case "Electric PP":
+                return "-15 STR, being attacked by an enemy has 15% chance to remove his DEX for 1 turn.";
         }
         return "";
     }
@@ -45,5 +47,6 @@ FightingStyles.StylesList = [
     "Crystal PP",
     "Diamond PP",
     "Scarred PP",
-    "Small PP"
+    "Small PP",
+    "Electric PP"
 ]

@@ -37,11 +37,11 @@ QuestManager.loadList([
                 "name": "MULTIPLAYER TUTORIAL",
                 "description": "FIRST TIME SEEEING THE MULTIPLAYER SCENE"
             },
-            { // 5
-                "name": "UNLOCKED NG+ QUEST",
-                "description": "ALL OTHER QUESTS HAVE BEEN COMPLETED",
-                "unlockQuests": [ 28 ]
-            }
+            //{ // 5
+            //    "name": "UNLOCKED NG+ QUEST",
+            //    "description": "ALL OTHER QUESTS HAVE BEEN COMPLETED",
+            //    "unlockQuests": [ 28 ]
+            //}
         ]
     },
     { // 1 - Tutorial
@@ -334,8 +334,7 @@ QuestManager.loadList([
             { // 1
                 "name": "Retarded Twin",
                 "description": "The childhood friend had a retarded twin. Unfortunately for you, she's a yandere, and she doesn't like the fact that PP Arbitrator shares his time with you.",
-                "encounter": "yandere",
-                "unlockQuests": [ 13 ]
+                "encounter": "yandere"
             },
             { // 2
                 "name": "Rich Girl",
@@ -515,36 +514,47 @@ QuestManager.loadList([
                     "arcadeMode": true,
                     "arcadeQuestStarter": 16
                 }
+            },
+            { // 4
+                "name": AreaManager.getArea(4).name,
+                "description": AreaManager.getArea(4).description,
+                "unlockNextStep": false,
+                "duelParam": {
+                    "arcadeMode": true,
+                    "arcadeQuestStarter": 32
+                }
             }
         ]
     },
-    { // 13 - TODO Yandere Dev Questline
-        "name": "TODO",
+    { // 13 - Hatesick
+        "name": "Hatesick",
         "description": "A new game finally released after 23 years of development. It's so successful people are acting like the main character of this game.",
         "isMain": false,
-        "areaId": 3,
-        "ignoreMe": true,
+        "areaId": 2,
 
         "questSteps": [
             { // 0
                 "name": "Consume",
-                "description": "Now there are 2 schoolgirls acting like yanderes. They want your PP, don't let them win.",
+                "description": "Now there are 2 schoolgirls acting like yanderes. They want your PP, don't let this 3D trash win.",
                 "encounter": "2yanderes"
             },
             { // 1
                 "name": "The",
-                "description": "You're hearing rumors about a legendary item that can ???.",
-                "encounter": ""
+                "description": "You hear rumors about a legendary item that helped in the making of the game. It made its user so powerful, it made everyone in love with his game.",
+                "encounter": "3yanderes"
             },
             { // 2
                 "name": "Cum",
-                "description": "a kawaii tree that’s definitely not yuki that says ‘I am twee :3’ w/ yandere vibes TODO.",
-                "encounter": "3yanderes"
+                "description": "A big tree is catching your attention, it has many texts carved in it, such as 'kawaii' or 'yandere'. It makes you want to punch it.",
+                "encounter": "notYuki",
+                "preFightDialogue": 51
             },
             { // 3
                 "name": "Chalice",
-                "description": ".",
-                "encounter": "yandereDev"
+                "description": "The dev of the game himself is here to challenge you. He is super buff, probably thanks to drinking from the sacred chalice every day.",
+                "encounter": "yandereDev",
+                "unlockRelics": [ 0 ],
+                "unlockMoves": [ DrinkFromChalice ]
             }
         ]
     },
@@ -557,7 +567,7 @@ QuestManager.loadList([
         "questSteps": [
             { // 0
                 "name": "Crystal Style",
-                "description": "So the rumors about enchented crystals that make your PP faster, but more fragile were true after all...",
+                "description": "So the rumors about enchanted crystals that make your PP faster, but more fragile were true after all...",
                 "encounter": "crystalWeebs"
             },
             { // 1
@@ -603,7 +613,7 @@ QuestManager.loadList([
                 "encounter": "spiritGuardians"
             },
             { // 1
-                "name": "The Blind Guardian",
+                "name": "Defenders of...",
                 "description": "As you open the entry door, a spirit materializes before you. A large spectral guardian appears, with a gleaming sword in one hand, and a giant shield in the other.",
                 "encounter": "guardiansOfFaith"
             },
@@ -614,7 +624,7 @@ QuestManager.loadList([
             },
             { // 3
                 "name": "Worldwide Cleaners",
-                "description": "What would be the world without maintainers? Probably would end up a dirty place. It's a good thing maintainers are there to keep thing clean.",
+                "description": "What would the world be without maintainers? Probably would end up a dirty place. It's a good thing maintainers are there to keep things clean.",
                 "encounter": "clericMaintainers"
             },
             { // 4
@@ -679,14 +689,15 @@ QuestManager.loadList([
                 "description": "Did you think it would be that easy? Here comes the last trial. Prove your faith, and you shall be rewareded.",
                 "encounter": "faithForReal",
                 "duelParam": { "waifuDetermination": true },
-                "unlockQuests": [ 29 ],
+                "unlockAreas": [ 4 ],
+                "unlockQuests": [ 29, 32 ],
                 "unlockQuestSteps": [ [12, 3] ],
                 "saveWaifu": "Priestess",
-                "postFightCutscene": 5
+                "postFightCutscene": 7
             }
         ]
     },
-    { // 18 - Alters of B
+    { // 18 - Altars of B
         "name": "Altars of B",
         "description": "This area of the temple is dedicated to the Holy Brenn Trinity.",
         "isMain": true,
@@ -905,9 +916,16 @@ QuestManager.loadList([
                 "encounter": "gigaWeebs",
                 "postFightDialogue": 33,
                 "unlockArtworks": [ "Eye of Truth" ],
-                "unlockMoves": [ EyeOfTruth ]
+                "unlockMoves": [ EyeOfTruth ],
+                "unlockNextStep": false
+            },
+            { // 3
+                "name": "Survey",
+                "description": "Maybe you could convince the Eye of Truth to let you use the Ultimate Bleach?",
+                "preFightDialogue": 50,
+                "encounter": "bleachCoveredWeeb",
+                "unlockRelics": [ 4 ]
             }
-            // TODO last step unlocked after relics to keep the bleach (fight against eye of truth?)
         ]
     },
     { // 26 - Explosive Traps
@@ -954,7 +972,7 @@ QuestManager.loadList([
         "name": "Wyndoella Bridge",
         "description": "A new area appeared in the temple. All of it looks like empty space, except for one bridge made of light.",
         "isMain": true,
-        "areaId": 3,
+        "areaId": -1,
         "ignoreMe": true,
 
         "questSteps": [
@@ -1021,6 +1039,285 @@ QuestManager.loadList([
                 "preFightDialogue": 39,
                 "postFightDialogue": 40,
                 "unlockGods": [ "STFU Isaac" ]
+            }
+        ]
+    },
+    { // 32 - The Holy Prepuce
+        "name": "The Holy Prepuce",
+        "description": "This christian settlement is known for having the Holy Prepuce, the foreskin of Jesus Christ. This is a real thing, look it up!",
+        "isMain": true,
+        "areaId": 4,
+
+        "questSteps": [
+            { // 0
+                "name": "Confession",
+                "description": "You should confess all you did to a Priest. This should hopefully help your mental state, which doesn't seem very stable.",
+                "encounter": "introPriest",
+                "preFightDialogue": 45,
+                "inFightDialogue": 46,
+                "postFightDialogue": 47,
+                "unlockGameMechanics": [ "Alternative Talks" ]
+            },
+            { // 1
+                "name": "Holy Defenders",
+                "description": "Of course this place wasn't left unguarded. Since holy wars aren't a thing anymore, you've got some NEET templars in need of violence to punch.",
+                "encounter": "templars",
+                "duelParam": { "nextEncounters": [ "templarsAndPriest" ] }
+            },
+            { // 2
+                "name": "The Unexpected",
+                "description": "Wait what? Are they really here? This is totally unexpected!",
+                "encounter": "inquisitor",
+                "duelParam": { "nextEncounters": [ "inquisitorArmyA", "inquisitorArmyB" ] },
+                "unlockEvents": [ 7 ]
+            },
+            { // 3
+                "name": "Rank++",
+                "description": "You're going too far in the settlement, higher ranked priests are needed to stop you in your PP Punching madness! We both know they won't be enough though haha!",
+                "encounter": "bishopArmyA",
+                "duelParam": { "nextEncounters": [ "bishopArmyB", "bishopArmyC" ] }
+            },
+            { // 4
+                "name": "He Who Cannot See",
+                "description": "A holy warrior has been sent to stop you! They really dislike pp punching it seems, gotta make them pay for that!",
+                "encounter": "blindGuardian"
+            },
+            { // 5
+                "name": "He Who Cannot Die",
+                "description": "Legends about a warrior who has been proven to be unbeatable in fair combat have been told for centuries. And now you witness the legend himself.",
+                "encounter": "eternalChampion"
+            },
+            { // 6
+                "name": "True Cross",
+                "description": "Not many people know this, but the True Cross has been restored years ago. It has been hidden in this settlement for years, and probably has the power needed to make relics actually useful.",
+                "encounter": "christianSpirits",
+                "duelParam": { "nextEncounters": [ "trueCrossSprit" ] },
+                "postFightDialogue": 49,
+                "unlockGameMechanics": [ "Relics" ],
+                "unlockRelics": [ 1, 2, 3 ],
+                "unlockMoves": [ PPBibleMove ],
+                "unlockQuests": [ 13, 33, 35 ],
+                "unlockQuestSteps": [ [25, 3] ]
+            }
+        ]
+    },
+    { // 33 - Weeb Shop
+        "name": "Weeb Shop",
+        "description": "A weeb just opened his shop. He seems to be selling relics, this could be interesting!",
+        "isMain": true,
+        "areaId": 0,
+
+        "questSteps": [
+            { // 0
+                "name": "Weeb Shop",
+                "description": "This is a convention, so obviously there are shops, but this one seems different. Even if the owner is a weeb, it doesn't really sell anime-related merch.",
+                "encounter": "weebAssistant",
+                "preFightDialogue": 52,
+                "unlockGameMechanics": [ "PP Coins" ]
+            }
+        ]
+    },
+    { // 34 - Weeb Shop Unlocks - HIDDEN
+        "name": "WEEB SHOP UNLOCKS",
+        "description": "YOU SHOULD NOT BE ABLE TO SEE THIS!",
+        "isMain": false,
+        "areaId": -1,
+
+        "questSteps": [
+            {
+                "ppCoinsPrice": 100,
+                "unlockMoves": [ AcidCover ]
+            },
+            {
+                "ppCoinsPrice": 300,
+                "unlockRelics": [ 5 ] // Kiwi
+            },
+            {
+                "ppCoinsPrice": 500,
+                "unlockMoves": [ Barrel ]
+            },
+            {
+                "ppCoinsPrice": 1000,
+                "unlockMoves": [ KidneyShoot, SuperKidneyShoot ]
+            },
+            {
+                "ppCoinsPrice": 1500,
+                "unlockMoves": [ Martini ],
+                "unlockFightingStyles": [ "Drunken PP" ]
+            },
+            {
+                "ppCoinsPrice": 2000,
+                "unlockMoves": [ Swap ]
+            },
+            {
+                "ppCoinsPrice": 3000,
+                "unlockGods": [ "Villager" ]
+            }
+        ]
+    },
+    { // 35 - Sealed Evils
+        "name": "Sealed Evils",
+        "description": "This area's waifu has been kept hidden in the same place a gate to Hell was left open. Her presence might have had an influence on the demons in here, and 'japanized' them.",
+        "isMain": true,
+        "areaId": 4,
+
+        "questSteps": [
+            { // 0
+                "name": "Fear",
+                "description": "A pair of floating sunglasses suddenly appear before you, and a very loud scream seems to be coming from them. Let's be honest, the scream was more annoying than scary.",
+                "encounter": "fearMePls",
+                "inFightDialogue": 53,
+                "unlockArtworks": [ "fear me pls" ]
+            },
+            { // 1
+                "name": "問題?",
+                "description": "Japanese tales talk about Onis, which are similar to our western trolls. Though when I first read that, I thought it was about the monsters, not the internet trolls.",
+                "encounter": "onis",
+                "duelParam": { "nextEncounters": [ "onisTroll", "onis" ] },
+                "unlockQuests": [ 38 ]
+            },
+            { // 2
+                "name": "Oddities I",
+                "description": "Rather strange beings have appeared, holding the shape of animals, but there seems to be more to it. And they have the instinct to make people their victims, so punching them makes us the good guys.",
+                "encounter": "odditiesSnail",
+                "duelParam": { "nextEncounters": [ "odditiesCrab", "odditiesMonkey" ] }
+            },
+            { // 3
+                "name": "Tomboy Melon",
+                "description": "Let me tell you the tragic tale of the tomboy melon. It used to have a great life until the day she watched a cursed tape. She now takes the form of a Sadako, and haunts whoever she stumbles upon. Once you're too scared to move, she gets you.",
+                "encounter": "sadako"
+            },
+            { // 4
+                "name": "Oddities II",
+                "description": "The last of the oddities are there, that means that now comes the time of the oddity pp punching. And here's a bit of advice, avoid contact with the darkness.",
+                "encounter": "odditiesSnake",
+                "duelParam": { "nextEncounters": [ "odditiesCat", "odditiesDarkness" ] }
+            },
+            { // 5
+                "name": "Gods of Death",
+                "description": "...or so they pretend to be. Shinigamis are just a bunch of edgy otakus that became part of the japanese culture, and then literaly changed into evil creatures. That doesn't mean they are weak, you should deal with them with extreme brute force.",
+                "encounter": "shinigamiIntro",
+                "duelParam": { "nextEncounters": [ "2shinigamis", "epicShinigami" ] },
+                "unlockQuests": [ 36 ],
+                "postFightCutscene": 8
+            }
+        ]
+    },
+    { // 36 - Conspiracy
+        "name": "Conspiracy",
+        "description": "Christians and weeb folklore have united against you! How can you kidnap anime girls with all those annoyances? Kill them all, there should not be even one person leaving this place alive.",
+        "isMain": true,
+        "areaId": 4,
+
+        "questSteps": [
+            { // 0
+                "name": "Allies at Odds",
+                "description": "How touching! Christians and demons managed to set their differences aside to fight their common threat: you. As if that was going to work.",
+                "encounter": "onisNPriests",
+                "duelParam": { "nextEncounters": [ "onisTroll", "onisNPriestsReversed" ] }
+            },
+            { // 1
+                "name": "Dirty Work",
+                "description": "Maintainers truly are everywhere, even in this christian settlement. If they like to wipe the floor that much, let's do it with their bodies.",
+                "encounter": "chrsitianMaintainers",
+                "duelParam": { "nextEncounters": [ "chrsitianMaintainers2" ] }
+            },
+            { // 2
+                "name": "Tengu Cardinals I",
+                "description": "The Tengu Cardinals is the name given to the cardinals in charge of japanese regions. They harbor the power of the Tengus, legendary creatures known as harbingers of war.",
+                "encounter": "evilCardinal1",
+                "duelParam": { "nextEncounters": [ "evilCardinal2", "evilCardinal3", "evilCardinal4", "evilCardinal5" ] }
+            },
+            { // 3
+                "name": "Yokai Nuns",
+                "description": "If you mess with the nuns, you suffer the wrath of the guns. If you mess with the yokais (in this case, dokkaebis), you get, uuuuuuuh, blue fire which inflicts damage over time but also dies out after some time.",
+                "encounter": "nunsAndYokai",
+                "duelParam": { "nextEncounters": [ "doubleNuns", "nunsBossAndYokai" ] }
+            },
+            { // 4
+                "name": "Tengu Cardinals II",
+                "description": "Another bunch of Tengu Cardinals has been sent after you. And it feels like it's not going to be the end of all Tengu Cardinals either. Is there no end to them?",
+                "encounter": "evilCardinal6",
+                "duelParam": { "nextEncounters": [ "evilCardinal7", "evilCardinal8", "evilCardinal9", "evilCardinal10" ] },
+                "unlockQuests": [ 39 ]
+            },
+            { // 5
+                "name": "Tengu Cardinals III",
+                "description": "And they brought friends this time! This is the last of them until you reach the final area, where the fate of christianity and pp punching will change forever.",
+                "encounter": "templars",
+                "duelParam": { "nextEncounters": [ "evilCardinal11", "odditiesSnake", "evilCardinal12", "bishopArmyC", "introPriest" ] }
+            },
+            { // 6
+                "name": "Final Sin",
+                "description": "The origin of the holy/demonic alliance, the kings of christianity and hell, are here ready to fight you. Get ready to wreck their pp, and show them that nothing will ever stop you.",
+                "encounter": "introPriest",
+                "duelParam": { "nextEncounters": [ "bishopArmyA", "benedictNDemon", "powerOfGodAndAnime" ] },
+                "saveWaifu": "Rias",
+                "postFightCutscene": 9,
+                "unlockQuests": [ 37 ],
+                "unlockQuestSteps": [ [ 12, 4] ],
+                "unlockEvents": [ 8 ]
+            }
+        ]
+    },
+    { // 37 - Fherla
+        "name": "Fherla",
+        "description": "Fherla needs your help to restore christian values in this now evil settlement! Destroy demons and other creatures alike!",
+        "isMain": false,
+        "areaId": 4,
+
+        "questSteps": [
+            { // 0
+                "name": "Demon Activity",
+                "description": "Some demons here are regular demons that aren't from japanese tales. And they deserve the same treatment as everyone: some good old pp punching.",
+                "encounter": "goatDemon",
+                "duelParam": { "nextEncounters": [ "minorDemon", "goatDemonNSmallerOnes" ] },
+                "preFightDialogue": 56
+            },
+            { // 1
+                "name": "Tengu King",
+                "description": "The king of the corrupted Tengu Cardinals is known to have immense powers. The legends says he can use the powers of every other Tengu Cardinals.",
+                "encounter": "evilCardinalKing",
+                "unlockMoves": [ FherlaMove ]
+            }
+        ]
+    },
+    { // 38 - Melodia
+        "name": "Melodia",
+        "description": "Melodia needs your help to grow demonic values in this christian settlement! Destroy christians and other holy people!",
+        "isMain": false,
+        "areaId": 4,
+
+        "questSteps": [
+            { // 0
+                "name": "Holy Activities",
+                "description": "Some christians here are regular christians that didn't ally with demons. And they deserve the same treatment as everyone: some good old pp punching.",
+                "encounter": "templars",
+                "duelParam": { "nextEncounters": [ "inquisitorArmyB" ] },
+                "preFightDialogue": 57
+            },
+            { // 1
+                "name": "Inquisition'ed",
+                "description": "Wouldn't it be funny if you did to the inquisition what they did to innocent people centuries ago? I think that would be hilarious, don't you think that way too?.",
+                "encounter": "inquisitorArmyA",
+                "duelParam": { "nextEncounters": [ "inquisitionGrandmaster", "2christians", "3christians", "timmy" ] },
+                "unlockMoves": [ MelodiaMove ]
+            }
+        ]
+    },
+    { // 39 - Tea Kettle
+        "name": "Tea Kettle",
+        "description": "An electric alien is attacking the area! No one knows what it is seeking but it must be destroyed!",
+        "isMain": false,
+        "areaId": 4,
+
+        "questSteps": [
+            { // 0
+                "name": "Virtual Alien",
+                "description": "You stumble upon what the creature might have been seeking here. The alien should be here soon.",
+                "encounter": "familyFriendly",
+                "duelParam": { "nextEncounters": [ "pikamee" ] },
+                "unlockFightingStyles": [ "Electric PP" ]
             }
         ]
     }

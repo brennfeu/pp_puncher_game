@@ -8,10 +8,10 @@ class SwordMove extends Move {
     execute(_user, _target = null) {
         _user.duel.addMessage(_user.getName() + " attacks " + _target.getName() + " with a sword !");
 		if (_user.STR > _target.STR) {
-			_target.damage(_user.STR - _target.STR);
+			_target.damage(_user.STR - _target.STR, "attack", _user);
 		}
 		else {
-			_target.damage(Math.floor(10 + _user.STR / 10));
+			_target.damage(Math.floor(10 + _user.STR / 10), "attack", _user);
 		}
 
         _user.duel.addAnimation("punch", 60, _target, true, false);

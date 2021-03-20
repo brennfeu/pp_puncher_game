@@ -8,6 +8,14 @@ class MenuScene extends Scene {
 
         this.textObjects = [];
         this.title = null;
+
+        if (ProgressManager.getValue("PP_Coins") == undefined) ProgressManager.setValue("PP_Coins", 0);
+        if (!MenuScene.LuckTry) {
+            MenuScene.LuckTry = true;
+            if (getRandomPercent() <= 1) {
+                AchievementManager.unlockAchievement(7); // Lucky
+            }
+        }
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     preload() { try {
@@ -114,3 +122,4 @@ class MenuScene extends Scene {
         return this.cursor.getCurrentObject();
     }
 }
+MenuScene.LuckTry = false;

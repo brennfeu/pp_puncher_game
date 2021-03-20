@@ -301,7 +301,7 @@ DialogueManager.loadList([
             },
             {
                 "speaker": "Ideas",
-                "text": " - Pudding\n - Pépin2Pom\n - Nota\n - Alexandwich\n - Brenn"
+                "text": " - Pudding\n - Pépin2Pom, Nota and Alexandwich\n - ForgeMaster\n - Brenn"
             },
             {
                 "speaker": "Sounds",
@@ -321,7 +321,7 @@ DialogueManager.loadList([
             },
             {
                 "speaker": "Special Thanks",
-                "text": " - oRpheusB20"
+                "text": " - oRpheusB20\n - Family and friends"
             },
             {
                 "speaker": "Cool Player",
@@ -796,6 +796,389 @@ DialogueManager.loadList([
             {
                 "speaker": "PP Arbitrator",
                 "text": "Time's up!"
+            }
+        ]
+    },
+    { // 44 - Allfaiths Temple OUT!
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "That... was weird. Even for my standards."
+            },
+            {
+                "text": "At least we gained a lot from this place. A new party member, a new saved waifu, and new powerful abilities!"
+            },
+            {
+                "speaker": "Pudding",
+                "text": "And now what? Where's our next destination?"
+            },
+            {
+                "speaker": "Eldon",
+                "text": "Home maybe? I'd like to rest for a bit."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "I guess we could rest for a bit indeed. I think all that PP Punching is affecting my mind."
+            },
+            {
+                "text": "I know a place where good old christian values are still practiced. Let's go there!"
+            }
+        ]
+    },
+    { // 45 - Enters Christian Settlement
+        "dialogueLines": [
+            {
+                "speaker": "PP Arbitrator",
+                "text": "Since we're in christian territory, I probably should change my language for a bit."
+            },
+            {
+                "text": "We gotta keep this place family friendly. Think about little Timmy playing this game expecting a colorful and fun game."
+            },
+            {
+                "text": "Well, he wouldn't be playing up until this point anyway, but the christian roleplay sounds fun."
+            },
+            {
+                "text": "Let's find someone to see how good I am to fake talking like a true christian."
+            }
+        ]
+    },
+    { // 46 - Christian Settlement quest start
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "Sir, could you please help us? We've committed sins and would like to confess."
+            },
+            {
+                "speaker": "Priest",
+                "text": "There is no sin that The Lord does not forgive. I'm listening to you."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "I killed a lot of people by punching their PP (some of them which were innocent), kidnapped anime girls for my own harem, prayed to other gods, stole ancient relics, created life not using the common means (which is against God's will)."
+            },
+            {
+                "text": "I might have done other minor crimes that I forgot about as well."
+            },
+            {
+                "text": "How can He forgive me?"
+            },
+            {
+                "speaker": "Priest",
+                "text": "Wait... What?"
+            },
+            {
+                "speaker": "Pudding",
+                "text": "Yeah, what are those relics you stole? Did I miss something?"
+            },
+            {
+                "speaker": "Priest",
+                "text": "..."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "I was forced into all of this. I never wanted any of this..."
+            },
+            {
+                "speaker": "Priest",
+                "text": "I'm sorry sir, but this too much. I'll have to stop you right here and right now."
+            },
+        ]
+    },
+    { // 47 - Explain stolen relics
+        "dialogueLines": [
+            {
+                "speaker": "Pudding",
+                "text": "So, what are those relics you talked about earlier?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "When researching the waifus, I went in here and stole a bunch of random garbage."
+            },
+            {
+                "text": "I only kept the PP Bible and Legato though. Legato is the name of my mask in case you weren't aware."
+            },
+            {
+                "text": "I couldn't activate them properly despite spending a lot of time researching them. We'll probably find how to activate them in here."
+            },
+            {
+                "speaker": "Pudding",
+                "text": "So, you didn't actually felt like resting? You just wanted us to follow you."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "lmao yeah"
+            },
+            {
+                "speaker": "Pudding",
+                "text": "I was scared our PP Punching quest would stop there. I'm glad we're still on the run after all!"
+            },
+            {
+                "speaker": "Eldon",
+                "text": "Why am I even friend with you..."
+            }
+        ]
+    },
+    { // 48 - No Steam Connection
+        "dialogueLines": [
+            {
+                "speaker": "PP Arbitrator",
+                "text": "Connection to Steam was lost, or Steam is not running. Achievements, Stats and Multiplayer are disabled."
+            }
+        ]
+    },
+    { // 49 - Unlock Relics
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "Hey I just found something in the cross remains."
+            },
+            {
+                "text": "Eldon, say 'aah'."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "Aaah..."
+            },
+            {
+                "text": "*gulp*"
+            },
+            {
+                "text": "What did you throw in my mouth? It tastes weird."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "The Holy Prepuce."
+            },
+            {
+                "text": "It should awaken the power of nearby relics. Now we can steal as many as we want, and they'll be useful this time!"
+            },
+        ]
+    },
+    { // 50 - Can we use Ultimate Bleach?
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "Hey I wanted to ask if you were still in need of the Ultimate Bleach?"
+            },
+            {
+                "speaker": "Eye of Truth",
+                "text": "Not really, you can take it if you want it."
+            },
+            {
+                "text": "Except not. A random weeb stole it from me and ran away, I have no idea what happened to him."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "He's just there. I guess you couldn't see him, thanks for the information!"
+            }
+        ]
+    },
+    { // 51 - I am twee :3
+        "dialogueLines": [
+            {
+                "speaker": "Not Yuki",
+                "text": "I am twee :3"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "wth is that"
+            }
+        ]
+    },
+    { // 52 - Welcome to my store!
+        "dialogueLines": [
+            {
+                "speaker": "Weeb",
+                "text": "Moves, Relics, and other stuff! You want it? It's yours my friend, as long as you have enough PP Coins!"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "what"
+            },
+            {
+                "speaker": "Weeb",
+                "text": "You don't have any PP Coin, am I wrong?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "I dont even know what the hell PP Coins are. Since when is there money in this game?"
+            },
+            {
+                "speaker": "Weeb",
+                "text": "Mmmmh I see..."
+            },
+            {
+                "text": "Sorry guys, I can't give credit. Come back when you're a little... mmmmmmh... richer!"
+            },
+            {
+                "speaker": "Pudding",
+                "text": "PP Coins are just money that's generated whenever an enemy PP suffers."
+            },
+            {
+                "text": "Except we never picked it up. So we're as poor as one can be."
+            },
+            {
+                "speaker": "Weeb",
+                "text": "How about redirecting your money to my bank account? And I'll give you stuff when you reach a specific amount of money."
+            },
+            {
+                "text": "You'll get new stuff for your pp punching, by punching pp! Isn't that great?"
+            },
+            {
+                "text": "And if you expected to punch pp when coming here, you can have fun on my assistant right here."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Actually, that's a cool deal. Let's do that."
+            }
+        ]
+    },
+    { // 53 - fear me pls
+        "dialogueLines": [
+            {
+                "speaker": "???",
+                "text": "fear me pls"
+            },
+        ]
+    },
+    { // 54 - Once upon a time all dicks were erect and hard
+        "dialogueLines": [
+            {
+                "speaker": "Shinigami",
+                "text": "Once upon a time all dicks were erect and hard. They stood proudly."
+            },
+            {
+                "text": "But once Brenn and Pudding discovered the secret art of pp punching... they changed."
+            },
+            {
+                "text": "To hide, seem like less of a threat, all dicks learned how to go flacid."
+            },
+            {
+                "text": "It's fascinating to see how two individuals... changed the fate of all dicks for their eternal future."
+            },
+            {
+                "text": "Rest in pp."
+            },
+            {
+                "speaker": "Benedict IX",
+                "text": "And that's why we should unite to stop them."
+            },
+            {
+                "text": "In the name of God, and those japanese cartoons you came from, we shall put a definitive stop to this awful practice named pp punching."
+            },
+        ]
+    },
+    { // 55 - Christian Settlement OUT
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "PP Punching really knows no flaws. Its powers are beyond what I thought they originally were."
+            },
+            {
+                "speaker": "Pudding",
+                "text": "This is nothing. PP Punching is much more grandiose than what you experienced."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Before, I just thought of it as a way of beating people up to get my sweet anime girls back."
+            },
+            {
+                "text": "But now, I just want to punch PP even more. I just can't stop."
+            },
+            {
+                "text": "Ironically, the kidnapping of my girls is the best thing that happened in my life. It made me open my eyes to what true art is."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "This... is a dangerous situation you're in. As your friend, I don't want you to fall into that kind of rabbit hole."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Are you dumb? PP Punching only is dangerous to my foes, I'm never going to lose a duel."
+            },
+            {
+                "text": "Anyway, we've got stuff to do. Let's go to the next area."
+            },
+        ]
+    },
+    { // 56 - Fherla Blabla
+        "dialogueLines": [
+            {
+                "speaker": "Fherla",
+                "text": "Hey guys."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Ew a woman."
+            },
+            {
+                "text": "What do you want?"
+            },
+            {
+                "speaker": "Fherla",
+                "text": "I'd like you to defeat more evil creatures in this area."
+            },
+            {
+                "text": "If you do, I'll help you in battles when you call for me."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "Sure, we'll do it."
+            },
+        ]
+    },
+    { // 57 - Melodia Blabla
+        "dialogueLines": [
+            {
+                "speaker": "Melodia",
+                "text": "Yo guys."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "A woman, epic."
+            },
+            {
+                "text": "What do you want?"
+            },
+            {
+                "speaker": "Melodia",
+                "text": "I'd like you to decrease the amount of christianity in this area."
+            },
+            {
+                "text": "If you do, I'll help you in battles when you call for me."
+            },
+            {
+                "speaker": "Pudding",
+                "text": "Sure, we'll do it."
+            },
+        ]
+    },
+    { // 58 - Sad Legato
+        "dialogueLines": [
+            {
+                "speaker": "Legato",
+                "text": "So, you picked me this time?"
+            },
+            {
+                "text": "Why is there even two of the same being? Two of us?"
+            },
+            {
+                "text": "We used to ask each other how we were doing everyday."
+            },
+            {
+                "text": "I should not even exist. Masks are supposed to be discarded according to the rules."
+            },
+            {
+                "text": "I think, everytime I get to witness this world..."
+            },
+            {
+                "text": "I don't want to be born again as a person."
+            },
+            {
+                "text": "I would rather be born without self-consciousness."
+            },
+            {
+                "text": "Like... a tree. Then we don't have to worry about anything in life."
             }
         ]
     }

@@ -20,8 +20,8 @@ class Enemy extends Fighter {
         var l = this.currentMovepool.slice();
 
         // gods moves
-        if (this.regularCharges > 0 && this.godsList.length > 0) l.push(RegularPriestMove);
-        if (this.specialCharges > 0 && this.godsList.length > 0) l.push(SpecialPriestMove);
+        if (this.regularCharges > 0 && this.godsList.length > 0 && !this.isSilenced) l.push(RegularPriestMove);
+        if (this.specialCharges > 0 && this.godsList.length > 0 && !this.isSilenced) l.push(SpecialPriestMove);
 
         return l;
     }

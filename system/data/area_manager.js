@@ -53,6 +53,13 @@ class Area {
         }
         return true;
     }
+    hasCompletedMainQuest() {
+        var l = QuestManager.getQuestsFromArea(this.id);
+        for (var i in l) {
+            if (l[i].isMain && !l[i].isCompleted() && !l[i].ignoreMe) return false;
+        }
+        return true;
+    }
 }
 
 class AreaManager {
@@ -68,6 +75,14 @@ class AreaManager {
         for (var i in _list) {
             AreaManager.addArea(new Area(_list[i], i));
         }
+    }
+
+    static getNbCompletedAreas() {
+        var counter = 0;
+        for (var i in AreaManager.AREA_LIST) {
+            if (AreaManager.AREA_LIST[i].hasCompletedMainQuest()) counter += 1;
+        }
+        return counter;
     }
 }
 AreaManager.AREA_LIST = [];

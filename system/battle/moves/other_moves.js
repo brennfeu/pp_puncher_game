@@ -139,10 +139,60 @@ class KillParty extends Move {
 
         for (var i in _user.duel.heroes) {
             _user.duel.heroes[i].STRValue = -99999999;
+            _user.duel.heroes[i].damage(1000);
             _user.duel.addMessage(_user.duel.heroes[i].getName() + " dies!");
         }
 
         _user.duel.memorySoundEffects.push("darkMagic");
+    }
+}
+
+// relic moves
+class PPBibleMove extends Move {
+    constructor() {
+        super();
+        this.name = "PP Bible";
+        this.description = "Grants a random buff and a random debuff to every fighter on the battlefield.";
+        this.autoPass = true;
+        this.needsTarget = false;
+        this.type = "other";
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " summons the PP Bible!");
+
+        var l = _user.duel.getAllFighters();
+        for (var i in l) {
+            if (l[i].isDead()) continue;
+
+            l[i].addRandomBuff();
+            l[i].addRandomDebuff();
+            _user.duel.addMessage(l[i].getName() + " gets a random buff and a random debuff!");
+        }
+
+        _user.duel.memorySoundEffects.push("darkMagic");
+    }
+}
+class DrinkFromChalice extends Move {
+    constructor() {
+        super();
+        this.name = "Mmmmmh Milk";
+        this.description = "Grants 5 random buffs to the user.";
+        this.autoPass = true;
+        this.needsTarget = false;
+        this.type = "other";
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " drinks from the Cum Chalice!");
+
+        _user.addRandomBuff();
+        _user.addRandomBuff();
+        _user.addRandomBuff();
+        _user.addRandomBuff();
+        _user.addRandomBuff();
+
+        _user.duel.memorySoundEffects.push("mmh");
     }
 }
 

@@ -180,7 +180,11 @@ class MapScene extends Scene {
         try {
             if (this.isOnArea) this.logTextObject.setText(this.loadedAreas[this.cursor.getCurrentSelect()].getDescription());
             else if (this.cursor.getCurrentSelect() == 0) this.logTextObject.setText("Customize your party members' PP !");
-            else if (this.cursor.getCurrentSelect() == 1) this.logTextObject.setText("The Holy Book of PP Punching!\nHere you can find all kind of useful informations.\n\nTotal Number of Unlocked Things: " + ProgressManager.getTotalNbOfUnlocks());
+            else if (this.cursor.getCurrentSelect() == 1) {
+                var txt = "The Holy Book of PP Punching!\nHere you can find all kind of useful informations.\n\nTotal Number of Unlocked Things: " + ProgressManager.getTotalNbOfUnlocks() + "\nTotal Completion: " + ProgressManager.getPercentageCompletion() + "%";
+                if (ProgressManager.getUnlockedGameMechanics().indexOf("PP Coins") > -1) txt += "\n\nPP Coins Amount: " + ProgressManager.getValue("PP_Coins");
+                this.logTextObject.setText(txt);
+            }
             else if (this.cursor.getCurrentSelect() == 2) this.logTextObject.setText("Exit to the menu");
         }
         catch(e) {} // out of bounds

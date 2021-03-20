@@ -53,12 +53,66 @@ class TextDict extends Phaser.GameObjects.Text {
     static updatedText(_txt) {
         var txt = _txt;
 
+        // parody names
         if (!DEV_MODE) {
             // Parody Names
             for (var i in TextDict.DICT) {
                 txt = txt.split(i).join(TextDict.DICT[i]);
             }
         }
+        // christian
+        if (CURRENT_SCENE != null && (
+          (CURRENT_SCENE.duel != null && CURRENT_SCENE.duel.christianText) ||
+          (!ProgressManager.isStepCompleted(36, 6) && CURRENT_SCENE.area != null && CURRENT_SCENE.area.id == 4) ||
+          (!ProgressManager.isStepCompleted(36, 6) && CURRENT_SCENE.duel != null && CURRENT_SCENE.duel.place.id == 4))) {
+            txt = txt.split("PP").join("Power Puff Girl");
+            txt = txt.split("Pp").join("Power Puff Girl");
+            txt = txt.split("pp").join("power puff girl");
+        	txt = txt.split("Punch").join("Hug");
+        	txt = txt.replace(/hitler/gi, "Angry German");
+        	txt = txt.replace(/villager/gi, "infidel");
+        	txt = txt.replace(/dick/gi, "Richard");
+        	txt = txt.replace(/raped/gi, "raked");
+        	txt = txt.replace(/satan/gi, "Stanley");
+        	txt = txt.replace(/hell/gi, "Hottube");
+        	txt = txt.replace(/gay/gi, "Brenn");
+        	txt = txt.replace(/kidney stone/gi, "volleyball");
+        	txt = txt.replace(/circumcised/gi, "trims");
+        	txt = txt.replace(/punches/gi, "hugs");
+        	txt = txt.replace(/punching/gi, "hugging");
+        	txt = txt.replace(/punch/gi, "hug");
+        	txt = txt.replace(/dong/gi, "dog");
+        	txt = txt.replace(/espinoza/gi, "Uncle");
+        	txt = txt.replace(/hog/gi, "Teddy Bear");
+        	txt = txt.replace(/ancient Fungus/gi, "Papa Stalin");
+        	txt = txt.replace(/furry/gi, "Hairy Man");
+        	txt = txt.replace(/fuck/gi, "duck");
+        	txt = txt.replace(/cum/gi, "milky white substance");
+            txt = txt.replace("SEXUAL CONFUSION", "ROMANTIC TENSION");
+        	txt = txt.replace("Wyndoella", "God");
+        }
+        // uwu
+        if (CURRENT_SCENE != null && CURRENT_SCENE.duel != null && CURRENT_SCENE.duel.uwuText) {
+            txt = txt.split("r").join("w");
+        	txt = txt.split("R").join("W");
+        }
+        // leet
+        if (CURRENT_SCENE != null && CURRENT_SCENE.duel != null && CURRENT_SCENE.duel.leetTextCountdown > 0) {
+            _txt = _txt.split("o").join("0");
+        	_txt = _txt.split("O").join("0");
+        	_txt = _txt.split("i").join("1");
+        	_txt = _txt.split("I").join("1");
+        	_txt = _txt.split("e").join("3");
+        	_txt = _txt.split("E").join("3");
+        	_txt = _txt.split("a").join("4");
+        	_txt = _txt.split("A").join("4");
+        	_txt = _txt.split("s").join("5");
+        	_txt = _txt.split("S").join("5");
+        	_txt = _txt.split("b").join("8");
+        	_txt = _txt.split("B").join("8");
+        }
+
+        // reverse texte: txt = txt.split("").reverse().join("").split(" ").reverse().join(" ")
 
         return txt.split("|").join("\n").split("`").join("'");
     }
@@ -73,10 +127,12 @@ TextDict.addDict(" 69 ", " 69 (lol) ");
 TextDict.addDict("IKEA", "DIKEA");
 TextDict.addDict("Ikea", "Dikea");
 TextDict.addDict("Free Lives", "Free Loves");
+TextDict.addDict("Power Puff", "Puff Power");
 
 TextDict.addDict("Senjougahara", "Senjouhagara");
 TextDict.addDict("Ryuko", "Myuko");
 TextDict.addDict("Kurisu", "Rukisu");
 TextDict.addDict("Astolfo", "Astalfo");
+TextDict.addDict("Rias", "Lias");
 
 TextDict.addDict("Mongo", "Bongo");

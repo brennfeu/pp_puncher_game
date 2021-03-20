@@ -101,3 +101,19 @@ class Deredere extends Dere {
         ];
     }
 }
+
+class NotYuki extends Yandere {
+    constructor(_name = "Not Yuki") {
+        super(_name);
+
+        this.STRValue = 1000;
+        this.armorValue = 1000;
+    }
+
+    getHurtSound() {
+        return "woodcut";
+    }
+    getCorpseSound() {
+        return this.getHurtSound();
+    }
+}

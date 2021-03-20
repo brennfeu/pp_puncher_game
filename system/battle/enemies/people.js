@@ -1,4 +1,10 @@
-class VonTruffle extends Enemy {
+class UniquePeople extends Enemy {
+    isOfInterest() {
+        return true;
+    }
+}
+
+class VonTruffle extends UniquePeople {
     constructor(_name = "Von Truffle") {
         super(_name);
 
@@ -13,7 +19,7 @@ class VonTruffle extends Enemy {
     }
 }
 
-class Edimo extends Enemy {
+class Edimo extends UniquePeople {
     constructor(_name = "Edimo") {
         super(_name);
 
@@ -33,7 +39,7 @@ class Edimo extends Enemy {
     }
 }
 
-class ShadowAphro extends Enemy {
+class ShadowAphro extends UniquePeople {
     constructor(_name = "Shadow Aphrodite") {
         super(_name);
 
@@ -43,27 +49,27 @@ class ShadowAphro extends Enemy {
     }
 }
 
-class YandereDev extends Enemy {
+class YandereDev extends UniquePeople {
     constructor(_name = "YandereDev") {
         super(_name);
 
-        this.STRValue = 300;
+        this.STRValue = 500;
+        this.DEXValue = 40
+        this.specialArmorValue = 1000;
+
+        this.currentMovepool.push(DrinkFromChalice);
+        this.firstTurn = true;
 
         this.isBoss = true;
-        this.nextPhase = ChaliceYandereDev;
 
         // TODO GOD
     }
-}
-class ChaliceYandereDev extends Enemy {
-    constructor(_name = "YandereDev") {
-        super(_name);
 
-        this.STRValue = 1000;
-        this.DEXValue = 50;
-
-        this.isBoss = true;
-
-        // TODO GOD
+    selectMove() {
+        if (this.firstTurn) {
+            this.chosenMove = DrinkFromChalice;
+            this.firstTurn = false;
+        }
+        else super.selectMove();
     }
 }

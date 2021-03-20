@@ -63,6 +63,12 @@ class Encounter {
                     this.addEnemy(new HeroEnemy(l[i]), 0, 0);
                 }
                 break;
+            case("bleachCoveredWeeb"):
+                this.addEnemy(new BleachCoveredWeeb(), 290);
+                break;
+            case("weebAssistant"):
+                this.addEnemy(new Weeb());
+                break;
 
             // IKEA
             case("ikeaGuards"):
@@ -302,6 +308,9 @@ class Encounter {
                 this.addEnemy(new Yandere());
                 this.addEnemy(new Yandere(), 561);
                 break;
+            case("notYuki"):
+                this.addEnemy(new NotYuki());
+                break;
             case("yandereDev"):
                 this.addEnemy(new YandereDev());
                 break;
@@ -421,6 +430,244 @@ class Encounter {
                 this.addEnemy(new DemonicSoul(), 76);
                 this.addEnemy(new DemonicSoul());
                 this.addEnemy(new DemonicSoul(), 561);
+                break;
+
+            // christian settlement
+            case("introPriest"):
+                this.addEnemy(new ChristianPriest());
+                break;
+            case("templars"):
+                this.addEnemy(new Templar(), 190);
+                this.addEnemy(new Templar(), 450);
+                break;
+            case("templarsAndPriest"):
+                this.addEnemy(new Templar(), 76);
+                this.addEnemy(new ChristianPriest());
+                this.addEnemy(new Templar(), 561);
+                break;
+            case("inquisitor"):
+                this.addEnemy(new Inquisitor());
+                break;
+            case("inquisitorArmyA"):
+                this.addEnemy(new ChristianPriest(), 76);
+                this.addEnemy(new Inquisitor());
+                this.addEnemy(new ChristianPriest(), 561);
+                break;
+            case("inquisitorArmyB"):
+                this.addEnemy(new Templar(), 76);
+                this.addEnemy(new Inquisitor());
+                this.addEnemy(new Templar(), 561);
+                break;
+            case("bishopArmyA"):
+                this.addEnemy(new ChristianPriest(), 76);
+                this.addEnemy(new ChristianBishop());
+                this.addEnemy(new ChristianPriest(), 561);
+                break;
+            case("bishopArmyB"):
+                this.addEnemy(new ChristianPriest(), 76);
+                this.addEnemy(new ChristianArchBishop());
+                this.addEnemy(new ChristianPriest(), 561);
+                break;
+            case("bishopArmyC"):
+                this.addEnemy(new ChristianBishop(), 76);
+                this.addEnemy(new ChristianArchBishop());
+                this.addEnemy(new ChristianBishop(), 561);
+                break;
+            case("blindGuardian"):
+                this.addEnemy(new ChristianPriest(), 76);
+                this.addEnemy(new BlindGuardian(), 290);
+                this.addEnemy(new ChristianPriest(), 561);
+                break;
+            case("eternalChampion"):
+                this.addEnemy(new ChristianPriest(), 76);
+                this.addEnemy(new EternalChampion(), 290);
+                this.addEnemy(new ChristianPriest(), 561);
+                break;
+            case("christianSpirits"):
+                this.addEnemy(new ChristianSpirit(), 170);
+                this.addEnemy(new ChristianSpirit(), 450);
+                break;
+            case("trueCrossSprit"):
+                this.addEnemy(new ChristianSpirit(), 76);
+                this.addEnemy(new TrueCross(), undefined, 50);
+                this.addEnemy(new ChristianSpirit(), 541);
+                break;
+            case("fearMePls"):
+                this.addEnemy(new FearMePls());
+                break;
+            case("onis"):
+                this.addEnemy(new Oni(), 170);
+                this.addEnemy(new Oni(), 450);
+                break;
+            case("onisTroll"):
+                this.addEnemy(new FakeOni());
+                break;
+            case("odditiesCrab"):
+                this.addEnemy(new OdditySpirit(), 76);
+                this.addEnemy(new CrabOddity());
+                this.addEnemy(new OdditySpirit(), 561);
+                break;
+            case("odditiesSnail"):
+                this.addEnemy(new OdditySpirit(), 76);
+                this.addEnemy(new SnailOddity());
+                this.addEnemy(new OdditySpirit(), 561);
+                break;
+            case("odditiesMonkey"):
+                this.addEnemy(new OdditySpirit(), 76);
+                this.addEnemy(new MonkeyOddity());
+                this.addEnemy(new OdditySpirit(), 561);
+                break;
+            case("sadako"):
+                this.addEnemy(new Sadako());
+                break;
+            case("odditiesCat"):
+                this.addEnemy(new OdditySpirit(), 76);
+                this.addEnemy(new CatOddity());
+                this.addEnemy(new OdditySpirit(), 561);
+                break;
+            case("odditiesSnake"):
+                this.addEnemy(new OdditySpirit(), 76);
+                this.addEnemy(new SnakeOddity());
+                this.addEnemy(new OdditySpirit(), 561);
+                break;
+            case("odditiesDarkness"):
+                this.addEnemy(new OdditySpirit(), 76);
+                this.addEnemy(new DarknessOddity());
+                this.addEnemy(new OdditySpirit(), 561);
+                break;
+            case("shinigamiIntro"):
+                this.addEnemy(new Weeb(), 76);
+                this.addEnemy(new Shinigami());
+                this.addEnemy(new Weeb(), 561);
+                this.enemyList[0].bleedDamage = this.enemyList[0].STRValue;
+                this.enemyList[2].bleedDamage = this.enemyList[2].STRValue;
+                this.enemyList[1].STRValue = 50;
+                break;
+            case("2shinigamis"):
+                this.addEnemy(new Shinigami(), 190);
+                this.addEnemy(new Shinigami(), 450);
+                break;
+            case("epicShinigami"):
+                this.addEnemy(new Weeb(), 76);
+                this.addEnemy(new EpicShinigami(), 290);
+                this.addEnemy(new Weeb(), 561);
+                this.enemyList[0].bleedDamage = this.enemyList[0].STRValue;
+                this.enemyList[2].bleedDamage = this.enemyList[2].STRValue;
+                break;
+            case("chrsitianMaintainers"):
+                this.addEnemy(new ChristianMaintainer(), 190);
+                this.addEnemy(new ChristianMaintainer(), 450);
+                break;
+            case("chrsitianMaintainers2"):
+                this.addEnemy(new ChristianMaintainer(), 76);
+                this.addEnemy(new ChristianMaintainer());
+                this.addEnemy(new ChristianMaintainer(), 561);
+                break;
+            case("onisNPriests"):
+                this.addEnemy(new Oni(), 170);
+                this.addEnemy(new ChristianPriest(), 450);
+                break;
+            case("onisNPriestsReversed"):
+                this.addEnemy(new ChristianPriest(), 170);
+                this.addEnemy(new Oni(), 450);
+                break;
+            case("evilCardinal1"):
+                this.addEnemy(new ChristianCardinal("Ajari, Cardinal of Higo Province", 1), 230);
+                break;
+            case("evilCardinal2"):
+                this.addEnemy(new ChristianCardinal("Saburō, Cardinal of Mount Iizuna", 5), 230);
+                break;
+            case("evilCardinal3"):
+                this.addEnemy(new ChristianCardinal("Sagamibō, Cardinal of Shiramine", 6), 230);
+                break;
+            case("evilCardinal4"):
+                this.addEnemy(new ChristianCardinal("Naigubu, Cardinal of Mount Takao", 7), 230);
+                break;
+            case("evilCardinal5"):
+                this.addEnemy(new ChristianCardinal("Daranibō, Cardinal of Mount Fuji", 10), 230);
+                break;
+            case("nunsAndYokai"):
+                this.addEnemy(new Dokkaebi(), 76);
+                this.addEnemy(new Nun());
+                this.addEnemy(new Dokkaebi(), 561);
+                break;
+            case("doubleNuns"):
+                this.addEnemy(new Nun(), 170);
+                this.addEnemy(new Nun(), 450);
+                break;
+            case("nunsBossAndYokai"):
+                this.addEnemy(new Dokkaebi(), 76);
+                this.addEnemy(new Canoness());
+                this.addEnemy(new Dokkaebi(), 561);
+                break;
+            case("evilCardinal6"):
+                this.addEnemy(new ChristianCardinal("Tsukuba-hōin, Cardinal of Hitachi Province", 12), 180);
+                break;
+            case("evilCardinal7"):
+                this.addEnemy(new ChristianCardinal("Kōtenbō, Cardinal of Katsuragi", 13), 230);
+                break;
+            case("evilCardinal8"):
+                this.addEnemy(new ChristianCardinal("Zenkibō, Cardinal of Mount Ōmine", 14), 230);
+                break;
+            case("evilCardinal9"):
+                this.addEnemy(new ChristianCardinal("Sankibō, Cardinal of Itsukushima", 15), 230);
+                break;
+            case("evilCardinal10"):
+                this.addEnemy(new ChristianCardinal("Myōgibō, Cardinal of Mount Ueno", 11), 230);
+                break;
+            case("evilCardinal11"):
+                this.addEnemy(new ChristianCardinal("Hōkibō, Cardinal of Mount Daisen", 4), 230);
+                break;
+            case("evilCardinal12"):
+                this.addEnemy(new ChristianCardinal("Hōkibō, Cardinal of Mount Daisen", 2), 230);
+                break;
+            case("benedictNDemon"):
+                this.addEnemy(new ThePope(), 170);
+                this.addEnemy(new EpicShinigami(), 450);
+                break;
+            case("benedictNDemon"):
+                this.addEnemy(new ThePope(), 170);
+                this.addEnemy(new EpicShinigami(), 450);
+                break;
+            case("powerOfGodAndAnime"):
+                this.addEnemy(new ChristianPriest(), 76);
+                this.addEnemy(new ThePopeFinal(), 290);
+                this.addEnemy(new ChristianPriest(), 561);
+                break;
+
+            case("goatDemon"):
+                this.addEnemy(new GoatDemon());
+                break;
+            case("goatDemonNSmallerOnes"):
+                this.addEnemy(new MinorDemon(), 76);
+                this.addEnemy(new GoatDemon());
+                this.addEnemy(new MinorDemon(), 561);
+                break;
+            case("evilCardinalKing"):
+                this.addEnemy(new TenguCardinalBoss(), 230);
+                break;
+            case("inquisitionGrandmaster"):
+                this.addEnemy(new Inquisitor(), 76);
+                this.addEnemy(new GrandMaster());
+                this.addEnemy(new Inquisitor(), 561);
+                break;
+            case("2christians"):
+                this.addEnemy(new ChristianGuy(), 190);
+                this.addEnemy(new ChristianGuy(), 450);
+                break;
+            case("3christians"):
+                this.addEnemy(new ChristianGuy(), 76);
+                this.addEnemy(new ChristianGuy());
+                this.addEnemy(new ChristianGuy(), 561);
+                break;
+            case("timmy"):
+                this.addEnemy(new Timmy());
+                break;
+            case("familyFriendly"):
+                this.addEnemy(new FamilyFriendly());
+                break;
+            case("pikamee"):
+                this.addEnemy(new ElectricKettleAlien());
                 break;
 
             // multiplayer

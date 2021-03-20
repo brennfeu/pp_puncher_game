@@ -1,4 +1,23 @@
 // UNLOCKED
+class AcidCover extends Move {
+    constructor() {
+        super();
+        this.name = "Acid Cover";
+        this.description = "For 3 turns, every attack will deal back 1/10 of your post-damage STR to the one who attacked you.";
+        this.needsTarget = false;
+        this.autoPass = true;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " gets covered in acid!");
+        _user.acidCover = 4;
+
+        _user.duel.memorySoundEffects.push("acid");
+        _user.duel.addAnimation("acid", 60, _user);
+    }
+}
+
+// UNLOCKED
 class AdaptPP extends Move {
     constructor() {
         super();
@@ -26,6 +45,32 @@ class AdaptPP extends Move {
                 _user.duel.memorySoundEffects.push("mmh");
             }
         }
+    }
+}
+
+// UNLOCKED
+class Barrel extends Move {
+    constructor() {
+        super();
+        this.name = "Barrel";
+        this.description = "Increases all damages to 300% for this turn.";
+        this.autoPass = true;
+        this.priority = true;
+        this.needsTarget = false;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " makes everyone weaker!");
+        if (_user.duel.barrelWeakening) {
+            _user.duel.addMessage("But there already was a weakening!");
+        }
+        else {
+            _user.duel.memorySoundEffects.push("protect");
+            for (var i in _user.duel.getAllFighters()) {
+                _user.duel.addAnimation("weakening", 60, _user.duel.getAllFighters()[i]);
+            }
+        }
+        _user.duel.barrelWeakening = true;
     }
 }
 
@@ -327,6 +372,26 @@ class InterrogationPoint extends Move {
 }
 
 // UNLOCKED
+class KidneyShoot extends Move {
+    constructor() {
+        super();
+        this.name = "Kidney Shoot";
+        this.description = "Target and user takes 50 damages. Has 33% chance to force the target's movepool to only 'Kidney Shoot' and 'Super Kidney Shoot' for the next turn.";
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " shoots a kidney stone!");
+        _user.damage(50, "inner")
+        if (_target.damage(50, "attack", _user) && _user.rollLuckPercentLow() <= 33) {
+            _target.kidneyCurse = 2;
+        }
+
+        _user.duel.memorySoundEffects.push("punchA");
+        _user.duel.addAnimation("shoot", 60, _user);
+    }
+}
+
+// UNLOCKED
 class Kick extends Move {
     constructor() {
         super();
@@ -376,6 +441,63 @@ class LaughingSoul extends Move {
 
         _user.duel.addAnimation("laugh", 60, _user);
         _user.duel.memorySoundEffects.push("laugh");
+    }
+}
+
+// TO UNLOCK
+class LivingGod extends Move {
+    constructor() {
+        super();
+        this.name = "Living God";
+        this.description = "Gets 10 000 STR and 10 000 DEX. Non-stackable.";
+        this.illegal = 99;
+        this.needsTarget = false;
+        this.autoPass = true;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " ascends!");
+		if (!_user.livingGod) {
+			_user.duel.addMessage("Behold " + _user.getName() + " the living God!");
+			_user.livingGod = true;
+		}
+		else {
+			_user.heal(10000);
+		}
+
+        _user.duel.addAnimation("godhood", 60, _user);
+        _user.duel.memorySoundEffects.push("jesus");
+
+        if (_user.duel.uwuText) {
+            _user.duel.randomCapTextCountdown = 1;
+        }
+    }
+}
+
+// UNLOCKED
+class Martini extends Move {
+    constructor() {
+        super();
+        this.name = "PP Alcohol";
+        this.description = "If doesn't have Drunken PP, grants Drunken PP and +10 DEX. Else, grants 5 DEX.";
+        this.autoPass = true;
+        this.needsTarget = false;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " drinks a martini...");
+        if (_user.hasFightingStyle("drunken")) {
+            _user.duel.addMessage("...and gets 5 DEX!");
+            _user.DEXValue += 5;
+        }
+        else {
+            _user.duel.addMessage("...and gets a drunken PP!");
+            _user.addFightingStyle("drunken");
+            _user.DEXValue += 10;
+
+            _user.duel.addAnimation("drunken", 60, _user);
+            _user.duel.memorySoundEffects.push("drink");
+        }
     }
 }
 
@@ -654,7 +776,7 @@ class Steel extends Move {
     constructor() {
         super();
         this.name = "Steel";
-        this.description = "Makes all damages reduced to 10% for this turn.";
+        this.description = "Reduces all damages to 10% for this turn.";
         this.autoPass = true;
         this.priority = true;
         this.needsTarget = false;
@@ -672,6 +794,51 @@ class Steel extends Move {
             }
         }
         _user.duel.steelProtection = true;
+    }
+}
+
+// UNLOCKED
+class Swap extends Move {
+    constructor() {
+        super();
+        this.name = "Swap";
+        this.description = "Swaps STR with the target.";
+        this.dexChange = -20;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " swaps STR with " + _target.getName() + "!");
+
+        // before swap STR, check who says something
+        if (_user.isAlive()) _user.duel.memorySoundEffects.push(_user.getHurtSound());
+        if (_target.isAlive()) _user.duel.memorySoundEffects.push(_target.getHurtSound());
+
+        var strMemory = _user.STR;
+        _user.setSTR(_target.STR);
+        _target.setSTR(strMemory);
+
+        _user.duel.addAnimation("swap", 60, _user);
+        _user.duel.addAnimation("swap", 60, _target);
+    }
+}
+
+// UNLOCKED
+class SuperKidneyShoot extends Move {
+    constructor() {
+        super();
+        this.name = "Super Kidney Shoot";
+        this.description = "Target and user takes 500 damages. Has 66% chance to force the target's movepool to only 'Kidney Shoot' and 'Super Kidney Shoot' for the next turn.";
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " shoots a super kidney stone!");
+        _user.damage(500, "inner")
+        if (_target.damage(500, "attack", _user) && _user.rollLuckPercentLow() <= 66) {
+            _target.kidneyCurse = 2;
+        }
+
+        _user.duel.memorySoundEffects.push("punchB");
+        _user.duel.addAnimation("shoot", 60, _user);
     }
 }
 
@@ -694,6 +861,10 @@ class TurkeyBomb extends Move {
             l[i].turkeyBomb = 6;
 
             _user.duel.addAnimation("yum", 60, l[i]);
+        }
+
+        if (_user.duel.uwuText) {
+            _user.duel.sexyTextCountdown = 6;
         }
     }
 }
@@ -763,12 +934,17 @@ class Yes extends Move {
         _user.duel.memorySoundEffects.push("darkMagic");
         _user.duel.addAnimation("summons", 60, _user);
         _user.duel.addAnimation("truffled", 60, _user, false, false);
+
+        if (_user.duel.uwuText) {
+            _user.duel.russianTextCountdown = 1;
+        }
     }
 }
 
-const REGULAR_MOVE_LIST = [AdaptPP, BigGuy, BigSatan, Boomerang, BrocketeerDive, BronanSlam,
+const REGULAR_MOVE_LIST = [AcidCover, AdaptPP, Barrel, BigGuy, BigSatan,
+    Boomerang, BrocketeerDive, BronanSlam,
     Bullet, DeadBro, EncrustPP, FlexBro, HighFiveBro,
-    Hologram, InterrogationPoint, Kick, LaughingSoul,
-    Pig, PregnantBro, PunchingPP, PunchingPPReallyHard,
+    Hologram, InterrogationPoint, KidneyShoot, Kick, LaughingSoul, LivingGod,
+    Martini, Pig, PregnantBro, PunchingPP, PunchingPPReallyHard,
     RedPill, RootOfNuisance, Save, SawBlade, Scout,
-    ShieldMove, Steel, TrapSign, TurkeyBomb, Yes];
+    ShieldMove, Steel, Swap, TrapSign, TurkeyBomb, Yes];

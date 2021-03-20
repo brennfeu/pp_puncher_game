@@ -64,12 +64,12 @@ class BattleScene extends Scene {
 
         this.duelStatusFrame = this.addImage("ui/battle/log_frame", 792, 1000);
         this.duelStatusTitle = this.addText("DUEL EFFECTS", 810, -1000, {fontStyle: 'bold'});
-        this.duelStatus = this.addText("", 810, -1000, {fontSize: '21px', wordWrap: {width: 400, height: 550}});
+        this.duelStatus = this.addText("", 810, -1000, {fontSize: '21px', wordWrap: {width: 395, height: 550}});
 
         this.addImage("ui/battle/heroes_bar", 0, 561);
 
         this.duel.logTitleObject = this.addText(this.duel.messageTitle, 810, 13, {fontStyle: 'bold', backgroundColor: "#000"});
-        this.duel.logTextObject = this.addText(this.duel.getAllMessages(), 810, 57, {fontSize: '21px', wordWrap: {width: 400, height: 550}}, getTextSpeed());
+        this.duel.logTextObject = this.addText(this.duel.getAllMessages(), 810, 57, {fontSize: '21px', wordWrap: {width: 395, height: 550}, backgroundColor: "#000"}, getTextSpeed());
 
         this.cursorHero = this.addImage("ui/cursor", -1000, -1000);
         this.cursorMove = this.addText(">", -1000, -1000, {fontSize: '21px'});
@@ -212,6 +212,7 @@ class BattleScene extends Scene {
             }
 
             this.duel.logTextObject.setText(this.duel.heroes[this.currentSelectHero].getDescription(), true);
+            if (this.duel.logTextObject.height >= 510) AchievementManager.unlockAchievement(10); // UI Breaker
             if (this.moveList.length == 0) this.updateMovepoolObjects();
 
             if (this.justPressedControl("ENTER")) {
@@ -360,6 +361,7 @@ class BattleScene extends Scene {
 
             while (this.duel.logTextObject.height > Math.min(500, this.duelStatusFrame.y-60)) {
                 this.duel.deleteFirstMessage();
+                this.duel.logTextObject.setText(this.duel.getAllMessages());
             }
         }
         else if (this.duel.duelState == "turnChange") {
@@ -386,6 +388,7 @@ class BattleScene extends Scene {
 
             while (this.duel.logTextObject.height > Math.min(500, this.duelStatusFrame.y-60)) {
                 this.duel.deleteFirstMessage();
+                this.duel.logTextObject.setText(this.duel.getAllMessages());
             }
         }
         else if (this.duel.duelState == "eventPlay") {
@@ -451,6 +454,7 @@ class BattleScene extends Scene {
 
             while (this.duel.logTextObject.height > Math.min(500, this.duelStatusFrame.y-60)) {
                 this.duel.deleteFirstMessage();
+                this.duel.logTextObject.setText(this.duel.getAllMessages());
             }
         }
         else if (this.duel.duelState == "waiting") {
@@ -592,8 +596,8 @@ class BattleScene extends Scene {
         try {
             var l = this.duel.heroes[this.currentSelectHero].currentMovepool;
             var yValue = 542; // must change cursor coordinate as well
-            for (var i in l) {
-                this.moveList.push(this.addText(l[i].newInstance().name, 520, i*18+yValue-(l.length*18), {fontSize: '21px'}));
+            for (var i = l.length - 1; i >= 0; i--) {
+                this.moveList.push(this.addText(l[i].newInstance().name, 520, i*18+yValue-(l.length*18), {fontSize: '21px', backgroundColor: '#000'}));
             }
 
             this.moveFrame.setY(yValue - (15 + l.length*18));
@@ -634,10 +638,13 @@ class BattleScene extends Scene {
         this.selectedMove = _move;
         this.currentSelectTarget = 0;
 
-        if (!this.selectedMove.newInstance().needsTarget) {
+        if (this.selectedMove.newInstance().needsTarget && this.selectedHero.chosenTarget == null) {
+            this.duel.duelState = "targetChoice";
+        }
+        else {
             this.duel.duelState = "heroChoice";
 
-            this.duel.fighterSelectsMove(this.selectedHero, this.selectedMove, null);
+            this.duel.fighterSelectsMove(this.selectedHero, this.selectedMove, this.selectedHero.chosenTarget);
             this.selectedHero = null;
             this.selectedMove = null;
 
@@ -648,9 +655,6 @@ class BattleScene extends Scene {
 
             this.selectionDirection = "right";
             this.updateMovepoolObjects();
-        }
-        else {
-            this.duel.duelState = "targetChoice";
         }
     }
     checkEnemiesObjects() {
@@ -715,7 +719,9 @@ class BattleScene extends Scene {
                 var counter = 0;
                 for (var j in this.duel.heroes[i].getAllStatus()) {
                     if (this.duel.heroes[i].getAllStatus()[j]["icon"] != null) {
-                        this.duel.heroes[i].statusIconObjects.push(this.addImage("status/" + this.duel.heroes[i].getAllStatus()[j]["icon"], this.duel.heroes[i].spriteObject.x + 115 + (counter*20), this.duel.heroes[i].spriteObject.y + 3));
+                        var coordX = this.duel.heroes[i].spriteObject.x + 115 + ((counter%9)*20);
+                        var coordY = this.duel.heroes[i].spriteObject.y + 3 + (Math.floor(counter/9)*20);
+                        this.duel.heroes[i].statusIconObjects.push(this.addImage("status/" + this.duel.heroes[i].getAllStatus()[j]["icon"], coordX, coordY));
                         counter += 1;
                     }
                 }

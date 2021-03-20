@@ -275,6 +275,42 @@ GodManager.loadList([
             _user.duel.memorySoundEffects.push("darkMagic");
         }
     ),
+    new RegularGod(
+        "Villager",
+        [
+            "A square-shaped human with a big nose who likes to trade and most of the time scam people.",
+            "Gets a new Special Charge in 5 turns. If already waiting for one, instantly gets it instead.",
+            "Gets a new Regular Charge in 3 turns. If already waiting for one, instantly gets it instead."
+        ],
+        function(_user, _target = null) { // regular move
+            if (_user.gettingSpecialCharge > 0) {
+                _user.duel.addMessage(_user.getName() + " gets a new special charge!");
+                _user.specialCharges += 1;
+                _user.gettingSpecialCharge = 0;
+            }
+            else {
+                _user.duel.addMessage(_user.getName() + " will get a new special charge in a few turns!");
+                _user.gettingSpecialCharge = 6;
+            }
+
+            _user.duel.addAnimation("nose", 60, _user);
+            _user.duel.memorySoundEffects.push("mmh");
+        },
+        function(_user, _target = null) { // special move
+            if (_user.gettingRegularCharge > 0) {
+                _user.duel.addMessage(_user.getName() + " gets a new regular charge!");
+                _user.regularCharges += 1;
+                _user.gettingRegularCharge = 0;
+            }
+            else {
+                _user.duel.addMessage(_user.getName() + " will get a new regular charge in a few turns!");
+                _user.gettingRegularCharge = 4;
+            }
+
+            _user.duel.addAnimation("nose", 60, _user);
+            _user.duel.memorySoundEffects.push("mmh");
+        }
+    ),
 
     // Waifus
     // TOUSE description for a waifu "An isekai girl that got isekai-ed into the PP Punch multiverse."
@@ -298,6 +334,43 @@ GodManager.loadList([
         }
     ),
     new Waifu(
+        "Rias",
+        [
+            "Demon Girl, chess master and the main girl of the Harem King.",
+            "Gets +2 DEX and +20 STR. If used again, the amount doubles until reaching 6 uses.",
+            "For the remaining turn, all damages dealt to the opponent team are dealt to every opponents. Inflicts <highest opponents STR>/5 damages to every opponents."
+        ],
+        function(_user, _target = null) { // regular move
+            _user.chessPromotion += 1;
+			if (_user.chessPromotion > 6) {
+				_user.duel.addMessage(_user.getName() + " already is at maximum promotion!");
+				_user.chessPromotion -= 1;
+			}
+			else if (_user.chessPromotion > 1) {
+				_user.duel.addMessage(_user.getName() + " gets a promotion!");
+                _user.duel.memorySoundEffects.push("ohYeah");
+                _user.duel.addAnimation("promotion", 60, _user);
+			}
+			else {
+				_user.duel.addMessage(_user.getName() + "'s becomes Rias' pawn!");
+                _user.duel.memorySoundEffects.push("ohYeah");
+                _user.duel.addAnimation("rook", 60, _user);
+			}
+        },
+        function(_user, _target = null) { // special move
+            _user.duel.addMessage(_user.getName() + " summons the Demonic Star of Destruction - The Extinquished Star!");
+
+            var l = _user.duel.getOppsOf(_user);
+            for (var i in l) {
+                l[i].trappedInStar = true;
+                _user.duel.addMessage(l[i].getName() + " is trapped in the star!");
+            }
+
+            _user.duel.memorySoundEffects.push("darkMagic");
+            _user.duel.addAnimation("summon", 60, _user);
+        }
+    ),
+    new Waifu(
         "Ryuko",
         [
             "Wait, isn't she the waifu of a black and red hedgehog?",
@@ -306,11 +379,11 @@ GodManager.loadList([
         ],
         function(_user, _target = null) { // regular move
             _user.lifeFibers += 1;
-			if (_user.lifeFibers >= 20) {
+			if (_user.lifeFibers > 20) {
 				_user.duel.addMessage(_user.getName() + " already is completely fused with life fiber!");
 				_user.lifeFibers -= 1;
 			}
-			if (_user.lifeFibers > 1) {
+			else if (_user.lifeFibers > 1) {
 				_user.duel.addMessage(_user.getName() + "'s body fuses with more life fibers!");
                 _user.duel.memorySoundEffects.push(_user.getHurtSound());
                 _user.duel.addAnimation("fiber", 60, _user);
@@ -344,7 +417,7 @@ GodManager.loadList([
         ],
         function(_user, _target = null) { // regular move
             _user.duel.addMessage(_user.getName() + " staples " + _target.getName() + "'s PP!")
-			if (_target.damage(Math.floor(_user.STR/10))) {
+			if (_target.damage(Math.floor(_user.STR/10), "attack", _user)) {
                 _target.bleedDamage += Math.floor(_user.STR/10);
             }
 
@@ -358,9 +431,59 @@ GodManager.loadList([
             _user.duel.memorySoundEffects.push("darkMagic");
             _user.duel.addAnimation("cursed", 60, _target, true, false);
         }
-    )
+    ),
 
     // Eldritch Gods
+
+    // Wyndoella
+    new God(
+        "Wyndoella",
+        [
+            "The one and only Overgod, Wyndoella is all worlds. She’s everything and everyone, beyond space, time, and every other concept you could think of.",
+            "Resurrects all allies.",
+            "Grants godhood, increasing STR and DEX by 10000. Only works on important people.",
+            "Grants the shield of faith, which reduces direct damages by 5 times the amount of gods you have."
+        ],
+        "overgod",
+        function(_user, _target = null) { // regular move
+            var l = _user.duel.getAlliesOf(_user);
+            var deadAllies = [];
+            for (var i in l) {
+                if (l[i].isDead()) {
+                    deadAllies.push(l[i]);
+                }
+            }
+
+            if (deadAllies.length <= 0) {
+                _user.duel.addMessage("But no one is in need of a resurrection!");
+            }
+            else {
+                for (var i in deadAllies) {
+                    deadAllies[i].setSTR(100);
+                    _user.duel.addMessage(deadAllies[i].getName() + " resurrects!");
+                    _user.duel.addAnimation("heal", 60, deadAllies[i]);
+                }
+                _user.duel.memorySoundEffects.push("heal");
+            }
+        },
+        function(_user, _target = null) { // special move
+            if (!_user.isOfInterest()) {
+                _user.duel.addMessage(_user.getName() + " cannot comprehend Wyndoella, and becomes mad.");
+                _user.madnessStacks += 5;
+                return false;
+            }
+            _user.duel.addMessage("Wyndoella grants " + _user.getName() + " Godhood.");
+
+            var storedMove = {};
+            storedMove["user"] = _user;
+            storedMove["move"] = LivingGod;
+            storedMove["target"] = _target;
+            _user.duel.memoryMoves.push(storedMove);
+        },
+        function(_user) { // trigger move
+            _user.shieldOfFaith = true;
+        }
+    )
 ]);
 GodManager.STARTER_GODS = [
     "Brenn", "Country Music Brenn", "Chad Brenn",

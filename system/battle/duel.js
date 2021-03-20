@@ -35,12 +35,19 @@ class Duel {
         // effects
         this.forcedDuelEffects = null;
         this.steelProtection = false;
+        this.barrelWeakening = false;
         this.noDexModifier = false;
         this.illegalLegal = false;
         this.forceConfusion = false;
         this.allowCheating = false;
         this.forceSatan = false;
         this.triggeredChaos = false;
+
+        this.uwuText = false;
+        this.christianText = false;
+        this.sexyTextCountdown = 0;
+        this.leetTextCountdown = 0;
+        this.randomCapTextCountdown = 0;
 
         // parameters
         this.parameters = {};
@@ -62,7 +69,7 @@ class Duel {
         // next encounters
         this.nextEncounters = [];
         if (this.hasParam("nextEncounters")) {
-            this.nextEncounters = this.getParam("nextEncounters");
+            this.nextEncounters = this.getParam("nextEncounters").slice();
         }
 
         // Objects on screen --> instantiated by battle scene
@@ -86,13 +93,18 @@ class Duel {
         }
         this.enemies = [];
         for (var i in _enc.enemyList) {
+            Logger.log("Enemy instanciation", "duelShit", _enc.enemyList[i])
             this.enemies.push(_enc.enemyList[i]);
+            _enc.enemyList[i].duel = this;
+            _enc.enemyList[i].initForDuel();
         }
     }
 
     startDuel() {
-        for (var i in this.getAllFighters()) {
-            this.getAllFighters()[i].duel = this; // can't do it in constructor cause not instantiated yet :(
+        var l = this.getAllFighters();
+        for (var i in l) {
+            l[i].duel = this; // can't do it in constructor cause not instantiated yet :(
+            l[i].initForDuel();
         }
 
         this.setTitle("DUEL START");
@@ -110,7 +122,11 @@ class Duel {
             this.triggerEvent(4);
         }
 
-        this.startNewTurn(true);
+        // random start event?
+        if (!this.rollEvent(true)) {
+            // start first turn
+            this.startNewTurn(true);
+        }
     }
 
     startNewTurn(_skipTurnChange = false) {
@@ -232,10 +248,14 @@ class Duel {
         this.turnCount += 1;
 
         this.steelProtection = false;
+        this.barrelWeakening = false;
         this.noDexModifier = false;
         this.illegalLegal = false;
         this.forceConfusion = false;
         this.allowCheating = false;
+        this.sexyTextCountdown = Math.max(0, this.sexyTextCountdown-1);
+        this.leetTextCountdown = Math.max(0, this.leetTextCountdown-1);
+        this.randomCapTextCountdown = Math.max(0, this.randomCapTextCountdown-1);
         if (getRandomPercent() <= 50) this.forceSatan = false;
 
         if (this.checkParam("turnCountdown", this.turnCount)) {
@@ -243,7 +263,7 @@ class Duel {
             return;
         }
     }
-    rollEvent() {
+    rollEvent(_onlyStart = false) {
         this.forceEventLoop += 1;
         if (this.checkParam("forceEventLoop", this.forceEventLoop) && this.hasParam("forceEvent")) {
             this.forceEventLoop = 0;
@@ -251,18 +271,22 @@ class Duel {
         }
 
         if (this.checkParam("forceBasicEvents", true)) return this.triggerEvent(randomFromList([0, 1, 2]));
-        if (ProgressManager.getUnlockedGameMechanics().indexOf("Events") < 0) return;
+        if (ProgressManager.getUnlockedGameMechanics().indexOf("Events") < 0) return false;
 
         var randomRoll = getRandomPercent();
         var events = ProgressManager.getUnlockedEvents();
         for (var i in events) {
+            if (EventManager.getEvent(events[i]).onlyStart != _onlyStart) continue;
+
             randomRoll -= EventManager.getEvent(events[i]).likeness;
             if (randomRoll <= 0) {
                 var ev = EventManager.getEvent(events[i]);
                 if (ev.nbMoveRequired > this.moveCount) return;
-                return this.triggerEvent(ev.id);
+                this.triggerEvent(ev.id);
+                return true;
             }
         }
+        return false;
     }
     eventNext() {
         if (this.eventMemory.length <= 0) return this.newTurn();
@@ -278,6 +302,7 @@ class Duel {
         this.duelState = "eventPlay";
         this.eventMemory.push(EventManager.getEvent(_eventId));
         this.eventNext();
+        return true;
     }
 
     fighterSelectsMove(_fighter, _move, _target) {
@@ -295,8 +320,16 @@ class Duel {
     }
     enemiesSelectTheirMoves() {
         for (var i in this.enemies) {
-            this.enemies[i].selectMove();
-            if (this.enemies[i].chosenMove != null && this.enemies[i].chosenMove.newInstance().needsTarget) this.enemies[i].selectTarget();
+            // select move?
+            if (this.enemies[i].chosenMove == null) {
+                this.enemies[i].selectMove();
+            }
+
+            // select target?
+            if (this.enemies[i].chosenMove != null && this.enemies[i].chosenMove.newInstance().needsTarget
+                && this.enemies[i].chosenTarget == null) {
+                this.enemies[i].selectTarget();
+            }
         }
     }
     getValidHeroesNb() {
@@ -467,6 +500,11 @@ class Duel {
         }
         return null;
     }
+    fakeFighter(_name) {
+        var a = new FakeEnemy(_name);
+        a.duel = this;
+        return a;
+    }
 
     getTheme() {
         if (this.duelState == "victory" && this.getVictoryTheme() != null) return this.getVictoryTheme();
@@ -498,7 +536,41 @@ class Duel {
     }
 
     addMessage(_message) {
-        this.messageList.push(_message.split("\n").join("|"));
+        var message = _message.split("\n").join("|");
+
+        // real messages may get a change lol
+        if (message.length > 3 && message.split(" ").length > 1) {
+            if (this.randomCapTextCountdown > 0) {
+                var lettres = message.split("");
+            	for (var i = 0; i < lettres.length; i++) {
+            		if (getRandomPercent() <= 33) {
+            			lettres[i] = lettres[i].toUpperCase();
+            		}
+            	}
+            	message = lettres.join("");
+            }
+            if (this.uwuText) {
+                message = message.split(" ");
+                for (var i in message) {
+                    if (getRandomPercent() <= 5 && /^[a-zA-Z]+$/.test(message[i])) {
+                        message[i] = "fuck"
+                    }
+                }
+                message = message.join(" ")
+
+                if (getRandomPercent() <= 15) {
+                    message += " uwu";
+                }
+                else if (getRandomPercent() <= 25) {
+                    message += " owo";
+                }
+                else if (getRandomPercent() <= 35) {
+                    message += " TwT";
+                }
+            }
+        }
+
+        this.messageList.push(message);
     }
     getAllMessages() {
         var str = "";
@@ -532,10 +604,16 @@ class Duel {
     }
     getDuelEffects() {
         if (this.forcedDuelEffects != null) return this.forcedDuelEffects;
-        
+
         var txt = "";
         if (this.steelProtection) {
-            txt += "- Damages are reduced to 10%.\n"
+            txt += "- Damages are reduced to ";
+            var amount = 10;
+            if (this.barrelWeakening) amount = 30;
+            txt += amount + "%.\n"
+        }
+        if (this.barrelWeakening) {
+            txt += "- Damages are increased to 300%.\n"
         }
         if (this.noDexModifier) {
             txt += "- Moves' DEX modifiers have no effect.\n"

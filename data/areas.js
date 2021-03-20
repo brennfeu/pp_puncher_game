@@ -14,5 +14,9 @@ AreaManager.loadList([
     { // 3
         "name": "Allfaiths Temple",
         "description": "An old temple in which you can pray for every existing god. There's either an incredible amount of people LARPing here, either something strange happening here."
+    },
+    { // 4
+        "name": "Christian Settlement",
+        "description": "This place is largest complex of christian activities, where everyone prays The Lord every day. It is being said that a lot of relics are stored there."
     }
 ]);

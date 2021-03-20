@@ -84,8 +84,11 @@ class QuestSteps {
         this.unlockEvents = _data.unlockEvents;
         this.unlockGods = _data.unlockGods;
         this.unlockArtworks = _data.unlockArtworks;
+        this.unlockRelics = _data.unlockRelics;
 
         this.saveWaifu = _data.saveWaifu;
+
+        this.ppCoinsPrice = _data.ppCoinsPrice;
 
         this.goToMultiplayerScene = _data.goToMultiplayerScene;
         if (this.goToMultiplayerScene == undefined) this.goToMultiplayerScene = false;

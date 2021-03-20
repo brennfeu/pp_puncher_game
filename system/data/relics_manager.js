@@ -4,6 +4,17 @@ class Relic {
 
         this.name = _data.name;
         this.description = _data.description;
+        this.usage = _data.usage;
+        this.wielder = PartyManager.getPartyMemberByName(_data.wielder);
+    }
+
+    getDescription(_includeName = false) {
+        var txt = "";
+        if (_includeName) txt += this.name + "\n\n";
+        txt += this.description;
+        txt += "\n\n" + this.usage;
+        txt += "\n\nWielder: " + this.wielder.name;
+        return txt;
     }
 }
 

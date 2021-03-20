@@ -57,7 +57,8 @@
 		<script src="./system/battle/moves/other_moves.js"></script>
 		<script src="./system/battle/moves/move_manager.js"></script>
 
-		<script src="./system/battle/enemies/machine.js"></script>
+		<script src="./system/battle/enemies/fakeEnemies.js"></script>>
+		<script src="./system/battle/enemies/machine.js"></script>>
 		<script src="./system/battle/enemies/weeb.js"></script>
 		<script src="./system/battle/enemies/people.js"></script>
 		<script src="./system/battle/enemies/ikeaGuard.js"></script>
@@ -67,6 +68,8 @@
 		<script src="./system/battle/enemies/magicOpponents.js"></script>
 		<script src="./system/battle/enemies/wyndoella.js"></script>
 		<script src="./system/battle/enemies/demons.js"></script>
+		<script src="./system/battle/enemies/christians.js"></script>
+		<script src="./system/battle/enemies/alien.js"></script>
 		<script src="./system/battle/enemies/multiplayer_fighter.js"></script>
 
 		<script src="./data/areas.js"></script>
@@ -80,10 +83,15 @@
 		<script src="./data/artworks.js"></script>
 
 		<script>var GAME = new Phaser.Game(GAME_CONFIG);</script>
+		<script>if (getRandomPercent() <= 1) document.title = "Puncher of PPs";</script>
 
 		<style>
 			* { margin: 0; padding: 0; }
-			body { background-color: black; }
+			body {
+				background-color: black;
+				margin-top: -17px;
+				overflow: hidden;
+			}
 		</style>
 
 		<title>PP Puncher</title>

@@ -29,4 +29,10 @@ ArtworkManager.loadList([
         "artworkPath": "oeil.jpg",
         "artist": "elizibar"
     },
+    { // fear me pls
+        "name": "fear me pls",
+        "description": "A floating pair of sunglasses that likes to scare people. When its body appear, it gets way more likely to be scared by him.",
+        "artworkPath": "fear.png",
+        "artist": "CPU(?)"
+    },
 ]);

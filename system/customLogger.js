@@ -1,5 +1,5 @@
 class Logger {
-    static log(_txt, _logId, _optionalObj = null) {
+    static log(_txt, _logId = null, _optionalObj = null) {
         if (!DEV_MODE) return;
 
         var l = new CustomLog(_txt, _logId, _optionalObj);
@@ -9,7 +9,7 @@ class Logger {
     static warning(_txt, _optionalObj = null) {
         if (!DEV_MODE) return;
 
-        var l = new CustomLog(_txt, "warning", _optionalObjs);
+        var l = new CustomLog(_txt, "warning", _optionalObj);
         Logger.allLogs.push(l);
         l.log();
     }
@@ -38,7 +38,8 @@ class CustomLog {
     }
 
     log() {
-        console.log(this.logId.toUpperCase() + " (" + this.timestamp + "): " + this.txt);
+        if (this.logId != null) console.log(this.logId.toUpperCase() + " (" + this.timestamp + "): " + this.txt);
+        else console.log("??? (" + this.timestamp + "): " + this.txt);
         if (this.optionalObj != null) console.log(this.optionalObj)
         if (LOG_TRACE) console.trace();
     }

@@ -71,3 +71,25 @@ class GigaWeeb extends MegaWeeb {
         this.STRValue = this.STRValue*2;
     }
 }
+
+class BleachCoveredWeeb extends Weeb {
+    constructor(_name = "Bleach-Covered Weeb") {
+        super(_name);
+
+        this.STRValue = 500;
+        this.DEXValue = 40;
+        this.specialArmorValue = 1000;
+
+        this.isBoss = true;
+    }
+
+    turnChange() {
+        super.turnChange();
+        this.bleachCountdown = 0;
+    }
+
+    hasRelic(_id) {
+        if (_id == 4) return true;
+        return super.hasRelic(_id);
+    }
+}

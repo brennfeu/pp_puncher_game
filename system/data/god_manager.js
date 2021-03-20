@@ -14,18 +14,19 @@ class God {
 
         txt += "\n\n\nRegular Move: " + this.description[1];
         txt += "\n\nSpecial Move: " + this.description[2];
-        if (this.startFunction != null) txt += "\n\nStart Bonus: " + this.description[3];
+        if (this.startFunction != null) txt += "\n\nTrigger Move: " + this.description[3];
 
         return txt;
     }
 
-    getRegularAttackAsMove() {
-        var move = MoveManager.createMove(function(_user, _target = null, _godName = this.__proto__.constructor.godName) {
+    getRegularAttackAsMove(_showGodMessage = true) {
+        var move = MoveManager.createMove(function(_user, _target = null, _godName = this.__proto__.constructor.godName, _showGodMessage = this.__proto__.constructor.showGodMessage) {
             var g = GodManager.getGod(_godName);
-            _user.duel.addMessage(g.name + " answers his calls!");
+            if (_showGodMessage) _user.duel.addMessage(g.name + " answers his calls!");
             g.normalMove(_user, _target);
         });
         move.godName = this;
+        move.showGodMessage = _showGodMessage;
 
         return move;
     }

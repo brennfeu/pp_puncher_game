@@ -27,9 +27,11 @@ class MultiplayerScene extends Scene {
             // so each instance has a different ID
             if (DEV_MODE) userId = getRandomPercent()*getRandomPercent()*getRandomPercent();
             Logger.log("User ID: " + userId, "multiplayer");
+
+            this.forceReturnBack = false;
         }
         catch(e) {
-            // TODO show error message and go back
+            this.forceReturnBack = true;
             throw e;
         }
 
@@ -75,6 +77,7 @@ class MultiplayerScene extends Scene {
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     update() { try {
+        if (this.forceReturnBack) return this.quitScene();
         if (this.isInOptions) {
             return this.optionsUpdate();
         }

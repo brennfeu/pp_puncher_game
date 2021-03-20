@@ -4,8 +4,18 @@ class PartyMember {
         this.name = _name;
 
         this.fightingStyles = [];
-        this.relics = null;
         this.gods = [];
+    }
+
+    get relics() {
+        var l = [];
+
+        var allRelics = ProgressManager.getUnlockedRelics();
+        for (var i in allRelics) {
+            if (allRelics[i].wielder.name == this.name) l.push(allRelics[i].id)
+        }
+
+        return l;
     }
 
     getDescription(_currentSelect = null) {

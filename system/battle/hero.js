@@ -22,8 +22,14 @@ class Hero extends Fighter {
             this.currentMovepool = forcedPool;
             return;
         }
+        else if (this.kidneyCurse > 0) {
+            this.currentMovepool = [ KidneyShoot, SuperKidneyShoot ];
+        }
         else {
             var commonMoves = [PunchingPP, PunchingPPReallyHard, Hologram, FlexBro, HighFiveBro];
+            if (this.isTrolled > 0) {
+                commonMoves = [ Barrel ]
+            }
             if (this.hasFightingStyle("versatile")) {
                 commonMoves.push(AdaptPP);
             }
@@ -31,6 +37,7 @@ class Hero extends Fighter {
             for (var i in commonMoves) {
                 while (this.currentMovepool.length <= i) {
                     var randomMove = this.getRandomMoveFromList(REGULAR_MOVE_LIST);
+                    if (this.legatoActivated) randomMove = this.getRandomMoveFromList(MoveManager.MOVE_LIST);
 
                     // 20% chance to be a common move
                     if (getRandomPercent() <= 20) {
@@ -75,8 +82,8 @@ class Hero extends Fighter {
         }
 
         // adds gods moves if has charges and gods
-        if (this.regularCharges > 0 && this.godsList.length > 0) this.currentMovepool.push(RegularPriestMove);
-        if (this.specialCharges > 0 && this.godsList.length > 0) this.currentMovepool.push(SpecialPriestMove);
+        if (this.regularCharges > 0 && this.godsList.length > 0 && !this.isSilenced) this.currentMovepool.push(RegularPriestMove);
+        if (this.specialCharges > 0 && this.godsList.length > 0 && !this.isSilenced) this.currentMovepool.push(SpecialPriestMove);
 
         this.currentMovepool = shuffleArray(this.currentMovepool);
         this.hasNewMovepool = true; // scene reloads moves
@@ -88,7 +95,9 @@ class Hero extends Fighter {
         var tries = 0;
         while (tries <= 100000) {
             var move = this.getRandomMove();
-            if (_list.indexOf(move) > -1) {
+            if (_list.indexOf(move) > -1 ||
+              (move == PPBibleMove && this.hasRelic(2) && this.rollLuckPercentLow() <= 50) ||
+              (move == DrinkFromChalice && this.hasRelic(0) && this.rollLuckPercentLow() <= 5)) {
                 return move;
             }
 
@@ -134,6 +143,9 @@ class Hero extends Fighter {
 
     getDangerLevel() { // used for killer blessing
         return 3;
+    }
+    isOfInterest() {
+        return true
     }
     isHero() {
         return true;
