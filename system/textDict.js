@@ -98,18 +98,18 @@ class TextDict extends Phaser.GameObjects.Text {
         }
         // leet
         if (CURRENT_SCENE != null && CURRENT_SCENE.duel != null && CURRENT_SCENE.duel.leetTextCountdown > 0) {
-            _txt = _txt.split("o").join("0");
-        	_txt = _txt.split("O").join("0");
-        	_txt = _txt.split("i").join("1");
-        	_txt = _txt.split("I").join("1");
-        	_txt = _txt.split("e").join("3");
-        	_txt = _txt.split("E").join("3");
-        	_txt = _txt.split("a").join("4");
-        	_txt = _txt.split("A").join("4");
-        	_txt = _txt.split("s").join("5");
-        	_txt = _txt.split("S").join("5");
-        	_txt = _txt.split("b").join("8");
-        	_txt = _txt.split("B").join("8");
+            txt = txt.split("o").join("0");
+        	txt = txt.split("O").join("0");
+        	txt = txt.split("i").join("1");
+        	txt = txt.split("I").join("1");
+        	txt = txt.split("e").join("3");
+        	txt = txt.split("E").join("3");
+        	txt = txt.split("a").join("4");
+        	txt = txt.split("A").join("4");
+        	txt = txt.split("s").join("5");
+        	txt = txt.split("S").join("5");
+        	txt = txt.split("b").join("8");
+        	txt = txt.split("B").join("8");
         }
 
         // reverse texte: txt = txt.split("").reverse().join("").split(" ").reverse().join(" ")

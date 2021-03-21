@@ -472,10 +472,10 @@ class Scene extends Phaser.Scene {
         this.forceTint = [];
 
         try {
-            GREENWORKS.setStat("COMP_AREAS", ProgressManager.getNbCompletedAreas());
+            GREENWORKS.setStat("COMP_AREAS", AreaManager.getNbCompletedAreas());
             GREENWORKS.storeStats(
                 function(_idk) {
-                    if (ProgressManager.getNbCompletedAreas() >= 13) {
+                    if (AreaManager.getNbCompletedAreas() >= 13) {
                         AchievementManager.unlockAchievement(9); // World Tour
                     }
                 },
