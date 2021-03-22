@@ -625,10 +625,6 @@ class Encounter {
                 this.addEnemy(new ThePope(), 170);
                 this.addEnemy(new EpicShinigami(), 450);
                 break;
-            case("benedictNDemon"):
-                this.addEnemy(new ThePope(), 170);
-                this.addEnemy(new EpicShinigami(), 450);
-                break;
             case("powerOfGodAndAnime"):
                 this.addEnemy(new ChristianPriest(), 76);
                 this.addEnemy(new ThePopeFinal(), 290);

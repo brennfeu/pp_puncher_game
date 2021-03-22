@@ -16,7 +16,7 @@ class MultiplayerScene extends Scene {
     create() { try {
         try {
             var ppPoints = ProgressManager.getValue("PP_Points");
-            if (ppPoints == undefined || ppPoints == null) {
+            if (ppPoints == undefined) {
                 ppPoints = 0;
                 ProgressManager.setValue("PP_Points", 0);
             }

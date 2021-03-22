@@ -292,10 +292,7 @@ class BrennStyleJSON {
     }
 
     static setJSON(_obj, _json) {
-        if (_obj == undefined || _obj == null) {
-            _obj = _json;
-            return;
-        }
+        if (_obj == undefined) return;
         for (var i in _json) {
             // Handle Object
             if (_json[i] instanceof Array) {

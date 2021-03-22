@@ -274,7 +274,6 @@ class ThePope extends ChristianArchBishop {
             for (var i in l) {
                 if (l[i].isDead()) continue;
 
-                var dexGain = Math.floor(_user.getHealValue()/15)
                 _user.duel.addMessage(l[i].getName() + " gains an extra life!");
                 _user.extraLife += 1;
             }
