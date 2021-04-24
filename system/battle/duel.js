@@ -309,6 +309,8 @@ class Duel {
         _fighter.chosenMove = _move;
         _fighter.chosenTarget = _target;
 
+        if (_move != null) _fighter.moveHistory.push(_move);
+
         this.checkAllFightersAttacks();
     }
 
@@ -323,6 +325,8 @@ class Duel {
             // select move?
             if (this.enemies[i].chosenMove == null) {
                 this.enemies[i].selectMove();
+
+                this.enemies[i].moveHistory.push(this.enemies[i].chosenMove);
             }
 
             // select target?
@@ -394,7 +398,7 @@ class Duel {
                 }
             }
 
-            this.mainFighter = this.getAllFighters(true)[this.currentFighterIndex];
+            this.mainFighter = f;
             if (this.mainFighter.isAlive() && this.messageList.length > 0) this.addTextSeparator();
 
             if (this.mainFighter.chosenMove.newInstance().autoPass ||
@@ -405,8 +409,10 @@ class Duel {
                 this.getAllFighters(true)[this.currentFighterIndex].DEXBonus = 0;
             }
             else {
-                this.getAllFighters(true)[this.currentFighterIndex].DEXBonus += 5;
-                this.addMessage(this.getAllFighters(true)[this.currentFighterIndex].getName() + "'s move failed!");
+                this.mainFighter.DEXBonus += 5;
+                if (this.mainFighter.hasStand(4) && this.mainFighter.chosenMove == Hologram) this.mainFighter.DEXBonus += 5;
+
+                this.addMessage(this.mainFighter.getName() + "'s move failed!");
                 this.addAnimation("miss", 60, this.mainFighter);
             }
         }
@@ -452,6 +458,7 @@ class Duel {
         }
 
         _fighter.executeMove();
+        _fighter.checkForStand();
     }
 
     getAllFighters(_orderByDexRoll = false) {
@@ -500,8 +507,8 @@ class Duel {
         }
         return null;
     }
-    fakeFighter(_name) {
-        var a = new FakeEnemy(_name);
+    fakeFighter(_name, _Class = FakeEnemy) {
+        var a = new _Class(_name);
         a.duel = this;
         return a;
     }
