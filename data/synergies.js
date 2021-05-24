@@ -34,4 +34,9 @@ GodManager.loadSynergyList([
         ["Brenn", "waifu"],
         "Direct damages are reduced by 10."
     ),
+    new Synergy(
+        "Valurin Duality",
+        ["The Brain", "The Brawn"],
+        "Has 5% chance to use an attack twice."
+    ),
 ]);

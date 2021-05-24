@@ -14,11 +14,11 @@ var GAME_CONFIG = {
 // phaser.js + credits.html + greenworks.js = 106238 lines of code(source only)
 // CTRL + SHIFT + ALT + L to get total lines of code
 
-const DEV_MODE = false;
-const GAME_VERSION = (DEV_MODE ? "DEV " : "") + "Beta 1.3.0"; // Beta x.x --> Release x.x
+const DEV_MODE = true;
+const GAME_VERSION = (DEV_MODE ? "DEV " : "") + "Beta 1.4.0"; // Beta x.x --> Release x.x
 //const GAME_VERSION = "beta2";
 
-const DEV_TEST_MUSIC = true;
+const DEV_TEST_MUSIC = false;
 const DISABLE_MUSIC = DEV_MODE && !DEV_TEST_MUSIC;
 const SCALE_GAME = true;
 var DREAM_LUCK = false;
@@ -40,7 +40,13 @@ if (DEV_MODE) {
 }
 
 function getTextSpeed() {
-	return 3;
+	switch(GlobalVars.get("settings")["textSpeed"]) {
+		case 0: return 5; // Slow
+		case 1: return 3; // Normal
+		case 2: return 0; // Fast
+		case 3: return -5; // SuperSonic
+	}
+	return 3; // Normal - Default
 }
 
 function getRandomPercent() {
@@ -49,6 +55,9 @@ function getRandomPercent() {
 }
 function getCurrentTimestamp() {
 	return Math.floor(Date.now() / 1000);
+}
+function getCurrentMilliTimestamp() {
+	return Math.floor(Date.now());
 }
 
 function shuffleArray(array) {

@@ -58,6 +58,17 @@ AchievementManager.loadList([
         "steamName": "UI_BREAKER",
         "isHidden": true
     },
+    { // 11
+        "name": "Saxon Blood",
+        "description": "Shed the blood of the saxon men.",
+        "steamName": "SAXON_MEN"
+    },
+    { // 12
+        "name": "Only Apathy...",
+        "description": "... from the Pills in Me. Reach 10 RedPill Addiction.",
+        "steamName": "ONLY_APATHY",
+        "isHidden": true
+    },
 ]);
 AchievementManager.ACHIEVEMENT_LIST = AchievementManager.ACHIEVEMENT_LIST.sort(
     function (a, b) {

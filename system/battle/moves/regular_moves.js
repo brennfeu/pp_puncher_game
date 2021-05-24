@@ -302,6 +302,21 @@ class HighFiveBro extends Move {
         this.description = "When used by 2 fighters, they both get +50 STR and +20 DEX for the next turn!";
         this.needsTarget = false;
         this.autoPass = true;
+
+        if (CURRENT_SCENE != null && CURRENT_SCENE.duel != null) {
+            this.description += "\n\nHigh Five Ready:"
+
+            var txt = "";
+            for (var i in CURRENT_SCENE.duel.heroes) {
+                if (CURRENT_SCENE.duel.heroes[i].isDead()) continue;
+                if (CURRENT_SCENE.duel.heroes[i].currentMovepool.indexOf(HighFiveBro) > -1) txt += "\n" + CURRENT_SCENE.duel.heroes[i].getName();
+            }
+
+            if (txt == "") this.description += " None";
+            else this.description += txt;
+
+            this.description += "\n"
+        }
     }
 
     execute(_user, _target = null) {
@@ -320,7 +335,7 @@ class HighFiveBro extends Move {
         }
 
         _user.duel.addAnimation("highfive", 60, _user);
-        _user.duel.addMessage(_user.getName() + " wants an high five...");
+        _user.duel.addMessage(_user.getName() + " wants a high five...");
         _user.wantsHighFive = true;
 
         _user.duel.memorySoundEffects.push("hey");
@@ -494,10 +509,28 @@ class Martini extends Move {
             _user.duel.addMessage("...and gets a drunken PP!");
             _user.addFightingStyle("drunken");
             _user.DEXValue += 10;
-
-            _user.duel.addAnimation("drunken", 60, _user);
-            _user.duel.memorySoundEffects.push("drink");
         }
+
+        _user.duel.addAnimation("drunken", 60, _user);
+        _user.duel.memorySoundEffects.push("drink");
+    }
+}
+
+// UNLOCKED
+class Perhaps extends Move {
+    constructor() {
+        super();
+        this.name = "Perhaps";
+        this.description = "Skips your turn.";
+        this.autoPass = true;
+        this.needsTarget = false;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " thinks about life and the universe...");
+        _user.duel.addMessage("Wait he forgot about the battle!");
+
+        _user.duel.addAnimation("perhaps", 60, _user);
     }
 }
 

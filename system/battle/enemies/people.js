@@ -73,3 +73,31 @@ class YandereDev extends UniquePeople {
         else super.selectMove();
     }
 }
+
+class Valurin extends UniquePeople {
+    constructor(_name = "Valurin") {
+        super(_name);
+
+        this.STRValue = 300;
+        this.DEXValue = 50;
+    }
+}
+class ValurinBadger extends Enemy {
+    constructor(_name = "Badger") {
+        super(_name);
+
+        this.STRValue = 100;
+        this.DEXValue = 40;
+
+        this.currentMovepool = [ PunchingPP ];
+    }
+}
+
+class LoliconNota extends Deredere {
+    constructor(_name = "Lolicon Nota") {
+        super(_name);
+
+        this.STRValue = 300;
+        this.DEXValue = 50;
+    }
+}

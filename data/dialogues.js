@@ -79,7 +79,7 @@ DialogueManager.loadList([
         "dialogueLines": [
             {
                 "speaker": "Pudding",
-                "text": "As you can see, there are only 2 stats in the game : STR and DEX."
+                "text": "As you can see, there are only 2 stats in the game: STR and DEX."
             },
             {
                 "text": "STR is about how strong you can punch PP. The more you have, the more damages your punches will deal. It's also your HP, so don't get it below 0!"
@@ -94,7 +94,7 @@ DialogueManager.loadList([
                 "text": "Each turn, we can use one of 5 moves. Those 5 moves are chosen randomly between all of our known moves, though for now we only know 5, so we don't have much a choice."
             },
             {
-                "text": "Moves that aren't against a specific target test their DEX against the average DEX of your opponents. Missing a move grants 5 temporary bonus DEX."
+                "text": "Moves that aren't against a specific target test their DEX against the average DEX of your opponents, but you have a 30 DEX bonus to use the move if you don't get damaged before using it. Missing a move grants 5 temporary bonus DEX."
             }
         ]
     },
@@ -444,9 +444,6 @@ DialogueManager.loadList([
             },
             {
                 "text": "If you haven't done it yet, there are side quests you can complete, to unlock additional stuff."
-            },
-            {
-                "text": "Also, here's a hint for a secret game mechanic: there's a way to play the move you want instead of being limited to the 5 random ones."
             },
             {
                 "text": "Also, if you have some free time, please send your feedback to the dev so he can make the game better for everyone."
@@ -1099,6 +1096,15 @@ DialogueManager.loadList([
             {
                 "text": "Anyway, we've got stuff to do. Let's go to the next area."
             },
+            {
+                "text": "We'll find an old friend of Espinoza there. From what I understood, they knew each other in prison."
+            },
+            {
+                "text": "He probably knows where he is hiding. I plan to get my revenge once we get all the girls back!"
+            },
+            {
+                "text": "And we've a got a loli to save there as well. Let's go!"
+            }
         ]
     },
     { // 56 - Fherla Blabla
@@ -1153,33 +1159,376 @@ DialogueManager.loadList([
             },
         ]
     },
-    { // 58 - Sad Legato
+    { // 58 - Stand blabla
         "dialogueLines": [
             {
-                "speaker": "Legato",
-                "text": "So, you picked me this time?"
+                "speaker": "Brenn",
+                "text": "What were those things?"
             },
             {
-                "text": "Why is there even two of the same being? Two of us?"
+                "speaker": "Valurin",
+                "text": "Don't you know about stands? They are spirits that grants you a specific fighting advantage."
             },
             {
-                "text": "We used to ask each other how we were doing everyday."
+                "speaker": "Pudding",
+                "text": "Is this a joke?"
             },
             {
-                "text": "I should not even exist. Masks are supposed to be discarded according to the rules."
+                "speaker": "Valurin",
+                "text": "If you manage to summon one, new moves are added to your movepool, and you get a unique ability."
             },
             {
-                "text": "I think, everytime I get to witness this world..."
+                "speaker": "Brenn",
+                "text": "And how do we summon those 'stands'? They seem pretty convenient."
             },
             {
-                "text": "I don't want to be born again as a person."
-            },
-            {
-                "text": "I would rather be born without self-consciousness."
-            },
-            {
-                "text": "Like... a tree. Then we don't have to worry about anything in life."
+                "speaker": "Valurin",
+                "text": "I don't know, we'll have to find out ourselves!"
             }
         ]
-    }
+    },
+    { // 59 - Meet the Valurin
+        "dialogueLines": [
+            {
+                "speaker": "Valurin",
+                "text": "Wait, Brenn?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Yo wtf why did you attack us?"
+            },
+            {
+                "speaker": "Valurin",
+                "text": "I just seek revenge on Espinoza. I didn't recognize you behind your mask."
+            },
+            {
+                "text": "And you killed some of my badgers. Of course I'd start attacking you."
+            },
+            {
+                "text": "I can't join you for this exact reason. I just can't forgive you."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "We've got Senjougahara with us though."
+            },
+            {
+                "speaker": "Valurin",
+                "text": "Forgiven."
+            }
+        ]
+    },
+    { // 60 - Unlock Stands
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "Oh I got it."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "You finally realized your quest had no sense and we should better go home?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "No not that, I now understand how to summon stands."
+            },
+            {
+                "speaker": "Valurin",
+                "text": "Yup I got it too."
+            },
+            {
+                "speaker": "Pudding",
+                "text": "Same, this is surprisingly easy."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "You just have to select 2 specific moves one after another and it gets summoned."
+            },
+            {
+                "speaker": "Valurin",
+                "text": "Easy Peasy."
+            }
+        ]
+    },
+    { // 61 - Valurin Special Dialogue Line
+        "dialogueLines": [
+            {
+                "speaker": "Valurin",
+                "text": "LET'S GOOOOO! LET'S PUNCH PP ALL DAY LONG!"
+            }
+        ]
+    },
+    { // 62 - blabla with lolidk
+        "dialogueLines": [
+            {
+                "speaker": "lolidk",
+                "text": "help me find the hamburglar"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "What?"
+            },
+            {
+                "speaker": "lolidk",
+                "text": "help me find the hamburglar"
+            },
+            {
+                "speaker": "Valurin",
+                "text": "no"
+            },
+            {
+                "speaker": "Pudding",
+                "text": "Who the heck is the hamburglar?"
+            },
+            {
+                "speaker": "lolidk",
+                "text": "hes wanted because he shat the bed"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "We'll help you catch this man. His deeds are inhuman and must be punished."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "What?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "We'll find the hamburglar, and make sure he doesn't shit any more bed."
+            }
+        ]
+    },
+    { // 63 - hamburglar hints
+        "dialogueLines": [
+            {
+                "speaker": "lolidk",
+                "text": "look at those beds"
+            },
+            {
+                "text": "someone shat in them recently. the hamburglar must be nearby"
+            }
+        ]
+    },
+    { // 64 - ok im 9
+        "dialogueLines": [
+            {
+                "speaker": "lolidk",
+                "text": "oops he wasn't the hamburglar"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "bruh gotta make it look like a suicide then"
+            },
+            {
+                "speaker": "Eldon",
+                "text": "This is painfully obvious that he didn't kill himself. No one will believe he did."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Pfft you have no faith in me. I'll just arrange the scene, they'll believe it I'm sure."
+            },
+            {
+                "text": "I do have an unrelated question for you lolidk. Are you really an adult? I thought this place was child-only."
+            },
+            {
+                "speaker": "lolidk",
+                "text": "ok im 9"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "lol"
+            }
+        ]
+    },
+    { // 65 - lolicon heaven
+        "dialogueLines": [
+            {
+                "speaker": "Nota",
+                "text": "Do you have some time to talk about Lolicon Heaven?"
+            },
+            {
+                "text": "It is a FaceBark (haha) group in which we share our love for lolis."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "How is this group not banned yet?"
+            },
+            {
+                "speaker": "Nota",
+                "text": "To join the group, you just have to rate the anime 'the sensei of eromangas' a 10/10 on this website!"
+            },
+            {
+                "speaker": "Eldon",
+                "text": "No."
+            }
+        ]
+    },
+    { // 66 - hamburglar blabla
+        "dialogueLines": [
+            {
+                "speaker": "The Hamburglar",
+                "text": "You fool! With all the beds I've shat, I already have become a legend!"
+            },
+            {
+                "text": "Thanks to this, I will attain divinity before your own very eyes."
+            },
+            {
+                "text": "Witness as I, the Hamburglar, becomes a god of bed shitting."
+            }
+        ]
+    },
+    { // 67 - Opstein's Dungeon OUT
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "Damn that guy was scary. Are we fighting gods now?"
+            },
+            {
+                "speaker": "Pudding",
+                "text": "He wasn't a god exactly. People who really have the potential to become a god are far stronger than this."
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Damn, I can't wait to fight them. Nothing can stand in my way!"
+            },
+            {
+                "text": "Now let's get to my place."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "For real? You want to have a pause and stop this maddening practice for a bit?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "Uh of course not, I just realized that before Espinoza teleported me, the lights were on."
+            },
+            {
+                "text": "The electricity bill is gonna be so damn high."
+            },
+            {
+                "text": "And there's a waifu to save there."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "Talking about waifus, do you have an explanation for this?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "What?"
+            },
+            {
+                "speaker": "Eldon",
+                "text": "She's a loli Brenn. And you call her a waifu? Don't you think something is wrong there?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "It is true that we're not saving 'waifus', we're saving 'best girls'."
+            },
+            {
+                "text": "It's just that the word waifu sounds better. And it's shorter."
+            },
+            {
+                "text": "We may not be the good guys killing all those people, but at least I'm not an active pedo like Espinoza."
+            },
+            {
+                "text": "Though lolis can be super fun at times, I just turned characters I liked into real people."
+            },
+            {
+                "speaker": "Eldon",
+                "text": "Weren't they from body pillows you had?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "I bought a bunch of body pillows for testing. I didn't want to ruin the one I have by accident."
+            },
+            {
+                "text": "One more reason to go back to my place, I want to make sure it's still there!."
+            }
+        ]
+    },
+    { // 68 - Megumin Incantation I
+        "dialogueLines": [
+            {
+                "speaker": "Megumin",
+                "text": "Darkness blacker than black and darker than dark, I beseech thee, combine with my deep crimson. The time of awakening cometh."
+            },
+            {
+                "text": "Justice, fallen upon the infallible boundary, appear now as an intangible distortion!"
+            },
+            {
+                "text": "I desire for my torrent of power a destructive force: a destructive force without equal! Return all creation to cinders, and come from the abyss!"
+            },
+            {
+                "text": "This is the mightiest means of attack known to man, the ultimate attack magic!"
+            },
+            {
+                "text": "EXPLOSION!!!"
+            }
+        ]
+    },
+    { // 69 - Megumin Incantation II
+        "dialogueLines": [
+            {
+                "speaker": "Megumin",
+                "text": "Oh, blackness shrouded in light..."
+            },
+            {
+                "text": "Frenzied blaze clad in night..."
+            },
+            {
+                "text": "All else aside, I don't want to be outdone by anyone else when it comes to explosion magic!"
+            },
+            {
+                "text": "Here I go ! My ultimate destructive magic..."
+            },
+            {
+                "text": "EXPLOSION!!!"
+            }
+        ]
+    },
+    { // 70 - Megumin Incantation III
+        "dialogueLines": [
+            {
+                "speaker": "Megumin",
+                "text": "Detonation... Detonation... Detonation..."
+            },
+            {
+                "text": "Wielder of the most glorious, powerful, and grand explosion magic..."
+            },
+            {
+                "text": "My name is Megumin!"
+            },
+            {
+                "text": "The blow that I am given to strike turns a blind eye to the fate of my kindred, rendering all hope of rebirth and anguish, and the model by which all forces are judged!"
+            },
+            {
+                "text": "Pitiful creature..."
+            },
+            {
+                "text": "Synchronize yourself with the red smoke, and atone in a surge of blood!"
+            },
+            {
+                "text": "Burst forth..."
+            },
+            {
+                "text": "EXPLOSION!!!"
+            }
+        ]
+    },
+    { // 71 - Megumin Incantation IV
+        "dialogueLines": [
+            {
+                "speaker": "Megumin",
+                "text": "Crimson-black blaze, king of myriad worlds, though I promulgate the laws of nature, I am the alias of destruction incarnate in accordance with the principles of creation."
+            },
+            {
+                "text": "Let the hammer of eternity descend unto me!"
+            },
+            {
+                "text": "Behold my power!"
+            },
+            {
+                "text": "EXPLOSION!!!"
+            }
+        ]
+    },
 ])

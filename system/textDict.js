@@ -10,13 +10,18 @@ class TextDict extends Phaser.GameObjects.Text {
         this.currentTextCursor = 0;
         this.memoryText = text;
 
+        this.lastRegisteredTimestamp = null;
+        this.hasStarted = false;
+
         if (_speed != null) {
             super.setText(TextDict.updatedText(this.memoryText.substring(0, this.currentTextCursor)));
         }
     }
 
     setText(_text, _forceInstant = false, _memory = true) {
+        if (_memory && this.memoryText != _text) this.lastRegisteredTimestamp = getCurrentMilliTimestamp();
         if (_memory) this.memoryText = _text;
+
         var txt = _text;
         if (this.speed != null && !_forceInstant) txt = txt.substring(0, this.currentTextCursor);
         return super.setText(TextDict.updatedText(txt));
@@ -24,18 +29,28 @@ class TextDict extends Phaser.GameObjects.Text {
 
     nextFrame() {
         if (this.speed == null) return;
-        var txt = this.memoryText;
+        if (!this.hasStarted) {
+            this.hasStarted = true;
+            this.lastRegisteredTimestamp = getCurrentMilliTimestamp();
+        }
+
+        // 1+ seconds means it doesn't count (options opened or something)
+        if (this.lastRegisteredTimestamp + 1000 < getCurrentMilliTimestamp()) this.lastRegisteredTimestamp = getCurrentMilliTimestamp();
 
         if (!this.isShowingFullText()) {
-            this.speedCursor += 1;
+            this.speedCursor += Math.floor((getCurrentMilliTimestamp()-this.lastRegisteredTimestamp)/8);
+            this.lastRegisteredTimestamp = getCurrentMilliTimestamp();
+
             if (this.speedCursor >= this.speed) {
                 this.currentTextCursor += this.speedCursor-this.speed+1;
                 this.speedCursor = 0;
 
+                var txt = this.memoryText;
                 txt = txt.substring(0, this.currentTextCursor);
                 this.setText(txt, false, false);
             }
         }
+        else this.lastRegisteredTimestamp = getCurrentMilliTimestamp();
     }
     isShowingFullText() {
         return this.currentTextCursor >= this.memoryText.length;
@@ -52,6 +67,10 @@ class TextDict extends Phaser.GameObjects.Text {
 
     static updatedText(_txt) {
         var txt = _txt;
+
+        // stand
+        txt = txt.split("stand").join("stånd");
+        txt = txt.split("Stand").join("Stånd");
 
         // parody names
         if (!DEV_MODE) {
@@ -119,6 +138,21 @@ class TextDict extends Phaser.GameObjects.Text {
     static addDict(_wordToChange, _wordThatReplaces) {
         TextDict.DICT[_wordToChange] = _wordThatReplaces;
     }
+
+    static speedToText(_nb) {
+        switch(_nb) {
+            case 0: return "Slow";
+            case 1: return "Normal";
+            case 2: return "Fast";
+            case 3: return "SuperSonic";
+        }
+        return "Invalid Speed: " + _nb
+    }
+    static getNextSpeed(_nb) {
+        var nb = _nb+1;
+        if (nb > 3) nb = 0;
+        return nb;
+    }
 }
 TextDict.DICT = {};
 
@@ -134,5 +168,6 @@ TextDict.addDict("Ryuko", "Myuko");
 TextDict.addDict("Kurisu", "Rukisu");
 TextDict.addDict("Astolfo", "Astalfo");
 TextDict.addDict("Rias", "Lias");
+TextDict.addDict("Megumin", "Mugemax");
 
 TextDict.addDict("Mongo", "Bongo");

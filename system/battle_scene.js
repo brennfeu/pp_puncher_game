@@ -121,7 +121,12 @@ class BattleScene extends Scene {
                 this.duel.enemies[1].setSpriteCoordinates(320, 75);
                 this.duel.enemies[2].setSpriteCoordinates(561, 75);
             }
-            // TODO 4 enemies
+            else if (this.duel.enemies.length == 4) {
+                this.duel.enemies[0].setSpriteCoordinates(20, 75);
+                this.duel.enemies[1].setSpriteCoordinates(200, 75);
+                this.duel.enemies[2].setSpriteCoordinates(420, 75);
+                this.duel.enemies[3].setSpriteCoordinates(600, 75);
+            }
 
             for (var i in this.duel.enemies) {
                 // resets game objects
@@ -163,7 +168,7 @@ class BattleScene extends Scene {
                 if (this.duel.memoryAnimations[i].isAbove) {
                     animY -= this.duel.memoryAnimations[i].fighter.spriteObject.height + 50;
                 }
-                var color = "fff";
+                var color = this.duel.memoryAnimations[i].color;
                 this.duel.memoryAnimations[i].animObject = this.addText("<"+this.duel.memoryAnimations[i].image+">", animX, animY, {"fontStyle": "bold", "fontSize": "28px", "backgroundColor": "#000", "color": "#"+color});
             }
             this.duel.memoryAnimations[i].duration -= 1;
@@ -215,7 +220,7 @@ class BattleScene extends Scene {
             if (this.duel.logTextObject.height >= 510) AchievementManager.unlockAchievement(10); // UI Breaker
             if (this.moveList.length == 0) this.updateMovepoolObjects();
 
-            if (this.justPressedControl("ENTER")) {
+            if (this.justPressedControl("ENTER") && this.duel.heroes[this.currentSelectHero].canPlayThisTurn()) {
                 this.playSoundSelect();
                 this.selectedHero = this.duel.heroes[this.currentSelectHero];
                 this.duel.duelState = "moveChoice";
@@ -243,7 +248,10 @@ class BattleScene extends Scene {
                 this.currentSelectMove -= this.duel.heroes[this.currentSelectHero].currentMovepool.length;
             }
 
-            this.duel.logTextObject.setText(this.duel.heroes[this.currentSelectHero].currentMovepool[this.currentSelectMove].newInstance().getDescription(), true);
+            var description = this.duel.heroes[this.currentSelectHero].currentMovepool[this.currentSelectMove].newInstance().getDescription();
+            var stand = this.duel.heroes[this.currentSelectHero].checkForStand(this.duel.heroes[this.currentSelectHero].currentMovepool[this.currentSelectMove]);
+            if (stand != false) description += "\n\nSummons Stand: " + stand.name;
+            this.duel.logTextObject.setText(description, true);
 
             if (this.justPressedControl("BACK")) {
                 this.playSoundSelect();
@@ -279,18 +287,11 @@ class BattleScene extends Scene {
                     this.currentSelectTarget -= this.duel.enemies.length;
                 }
 
-                if (this.justPressedControl("DOWN")) {
-                    var nbValid = 0;
-                    for (var i in this.duel.heroes) {
-                        if (this.duel.heroes[i].isAlive() && i != this.currentSelectHero) nbValid += 1;
-                    }
+                if (this.justPressedControl("DOWN") && this.hasValidHeroes()) {
+                    if (this.duel.heroes.length <= this.currentSelectTarget) this.currentSelectTarget = this.duel.heroes.length-1;
+                    this.isTargettingHeroes = true;
 
-                    if (nbValid > 0) {
-                        if (this.duel.heroes.length <= this.currentSelectTarget) this.currentSelectTarget = this.duel.heroes.length-1;
-                        this.isTargettingHeroes = true;
-
-                        return;
-                    }
+                    return;
                 }
             }
             else {
@@ -301,7 +302,7 @@ class BattleScene extends Scene {
                     this.currentSelectTarget -= this.duel.heroes.length;
                 }
 
-                if (this.justPressedControl("UP")) {
+                if (this.justPressedControl("UP") || !this.hasValidHeroes()) {
                     if (this.duel.enemies.length <= this.currentSelectTarget) this.currentSelectTarget = this.duel.enemies.length-1;
                     this.isTargettingHeroes = false;
 
@@ -526,6 +527,7 @@ class BattleScene extends Scene {
                     var q = QuestManager.getQuest(parseInt(this.currentQuest[0]));
                     var s = QuestManager.getStep(parseInt(this.currentQuest[0]), parseInt(this.currentQuest[1]));
 
+                    ProgressManager.StandsUnlockCache = ProgressManager.getUnlockedStands();
                     GlobalVars.set("unlocksNext", [q.id, s.id]);
 
                     if (s.postFightDialogue != undefined) GlobalVars.set("dialogueNext", [q.areaId, s.postFightDialogue]);
@@ -624,6 +626,14 @@ class BattleScene extends Scene {
     getSelectedTarget() {
         if (this.isTargettingHeroes) return this.duel.heroes[this.currentSelectTarget];
         return this.duel.enemies[this.currentSelectTarget];
+    }
+
+    // THIS IS FOR HEROES THAT CAN BE SELECTED
+    hasValidHeroes() {
+        for (var i in this.duel.heroes) {
+            if (this.duel.heroes[i].isAlive() && i != this.currentSelectHero) return true;
+        }
+        return false;
     }
 
     quitScene() {

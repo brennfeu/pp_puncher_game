@@ -27,7 +27,7 @@ GodManager.loadList([
             _user.duel.memorySoundEffects.push("jesus");
             _user.duel.addAnimation("amen", 60, _user);
         }
-    ),
+    ), // Brenn
     new RegularGod(
         "Chad Brenn",
         [
@@ -69,7 +69,7 @@ GodManager.loadList([
                 _user.duel.addMessage(_user.getName() + " already is the fastest!");
             }
         }
-    ),
+    ), // Chad Brenn
     new RegularGod(
         "Country Music Brenn",
         [
@@ -99,7 +99,7 @@ GodManager.loadList([
                 _user.duel.addMessage("But " + _target.getName() + " already has a Hockey Puck PP!");
             }
         }
-    ),
+    ), // Country Music Brenn
     new RegularGod(
         "DickDickSon666",
         [
@@ -125,7 +125,7 @@ GodManager.loadList([
 
             _user.duel.memorySoundEffects.push("darkMagic");
         }
-    ),
+    ), // DickDickSon666
     new RegularGod(
         "Hello There Puds",
         [
@@ -152,7 +152,7 @@ GodManager.loadList([
             _user.duel.memorySoundEffects.push("scream");
             _user.duel.addAnimation("change", 60, _user);
         }
-    ),
+    ), // Hello There Puds
     new RegularGod(
         "Ranger",
         [
@@ -173,7 +173,7 @@ GodManager.loadList([
                 new Bullet().execute(_user, _target);
             }
         }
-    ),
+    ), // Ranger
     new RegularGod(
         "Salt King",
         [
@@ -195,7 +195,7 @@ GodManager.loadList([
             _user.duel.addAnimation("bored", 60, _target, true, false);
             _user.duel.addAnimation("blabla", 60, _user);
         }
-    ),
+    ), // Salt King
     new RegularGod(
         "UREGonnaGetRAPED",
         [
@@ -239,7 +239,7 @@ GodManager.loadList([
             _user.duel.addAnimation("punch", 60, _target, true, false);
             _user.duel.memorySoundEffects.push("punchB");
         }
-    ),
+    ), // UREGonnaGetRAPED
     new RegularGod(
         "STFU Isaac",
         [
@@ -274,7 +274,61 @@ GodManager.loadList([
             _user.duel.addAnimation("cursed", 60, _target);
             _user.duel.memorySoundEffects.push("darkMagic");
         }
-    ),
+    ), // STFU Isaac
+    new RegularGod(
+        "The Brain",
+        [
+            "The one-sided god of knowledge. It is said he has ties with higher space beings.",
+            "Reduces the DEX of the target by 5.",
+            "The target cannot build up DEX Bous anymore."
+        ],
+        function(_user, _target = null) { // regular move
+            _user.duel.addMessage(_user.getName() + " hits " + _target.getName() + "'s weakness!");
+            _target.DEXValue -= 5;
+
+            _user.duel.addAnimation("weakness", 60, _target, false, false);
+            _user.duel.memorySoundEffects.push("punchBig");
+        },
+        function(_user, _target = null) { // special move
+            _user.duel.addMessage(_target.getName() + "'s plan of attack gets exposed! He can't get any DEX Bonus by missing a move!");
+            _target.noDexBonus = true;
+
+            _user.duel.addAnimation("exposed", 60, _target);
+            _user.duel.memorySoundEffects.push("hey");
+        }
+    ), // The Brain
+    new RegularGod(
+        "The Brawn",
+        [
+            "The one-sided god of physical strength, once one with The Brain.",
+            "Inflicts this.STR/10 and reduces the DEX of the target by 15 for 3 turns.",
+            "Building up damages doesn't reduces DEX anymore. Also uses the build-up move."
+        ],
+        function(_user, _target = null) { // regular move
+            _user.duel.addMessage(_user.getName() + " punches " + _target.getName() + "'s PP with his head!");
+            var r = _target.damage(10 + Math.floor(_user.STR/10), "attack", _user);
+
+            if (r) {
+                _target.disabled = 4;
+            }
+
+            _user.duel.addAnimation("dive", 60, _target, true, false);
+            _user.duel.memorySoundEffects.push("punchA");
+        },
+        function(_user, _target = null) { // special move
+            _user.duel.addMessage(_user.getName() + " becomes a giga-chad!");
+            _user.gigaChad = true;
+
+            var storedMove = {};
+            storedMove["user"] = _user;
+            storedMove["move"] = BronanSlam;
+            storedMove["target"] = _target;
+            _user.duel.memoryMoves.push(storedMove);
+
+            _user.duel.addAnimation("man", 60, _user);
+            _user.duel.memorySoundEffects.push("ohYeah");
+        }
+    ), // The Brawn
     new RegularGod(
         "Villager",
         [
@@ -310,10 +364,34 @@ GodManager.loadList([
             _user.duel.addAnimation("nose", 60, _user);
             _user.duel.memorySoundEffects.push("mmh");
         }
-    ),
+    ), // Villager
 
     // Waifus
-    // TOUSE description for a waifu "An isekai girl that got isekai-ed into the PP Punch multiverse."
+    new Waifu(
+        "Megumin",
+        [
+            "An isekai girl that got isekai-ed into the PP Punch multiverse.",
+            "Grants 5 explosion magic points.",
+            "Grants 3 explosion magic points and inflicts this.STR * [magic points] / 10 damages. Has 0 DEX for the next 3 turns."
+        ],
+        function(_user, _target = null) { // regular move
+            _user.duel.addMessage(_user.getName() + " adds 5 points to Explosion Magic!");
+            _user.explosionMagic += 5;
+
+            _user.duel.memorySoundEffects.push("flames");
+            _user.duel.addAnimation("points", 60, _user);
+        },
+        function(_user, _target = null) { // special move
+			_user.explosionMagic += 3;
+            _user.duel.memoryDialogues.push(randomFromList([68, 69, 70, 71]));
+
+			_target.damage(Math.floor(_user.explosionMagic*_user.STR/10), "attack", _user);
+			_user.noDex = 4;
+
+            _user.duel.memorySoundEffects.push("explosion");
+            _user.duel.addAnimation("explosion", 60, _target);
+        }
+    ), // Megumin
     new Waifu(
         "Priestess",
         [
@@ -332,7 +410,7 @@ GodManager.loadList([
 
             _user.duel.addAnimation("silenced", 60, _target, true, false);
         }
-    ),
+    ), // Priestess
     new Waifu(
         "Rias",
         [
@@ -369,7 +447,7 @@ GodManager.loadList([
             _user.duel.memorySoundEffects.push("darkMagic");
             _user.duel.addAnimation("summon", 60, _user);
         }
-    ),
+    ), // Rias
     new Waifu(
         "Ryuko",
         [
@@ -407,7 +485,7 @@ GodManager.loadList([
 				_user.duel.addMessage(_user.getName() + " already has a Kamui!");
 			}
         }
-    ),
+    ), // Ryuko
     new Waifu(
         "Senjougahara",
         [
@@ -431,7 +509,7 @@ GodManager.loadList([
             _user.duel.memorySoundEffects.push("darkMagic");
             _user.duel.addAnimation("cursed", 60, _target, true, false);
         }
-    ),
+    ), // Senjougahara
 
     // Eldritch Gods
 

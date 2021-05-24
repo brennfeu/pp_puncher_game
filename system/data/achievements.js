@@ -39,7 +39,8 @@ class AchievementManager {
         AchievementManager.ACHIEVEMENT_LIST.push(_area);
     }
     static getAchievement(_id) {
-        return AchievementManager.ACHIEVEMENT_LIST[_id];
+        for (var i in AchievementManager.ACHIEVEMENT_LIST) if (AchievementManager.ACHIEVEMENT_LIST[i].id == _id) return AchievementManager.ACHIEVEMENT_LIST[i];
+        return null;
     }
 
     static unlockAchievement(_id) {
@@ -57,13 +58,19 @@ class AchievementManager {
             Logger.warning("Error Trying to Unlock an Achievement", e)
         }
     }
+    static resetAchievements() {
+        ProgressManager.setValue("Achievements", []);
+        for (var i in AchievementManager.ACHIEVEMENT_LIST) {
+            GREENWORKS.clearAchievement(AchievementManager.ACHIEVEMENT_LIST[i].steamName, function() {}, function(e) {});
+        }
+    }
 
     static steamUpdate() {
         if (GREENWORKS == null) return false;
 
         var l = AchievementManager.ACHIEVEMENT_LIST;
         for (var i in l) { // update from steam
-            var f = Function("_bool", "if (_bool) { AchievementManager.unlockAchievement(" + i + ") }");
+            var f = Function("_bool", "if (_bool) { AchievementManager.unlockAchievement(" + l[i].id + "); }");
             GREENWORKS.getAchievement(l[i].steamName, f);
         }
     }
@@ -79,7 +86,7 @@ class AchievementManager {
 
             // update steam
             if (l[i]) {
-                AchievementManager.unlockAchievement(AchievementManager.ACHIEVEMENT_LIST[i].id);
+                AchievementManager.unlockAchievement(i);
             }
         }
 

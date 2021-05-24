@@ -28,4 +28,8 @@ class MultiplayerEnemy extends HeroEnemy {
 
     selectTarget() { Logger.warning("MultiplayerEnemy " + this.name + " tried to select a target!"); }
     selectHero() { Logger.warning("MultiplayerEnemy " + this.name + " tried to select a move!"); }
+
+    hasHeroDexBonus() {
+        return true;
+    }
 }

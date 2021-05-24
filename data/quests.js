@@ -879,12 +879,11 @@ QuestManager.loadList([
             { // 0
                 "name": "Illegal Pilgrims",
                 "description": "Deceive your narrator. Deceive the world. That is what you must do to reach the next step. Good Luck.",
-                "encounter": "swedishPilgrims",
-                "unlockNextStep": false
+                "encounter": "swedishPilgrims"
             },
             { // 1
                 "name": "Cheater Shame",
-                "description": "So now that you know you can cheat, and you know how, let's see if you can beat this stage.",
+                "description": "You can't pass this challenge without thinking outside the box. Do not be restricted by your movepool.",
                 "encounter": "targetDummy",
                 "duelParam": {
                     "forceRootOfNuisance": true
@@ -1254,9 +1253,10 @@ QuestManager.loadList([
                 "duelParam": { "nextEncounters": [ "bishopArmyA", "benedictNDemon", "powerOfGodAndAnime" ] },
                 "saveWaifu": "Rias",
                 "postFightCutscene": 9,
-                "unlockQuests": [ 37 ],
+                "unlockQuests": [ 37, 40 ],
                 "unlockQuestSteps": [ [ 12, 4] ],
-                "unlockEvents": [ 8 ]
+                "unlockEvents": [ 8 ],
+                "unlockAreas": [ 5 ]
             }
         ]
     },
@@ -1320,5 +1320,157 @@ QuestManager.loadList([
                 "unlockFightingStyles": [ "Electric PP" ]
             }
         ]
-    }
+    },
+    { // 40 - Strange Journey
+        "name": "Strange Journey",
+        "description": "Your weird travels aren't going to stop soon. You've seen blood, battles, crusades, unbreakable wills, golden spirits, an ocean of pps, balls of steel and... no lions yet but who knows what will happen next.",
+        "isMain": true,
+        "areaId": 5,
+
+        "questSteps": [
+            { // 0
+                "name": "Security",
+                "description": "As you arrive on the island, guards starts coming your way to stop you. Since you've acquired a bad reputation, there's no way they'll let you go without fighting.",
+                "encounter": "2opsteinGuards",
+                "duelParam": { "nextEncounters": [ "3opsteinGuards" ] }
+            },
+            { // 1
+                "name": "Mopsters",
+                "description": "On an island where law is not respected, only the strongest survive. And of course the order of the evil maintainers has a branch in here, terrorizing the people.",
+                "encounter": "2opsteinMaintainers",
+                "duelParam": { "nextEncounters": [ "3opsteinMaintainers" ] }
+            },
+            { // 2
+                "name": "Badger Master",
+                "description": "As you progress on the island, you suddenly get attacked by badgers! Who would train badgers to attack, and why would they be here?",
+                "encounter": "badgers",
+                "duelParam": { "nextEncounters": [ "valurin" ] },
+                "unlockQuests": [ 41, 42 ],
+                "unlockPartyMembers": [ "Valurin" ],
+                "unlockGods": [ "The Brain", "The Brawn" ],
+                "postFightDialogue": 59
+            },
+            { // 3
+                "name": "Majesty",
+                "description": "Now that Valurin joined your party, it's time to continue to explore the island. You now stumble upon mysterious enemies...",
+                "encounter": "standFight1",
+                "duelParam": { "nextEncounters": [ "2opsteinGuards", "standFight2" ] },
+                "postFightDialogue": 58
+            },
+            { // 4
+                "name": "Destiny Warning",
+                "description": "Those enemies are strong. It'll be really useful once you can master their powers, but you're starting to doubt your own capabilities. Can you really defeat Espinoza?",
+                "encounter": "standFight3",
+                "duelParam": { "nextEncounters": [ "3opsteinGuards", "standFight4" ] }
+            },
+            { // 5
+                "name": "Symphony Z",
+                "description": "Opstein guards were found near stands. Are those allies? Or are they trying to master the powers of stands as well? There's only one way to find out!",
+                "encounter": "standUsers1",
+                "duelParam": { "nextEncounters": [ "standUsers2", "standUserBoss" ] },
+                "postFightDialogue": 60,
+                "unlockGameMechanics": [ "Stands" ],
+                "unlockMoves": BASIC_STAND_MOVE_LIST
+            }
+        ]
+    },
+    { // 41 - The Dungeon
+        "name": "The Dungeon",
+        "description": "TODO",
+        "isMain": true,
+        "areaId": 5,
+
+        "questSteps": [
+            { // 0
+                "name": "The Thinker",
+                "description": "A statue is guarding the entrance. You get a strange feeling when close by to the man made of bronze. Even if it can't move, it won't let you go easily.",
+                "encounter": "theThinker",
+                "unlockMoves": [ Perhaps ]
+            },
+            { // 1
+                "name": "Bad Breath",
+                "description": "This is a dungeon, of course it has monsters in it. Let's kill those weird alien tentacled creatures. I won't there won't be shit-ass puzzles though.",
+                "encounter": "molbols",
+                "duelParam": { "nextEncounters": [ "greatMolbol" ] }
+            },
+            { // 2
+                "name": "idk lol",
+                "description": "As you encounter a new enemy, you notice christmas-y karl marx on the side that seems to be searching for something. He's probably friendly, and a funny guy at that!",
+                "encounter": "standFight5",
+                "duelParam": { "nextEncounters": [ "standFight6" ] },
+                "postFightDialogue": 62
+            },
+            { // 3
+                "name": "Bill Doors",
+                "description": "Hey this guy a celebrity! He made a fortune selling windows, and now he sells 5G implants to be hidden in vaccines! Let's punch some famous PP!",
+                "encounter": "5gGuards",
+                "duelParam": { "nextEncounters": [ "windowsGuards", "billDoors" ] }
+            },
+            { // 4
+                "name": "Lever Puzzle",
+                "description": "Dungeons are famous for their epic battles and their either super simple, either super hard puzzles. Let's hope this puzzle is a simple one.",
+                "encounter": "leverPuzzle1",
+                "duelParam": { "nextEncounters": [ "leverPuzzle2" ] },
+                "unlockMoves": [ ActivateLeverMove ]
+            },
+            { // 5
+                "name": "Hints",
+                "description": "Bedrooms could be a huge help in telling if the hamburglar went here or not. If there's shit on the bed, the culprit was near at some point.",
+                "encounter": "standFight7",
+                "duelParam": { "nextEncounters": [ "standFight8" ] },
+                "postFightDialogue": 63
+            },
+            { // 6
+                "name": "Island Boss",
+                "description": "The ruler of the island is near. He must be the true identity of the hamburglar! Let's defeat him!",
+                "encounter": "2opsteinGuards",
+                "duelParam": { "nextEncounters": [ "3opsteinGuards", "opsteinBoss" ] },
+                "postFightDialogue": 64
+            },
+            { // 7
+                "name": "Hunts",
+                "description": "The hamburglar must still be near! At this point, we could just kill everyone in here so we're sure the hamburglar dies!",
+                "encounter": "2opteinGuests",
+                "duelParam": { "nextEncounters": [ "3opteinGuests" ] }
+            },
+            { // 8
+                "name": "John Soup",
+                "description": "Hey this guy a celebrity! He made a fortune by inventing the soup when he accidentally drank a chicken! Let's punch some famous PP!",
+                "encounter": "chickenGuards",
+                "duelParam": { "nextEncounters": [ "soupGuards", "johnSoup" ] }
+            },
+            { // 9
+                "name": "Lolicon Heaven",
+                "description": "You've seen your fait share of weird people, but this one takes the cake! Not only is she a lolicon, she also is a huge fan of 'the sensei of eromangas'...",
+                "encounter": "loliconNota",
+                "preFightDialogue": 65
+            },
+            { // 10
+                "name": "The Hamburglar",
+                "description": "Hey, is that the humburglar just here? Quick, let's catch him and make him pay! He's probably ready to fight, so let's not underestimate him.",
+                "encounter": "theHamburglar",
+                "inFightDialogue": 66,
+                "duelParam": { "waifuDetermination": true },
+                "postFightCutscene": 10,
+                "saveWaifu": "Megumin"
+            },
+        ]
+    },
+    { // 42 - Verden
+        "name": "Verden",
+        "description": "Ancient spirits of the massacre of verden wander here. Behold, the bloody verdict of verden.",
+        "isMain": false,
+        "areaId": 4,
+
+        "questSteps": [
+            { // 0
+                "name": "Saxon Men",
+                "description": "Does a man have to fight all his life? Only in death to take flight to the skies. Warmongers vie to take my throne, no respect is ever shown.",
+                "encounter": "2saxonMen",
+                "duelParam": { "nextEncounters": [ "3saxonMen" ] }
+                // TODO GIVE VALURIN A RELIC
+            }
+        ]
+    },
+    // bonus puzzle quest
 ]);

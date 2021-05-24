@@ -93,15 +93,36 @@ class PartyManager {
     }
 
     static getHeroDescription(_hero) {
+        var txt = "No Description :(";
         switch(_hero) {
             case "Brenn":
-                return "Main Character, and a scientist that managed to make waifus real, using body pillows. He also makes music under the name of “Brennfeu Cthulhu”, which angered Cthulhu.\n\nHis waifu is Kurisu.";
+                txt = "Main Character, and a scientist that managed to make waifus real, using body pillows. He also makes music under the name of “Brennfeu Cthulhu”, which angered Cthulhu.";
+                break;
             case "Pudding":
-                return "A swedish dude that happened to be very good friend with Brenn. He seems to know a lot about PP Punching, but even him doesn't know why he knows this much.\n\nHis waifu is Mongo.";
+                txt = "A swedish dude that happened to be very good friend with Brenn. He seems to know a lot about PP Punching, but even him doesn't know why he knows this much.";
+                break;
             case "Eldon":
-                return "A very old friend of Brenn, master of painting miniatures and related board games. He also played a bunch of tabletop rpg campaigns with Brenn and other friends of him.\n\nHis waifu is Astolfo.";
+                txt = "A very old friend of Brenn, master of painting miniatures and related board games. He also played a bunch of tabletop rpg campaigns with Brenn and other friends of him.";
+                break;
+            case "Valurin":
+                txt = "Another swedish dude that recently became a friend of Brenn, he used to have 12 badgers but one of them got killed by Espinoza. He now seeks revenge, for his lost friend.";
+                break;
         }
-        return "No Description :("
+        txt += "\n\nHis waifu is " + PartyManager.getHeroWaifu(_hero) + ".";
+        return txt;
+    }
+    static getHeroWaifu(_hero) {
+        switch(_hero) {
+            case "Brenn":
+                return "Kurisu";
+            case "Pudding":
+                return "Mongo";
+            case "Eldon":
+                return "Astolfo";
+            case "Valurin":
+                return "Senjougahara";
+        }
+        return "None"
     }
     static getHeroDialogueLine(_hero) {
         switch(_hero) {
@@ -111,6 +132,8 @@ class PartyManager {
                 return 35;
             case "Eldon":
                 return 36;
+            case "Valurin":
+                return 61;
         }
         return null
     }

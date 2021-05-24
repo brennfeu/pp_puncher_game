@@ -9,7 +9,7 @@ class Machine extends Enemy {
         // immune to status
         this.resetStatus();
 
-        super.turnChange();
+        return super.turnChange();
     }
 
     heal(_value, _type) {

@@ -12,6 +12,7 @@ class Fighter {
 
         this.DEXBonus = 0;
         this.rolledDEX = 0;
+        this.hasBeenInterrupted = false;
 
         // styles
         this.fightingStyles = [];
@@ -57,6 +58,9 @@ class Fighter {
         for (var j in this.godsList) {
             if (this.godsList[j].startFunction != null) this.godsList[j].startFunction(this);
         }
+
+        // favorite waifu
+        if (this.godsList.find(god => god.name == PartyManager.getHeroWaifu(this.name))) this.waifuDetermination += 5;
 
         this.triggerStandAbilities();
     }
@@ -305,6 +309,12 @@ class Fighter {
             status["icon"] = "exposed";
             list.push(status);
         }
+        if (this.explosionMagic > 0) {
+            var status = {};
+            status["display"] = " - Explosion Magic Points: " + this.explosionMagic;
+            status["icon"] = "explosionMagic";
+            list.push(status);
+        }
         if (this.extraLife > 0) {
             var status = {};
             status["display"] = " - Extra Lives: " + this.extraLife;
@@ -321,6 +331,12 @@ class Fighter {
             var status = {};
             status["display"] = " - Haemorrhage: " + this.bleedDamage;
             status["icon"] = "bleedDamage";
+            list.push(status);
+        }
+        if (this.pigHeal > 0) {
+            var status = {};
+            status["display"] = " - Hog Squeezer: " + this.pigHeal;
+            status["icon"] = "pig";
             list.push(status);
         }
         if (this.lifeFibers > 0) {
@@ -341,17 +357,15 @@ class Fighter {
             status["icon"] = "madness";
             list.push(status);
         }
-        if (this.pigHeal > 0) {
-            var status = {};
-            status["display"] = " - Hog Squeezer: " + this.pigHeal;
-            status["icon"] = "pig";
-            list.push(status);
-        }
         if (this.redPillAddiction > 0) {
             var status = {};
             status["display"] = " - Red Pill Addiction: " + this.redPillAddiction;
             status["icon"] = "redpill";
             list.push(status);
+
+            if (this.isHero() && this.isAlive()) {
+                AchievementManager.unlockAchievement(12); // ONLY APATHY
+            }
         }
         if (this.scalyScars > 0) {
             var status = {};
@@ -594,6 +608,12 @@ class Fighter {
             status["icon"] = "other/fungus";
             list.push(status);
         }
+        if (this.isVaccinated) {
+            var status = {};
+            status["display"] = " - Vaccinated (Evil 5G Implants)";
+            status["icon"] = "other/vaccine";
+            list.push(status);
+        }
 
         if (this.standPower != null) {
             var status = {};
@@ -631,6 +651,7 @@ class Fighter {
         this.disabled = 0;
         this.noDexBonus = false;
         this.signpostCurse = 0;
+        this.isVaccinated = false;
 
         if (_onlyBadStatus) return;
         // resets good status
@@ -668,6 +689,8 @@ class Fighter {
         this.mechSkull = false;
         this.lostSoulCount = 0;
         this.borealAscentCountdown = -1;
+        this.forcedStandSynergy = -1;
+        this.explosionMagic = 0;
 
         // relic activation
         this.legatoActivated = false;
@@ -995,17 +1018,19 @@ class Fighter {
     hasStand(_standId) {
         return this.standPower == _standId;
     }
-    checkForStand() {
+    checkForStand(_nextMove = null) {
         if (ProgressManager.getUnlockedGameMechanics().indexOf("Stands") < 0) return false;
         //if (this.name != "Brenn") return false;
 
         var l = StandManager.STAND_LIST;
+        var moveHistory = this.moveHistory;
+        if (_nextMove != null) moveHistory.push(_nextMove);
         for (var i in l) {
-            if (l[i].summonMoves.length == 0 || this.moveHistory.length < 2) continue;
+            if (l[i].summonMoves.length == 0 || moveHistory.length < 2) continue;
 
             var ready = true;
             for (var j in l[i].summonMoves) {
-                if (l[i].summonMoves[j] != this.moveHistory[this.moveHistory.length - (1 + parseInt(j))]) {
+                if (l[i].summonMoves[j] != moveHistory[moveHistory.length - (1 + parseInt(j))]) {
                     if (ready) { // console logs
                         //console.log(l[i].name + " " + ready);
                         //console.log(l[i].summonMoves[j])
@@ -1017,6 +1042,8 @@ class Fighter {
             }
 
             if (ready) {
+                if (_nextMove != null) return l[i];
+
                 var storedMove = {};
                 storedMove["user"] = this;
                 storedMove["move"] = TriggerStand;
@@ -1041,6 +1068,9 @@ class Fighter {
 
         // Cybion
         if (this.hasStand(8)) this.resetStatus(true);
+
+        // When Gods Walked the Earth
+        if (this.hasStand(23)) this.forcedStandSynergy = randomFromList(GodManager.SYNERGY_LIST).id;
     }
 
     turnChange() {
@@ -1054,10 +1084,14 @@ class Fighter {
         this.chosenMove = null;
         this.chosenTarget = null;
         this.moveCap = 0;
+        this.hasBeenInterrupted = false;
 
         if (this.isTree) {
             this.chosenMove = Wait;
             return;
+        }
+        if (this.isVaccinated && this.rollLuckPercentHigh() <= 50) {
+            this.addRandomDebuff();
         }
 
         // stands start effect
@@ -1176,7 +1210,7 @@ class Fighter {
                     _fighter.duel.addMessage(_fighter.getName() + " explodes!");
                     _fighter.damage(1000, "inner");
 
-                    _fighter.duel.addAnimation("explosion", 60, _fighter);
+                    _fighter.duel.addAnimation("explosion", 60, _fighter, true, false);
                     _fighter.duel.memorySoundEffects.push("explosion");
                 });
             }
@@ -1187,7 +1221,7 @@ class Fighter {
                 this.duel.memoryTurnChange.push(function(_fighter) {
                     _fighter.duel.addMessage(_fighter.getName() + " achieves the Boreal Ascent!");
 
-                    _fighter.duel.addAnimation("boreal", 60, _fighter);
+                    _fighter.duel.addAnimation("boreal", 60, _fighter, true, false);
                     _fighter.duel.memorySoundEffects.push("flames");
                 });
             }
@@ -1202,7 +1236,7 @@ class Fighter {
                     _fighter.duel.addMessage(_fighter.getName() + " gets a regular charge!");
                     _fighter.regularCharges += 1;
 
-                    _fighter.duel.addAnimation("charge", 60, _fighter);
+                    _fighter.duel.addAnimation("charge", 60, _fighter, true, false);
                     _fighter.duel.memorySoundEffects.push("ohYeah");
                 });
             }
@@ -1214,7 +1248,7 @@ class Fighter {
                     _fighter.duel.addMessage(_fighter.getName() + " gets a special charge!");
                     _fighter.specialCharges += 1;
 
-                    _fighter.duel.addAnimation("charge", 60, _fighter);
+                    _fighter.duel.addAnimation("charge", 60, _fighter, true, false);
                     _fighter.duel.memorySoundEffects.push("ohYeah");
                 });
             }
@@ -1231,7 +1265,7 @@ class Fighter {
                 }
                 _fighter.damage(damage, "attack", _fighter.duel.fakeFighter("Rias"));
 
-                _fighter.duel.addAnimation("explosion", 60, _fighter);
+                _fighter.duel.addAnimation("explosion", 60, _fighter, true, false);
                 _fighter.duel.memorySoundEffects.push("explosion");
             });
         }
@@ -1393,6 +1427,10 @@ class Fighter {
         var nbActions = this.nbActions;
         if (this.boomerang > 0) nbActions += nbActions;
         if (this.hasSynergy("Valurin Duality") && this.rollLuckPercentLow() <= 5) nbActions += nbActions;
+        if (this.hasStand(6) && this.rollLuckPercentLow() <= 25) { // Beyond the Space, Beyond the Time
+            nbActions += nbActions;
+            this.duel.addMessage(this.getName() + "'s stand doubles the attack!");
+        }
         if (this.fullOfAmmos) {
             nbActions = nbActions*3;
             this.fullOfAmmos = false;
@@ -1480,11 +1518,13 @@ class Fighter {
                 if (_value >= this.specialArmorValue) {
                     _value = _value - this.specialArmorValue
                     this.duel.addMessage(this.getName() + "'s special armor takes " + this.specialArmorValue + " damage and breaks!");
+                    this.duel.addAnimation("-" + _value, 60, this, true, true, "f00");
                     this.specialArmorValue = 0;
                     if (_value <= 0) return false;
                 }
                 else {
                     this.duel.addMessage(this.getName() + "'s special armor takes " + _value + " damage!");
+                    this.duel.addAnimation("-" + _value, 60, this, true, true, "f00");
                     this.specialArmorValue -= _value;
                     return false;
                 }
@@ -1516,6 +1556,8 @@ class Fighter {
             }
             this.STRValue -= _value;
             this.duel.addMessage(this.getName() + " takes " + _value + " damage.");
+            this.duel.addAnimation("-" + _value, 60, this, true, true, "f00");
+            this.hasBeenInterrupted = true;
 
             // money!!
             if (!this.isHero() && ProgressManager.getUnlockedGameMechanics().indexOf("PP Coins") > 0) ProgressManager.setValue("PP_Coins", ProgressManager.getValue("PP_Coins")+1);
@@ -1538,6 +1580,20 @@ class Fighter {
                     for (var i in l) {
                         if (l[i].isDead()) continue;
                         l[i].damage(_value*3, "attack", this);
+                    }
+                }
+
+                // rain of a thousand flames
+                if (this.hasStand(27)) {
+                    this.duel.addMessage(this.getName() + "'s stand avenges his death.");
+                    var l = this.duel.getOppsOf(this);
+                    for (var i in l) {
+                        if (l[i].isDead()) continue;
+                        l[i].addRandomDebuff();
+                        l[i].addRandomDebuff();
+                        l[i].addRandomDebuff();
+                        l[i].addRandomDebuff();
+                        l[i].addRandomDebuff();
                     }
                 }
 
@@ -1587,7 +1643,7 @@ class Fighter {
             }
             if (_opponent.madnessStacks > 0 && _opponent.id != this.id && this.rollLuckPercentLow() <= _opponent.madnessStacks*3) {
                 this.duel.addMessage(_opponent.getName() + " hits himself in his madness!");
-    			_opponent.duel.getOppOf(this).damage(_value, "attack", _opponent)
+    			_opponent.damage(_value, "attack", _opponent)
     			return false;
             }
 
@@ -1615,15 +1671,22 @@ class Fighter {
                 this.duel.memorySoundEffects.push("protect");
                 return false;
             }
+            if (this.hasStand(6) && this.rollLuckPercentLow() <= 25) {
+                this.duel.addMessage(this.getName() + "'s stand cancels the attack!");
+                this.duel.addAnimation("safe", 60, this);
+                return false;
+            }
             if (this.armorValue > 0) {
                 if (_value >= this.armorValue) {
                     _value = _value - this.armorValue
                     this.duel.addMessage(this.getName() + "'s armor takes " + this.armorValue + " damages and breaks!");
+                    this.duel.addAnimation("-" + _value, 60, this, true, true, "f00");
                     this.armorValue = 0;
                     if (_value <= 0) return false;
                 }
                 else {
                     this.duel.addMessage(this.getName() + "'s armor takes " + _value + " damages!");
+                    this.duel.addAnimation("-" + _value, 60, this, true, true, "f00");
                     this.armorValue -= _value;
                     return false;
                 }
@@ -1688,6 +1751,7 @@ class Fighter {
                 this.STRValue += _value;
                 this.duel.addMessage(this.getName() + " gets healed by " + _value + " HP.");
                 this.duel.memorySoundEffects.push("heal");
+                this.duel.addAnimation("+" + _value, 60, this, true, true, "0f0");
                 return true;
             }
             else {
@@ -1716,6 +1780,8 @@ class Fighter {
         return false;
     }
     hasSynergy(_synergy) {
+        if (this.forcedStandSynergy == _synergy) return true;
+
         var s = GodManager.getSynergy(_synergy);
         for (var i in s.requiredGods) {
             if (this.godsList.indexOf(s.requiredGods[i]) < 0 && !this.hasGodType(s.requiredGods[i])) return false;
@@ -1823,9 +1889,13 @@ class Fighter {
     isOfInterest() {
         return (this.getDangerLevel() > 1 || this.STR >= 1000 || this.DEX >= 100)
     }
+    hasHeroDexBonus() {
+        return false;
+    }
     isHero() {
         return false;
     }
+
     getHurtSound() {
         if (this.isTree) return "woodcut"
         return "hurtA";

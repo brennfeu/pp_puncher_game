@@ -374,7 +374,7 @@ class FamilyFriendly extends EnergyCreature {
         this.currentMovepool = [ MoveManager.createMove(function execute(_user, _target = null) {
             _user.duel.addMessage(_user.swornEnemy.name + " kills " + _user.getName() + "!");
             _user.damage(1000, "attack", _user.swornEnemy);
-            _user.duel.addMessage(_user.getName() + "is DEAD! D.E.A.D.!");
+            _user.duel.addMessage(_user.getName() + " is DEAD! D.E.A.D.!");
         }) ];
 
         this.swornEnemy = new ElectricKettleAlien();

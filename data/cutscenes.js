@@ -45,10 +45,7 @@ const CUTSCENE_LIST = [
         "dialogueId": 20,
         "areaName": "The End",
         "music": "CinematicIntro",
-        "nextSceneKey": "Map",
-        "nextSceneData": {
-            "areaSelect": 4
-        }
+        "nextSceneKey": "Menu"
     },
     { // 6 - Out of High School
         "dialogueId": 24,
@@ -86,14 +83,39 @@ const CUTSCENE_LIST = [
         "music": "ChristianSettlement_area",
         "distantMusic": true,
         "nextSceneKey": "Cutscene",
+        "nextSceneKey": "Map",
+        "nextSceneData": {
+            "areaSelect": 4
+        }
+    },
+    { // 10 - Out of Opstein's Dungeon
+        "dialogueId": 67,
+        "areaName": "Opstein's Dungeon's Outside",
+        "music": "OpsteinsDungeon_area",
+        "distantMusic": true,
+        "nextSceneKey": "Cutscene",
         "nextSceneData": { // 5 - Out of Beta
             "dialogueId": 20,
             "areaName": "The End",
             "music": "CinematicIntro",
             "nextSceneKey": "Map",
             "nextSceneData": {
-                "areaSelect": 4
+                "areaSelect": 5
             }
         }
     },
 ];
+
+// use this when end of outro
+var beta_outro = {
+    "nextSceneKey": "Cutscene",
+    "nextSceneData": { // 5 - Out of Beta
+        "dialogueId": 20,
+        "areaName": "The End",
+        "music": "CinematicIntro",
+        "nextSceneKey": "Map",
+        "nextSceneData": {
+            "areaSelect": 4
+        }
+    }
+}

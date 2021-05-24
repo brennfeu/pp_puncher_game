@@ -195,7 +195,7 @@ class ProgressManager {
         }
         l = l.sort(
             function (a, b) {
-                var l = ["regular", "infernal", "armageddon", "faith", "stand", "rare", "other", "Dev Test"];
+                var l = ["regular", "infernal", "armageddon", "faith", "stand", "rare", "relic", "other", "Dev Test"];
                 var ta = l.indexOf(a.newInstance().type);
                 var tb = l.indexOf(b.newInstance().type);
                 if (ta < tb) return -1;
@@ -366,6 +366,38 @@ class ProgressManager {
         ProgressManager.RelicsCache = l;
         return l;
     }
+    static getUnlockedStands() {
+        if (ProgressManager.StandsCache != null) return ProgressManager.StandsCache;
+        if (ProgressManager.getUnlockedGameMechanics().indexOf("Stands") < 0) return [];
+
+        var l = [];
+        var moves = ProgressManager.getUnlockedMoves();
+        for (var i in StandManager.STAND_LIST) {
+            var moveMissing = StandManager.STAND_LIST[i].summonMoves.length == 0;
+
+            for (var j in StandManager.STAND_LIST[i].summonMoves) {
+                if (moves.indexOf(StandManager.STAND_LIST[i].summonMoves[j]) < 0) {
+                    moveMissing = true;
+                }
+            }
+
+            if (!moveMissing) {
+                l.push(StandManager.STAND_LIST[i]);
+            }
+        }
+
+        l = l.sort(
+            function (a, b) {
+                var na = a.name.toUpperCase();
+                var nb = b.name.toUpperCase();
+                if (na < nb) return -1;
+                else if (na > nb) return 1;
+                return 0;
+            }
+        );
+        ProgressManager.StandsCache = l;
+        return l;
+    }
 
     static getSavedWaifus() {
         if (ProgressManager.SavedWaifusCache != null) return ProgressManager.SavedWaifusCache;
@@ -395,6 +427,7 @@ class ProgressManager {
         ProgressManager.GodsCache = null;
         ProgressManager.ArtworksCache = null;
         ProgressManager.RelicsCache = null;
+        ProgressManager.StandsCache = null;
 
         ProgressManager.SavedWaifusCache = null;
     }
@@ -425,7 +458,6 @@ class ProgressManager {
             for (var j in l[i].questSteps) {
                 total += 1;
                 if (ProgressManager.isStepCompleted(l[i].id, j)) unlocked += 1;
-                else console.log(i + "/" + j);
             }
         }
 
@@ -510,6 +542,8 @@ class ProgressManager {
                 var price = "Shop is empty, you bought everything!";
                 try { price = "Next Item Price: " + QuestManager.getStep(34, ProgressManager.getCompletedSteps(34).length).ppCoinsPrice } catch(e) {}
                 return "Another random cryptocurrency, except the amount automatically increments whenever an opponent takes damage. Buying stuff is automatic, you don't have to worry about going to the shop and select an item to buy it.\n\nAmount of PP Coins: " + ProgressManager.getValue("PP_Coins") + "\n" + price;
+            case "Stands":
+                return "Spirits of PP Punching you can manifest by using specific move combos. Once summoned, they grant you a specific power as well as new available moves in your movepool. You don't have to successfully use the move, missing also counts for the combo.";
         }
         return "No Description :("
     }

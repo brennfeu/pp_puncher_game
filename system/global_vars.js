@@ -22,7 +22,8 @@ if (GlobalVars.get("settings") == null) {
     GlobalVars.set("settings", {
         "musicVolume": "100",
         "soundsVolume": "100",
-        "battleAutoNext": false
+        "battleAutoNext": false,
+        "textSpeed": 1
     });
     GlobalVars.updateSettings();
 }

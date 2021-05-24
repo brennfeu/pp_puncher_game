@@ -302,3 +302,24 @@ class ThePopeFinal extends ThePope {
         this.duel.memorySoundEffects.push("jesus");
     }
 }
+
+class SaxonMan extends ChristianPriest {
+    constructor(_name = "Saxon", _gods = null) {
+        super(_name);
+
+        this.STRValue = 140;
+
+        this.currentMovepool = [ Sword ];
+    }
+
+    turnChange() {
+        var a = super.turnChange();
+
+        if (this.bleedDamage > 0) {
+            // Saxon Blood
+            AchievementManager.unlockAchievement(11);
+        }
+
+        return a;
+    }
+}

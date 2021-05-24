@@ -19,7 +19,7 @@ class Area {
         return this.getTheme("victory");
     }
     getTheme(_type) {
-        return this.name.split(" ").join("") + "_" + _type;
+        return this.name.split(" ").join("").split("'").join("") + "_" + _type;
     }
 
     getName() {

@@ -59,6 +59,7 @@ class EldritchGod extends God {
 
 class Synergy {
     constructor(_name, _gods, _description) {
+        // also has id defined in GodManager.addSynergy(_synergyObj)
         this.name = _name;
         this.requiredGods = _gods;
         this.description = _description;
@@ -84,6 +85,7 @@ class GodManager {
         GodManager.GOD_LIST.push(_godObj);
     }
     static addSynergy(_synergyObj) {
+        _synergyObj.id = GodManager.SYNERGY_LIST.length;
         GodManager.SYNERGY_LIST.push(_synergyObj);
     }
 

@@ -18,5 +18,9 @@ AreaManager.loadList([
     { // 4
         "name": "Christian Settlement",
         "description": "This place is largest complex of christian activities, where everyone prays The Lord every day. It is being said that a lot of relics are stored there."
+    },
+    { // 5
+        "name": "Opstein's Island",
+        "description": "TODO"
     }
 ]);

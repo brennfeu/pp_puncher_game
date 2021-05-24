@@ -187,7 +187,9 @@ class GymClubStudent extends Tier3Student {
     constructor(_name = "Gym Club Student") {
         super(_name);
 
-        this.currentMovepool.push(BronanSlam)
+        this.currentMovepool.push(BronanSlam);
+
+        this.godsList.push(GodManager.getGod("The Brawn"));
     }
 
     selectMove() {

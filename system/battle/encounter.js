@@ -665,6 +665,146 @@ class Encounter {
             case("pikamee"):
                 this.addEnemy(new ElectricKettleAlien());
                 break;
+            case("2saxonMen"):
+                this.addEnemy(new SaxonMan(), 190);
+                this.addEnemy(new SaxonMan(), 450);
+                break;
+            case("3saxonMen"):
+                this.addEnemy(new SaxonMan(), 76);
+                this.addEnemy(new SaxonMan());
+                this.addEnemy(new SaxonMan(), 561);
+                break;
+
+            // opstein island
+            case("2opsteinGuards"):
+                this.addEnemy(new OpsteinGuard(), 190);
+                this.addEnemy(new OpsteinGuard(), 450);
+                break;
+            case("3opsteinGuards"):
+                this.addEnemy(new OpsteinGuard(), 76);
+                this.addEnemy(new OpsteinGuard());
+                this.addEnemy(new OpsteinGuard(), 561);
+                break;
+            case("2opsteinMaintainers"):
+                this.addEnemy(new OpsteinMaintainer(), 190);
+                this.addEnemy(new OpsteinMaintainer(), 450);
+                break;
+            case("3opsteinMaintainers"):
+                this.addEnemy(new OpsteinMaintainer(), 76);
+                this.addEnemy(new OpsteinMaintainer());
+                this.addEnemy(new OpsteinMaintainer(), 561);
+                break;
+            case("badgers"):
+                this.addEnemy(new ValurinBadger(), 76);
+                this.addEnemy(new ValurinBadger());
+                this.addEnemy(new ValurinBadger(), 561);
+                break;
+            case("valurin"):
+                this.addEnemy(new ValurinBadger(), 76);
+                this.addEnemy(new Valurin());
+                this.addEnemy(new ValurinBadger(), 561);
+                break;
+            case("standFight1"):
+                this.addEnemy(new EnemyStand(3), 300);
+                break;
+            case("standFight2"):
+                this.addEnemy(new EnemyStand(24), 170);
+                this.addEnemy(new EnemyStand(25), 450);
+                break;
+            case("standFight3"):
+                this.addEnemy(new EnemyStand(4), 300);
+                break;
+            case("standFight4"):
+                this.addEnemy(new EnemyStand(2), 90);
+                this.addEnemy(new EnemyStand(11), 450);
+                break;
+            case("standUsers1"):
+                this.addEnemy(new EnemyStandUser(24), 76);
+                this.addEnemy(new EnemyStandUser(3));
+                this.addEnemy(new EnemyStandUser(25), 561);
+                break;
+            case("standUsers2"):
+                this.addEnemy(new EnemyStandUser(2), 76);
+                this.addEnemy(new EnemyStandUser(4));
+                this.addEnemy(new EnemyStandUser(11), 561);
+                break;
+            case("standUserBoss"):
+                this.addEnemy(new BossStandUser());
+                break;
+            case("theThinker"):
+                this.addEnemy(new TheThinker());
+                break;
+            case("molbols"):
+                this.addEnemy(new Molbol(), 190);
+                this.addEnemy(new Molbol(), 450);
+                break;
+            case("greatMolbol"):
+                this.addEnemy(new Molbol(), 76);
+                this.addEnemy(new GreatMolbol(), 300);
+                this.addEnemy(new Molbol(), 561);
+                break;
+            case("standFight5"):
+                this.addEnemy(new EnemyStand(27), 300);
+                break;
+            case("standFight6"):
+                this.addEnemy(new EnemyStand(8), 300);
+                break;
+            case("windowsGuards"):
+                this.addEnemy(new WindowsGuard(), 190);
+                this.addEnemy(new WindowsGuard(), 450);
+                break;
+            case("5gGuards"):
+                this.addEnemy(new FiveGGuard(), 190);
+                this.addEnemy(new FiveGGuard(), 450);
+                break;
+            case("billDoors"):
+                this.addEnemy(new BillDoors());
+                break;
+            case("leverPuzzle1"):
+                this.addEnemy(new LeverEnemy(0, [ 0, 2 ]), 76);
+                this.addEnemy(new LeverEnemy(1, [ 1 ]));
+                this.addEnemy(new LeverEnemy(2, [ 0 ]), 561);
+                break;
+            case("leverPuzzle2"):
+                this.addEnemy(new LeverEnemy(0, [ 1, 2 ]), 76);
+                this.addEnemy(new LeverEnemy(1, [ 0 ]));
+                this.addEnemy(new LeverEnemy(2, [ 0, 2 ], true), 561);
+                break;
+            case("standFight7"):
+                this.addEnemy(new EnemyStand(23), 280);
+                break;
+            case("standFight8"):
+                this.addEnemy(new EnemyStand(6), 280);
+                break;
+            case("opsteinBoss"):
+                this.addEnemy(new OpsteinBoss());
+                break;
+            case("2opteinGuests"):
+                this.addEnemy(new OpsteinGuest(), 190);
+                this.addEnemy(new OpsteinGuest(), 450);
+                break;
+            case("3opteinGuests"):
+                this.addEnemy(new OpsteinGuest(), 76);
+                this.addEnemy(new OpsteinGuest());
+                this.addEnemy(new OpsteinGuest(), 561);
+                break;
+            case("chickenGuards"):
+                this.addEnemy(new ChickenGuard(), 190);
+                this.addEnemy(new ChickenGuard(), 450);
+                break;
+            case("soupGuards"):
+                this.addEnemy(new SoupGuard(), 190);
+                this.addEnemy(new SoupGuard(), 450);
+                break;
+            case("johnSoup"):
+                this.addEnemy(new JohnSoup());
+                break;
+            case("loliconNota"):
+                this.addEnemy(new LoliconNota());
+                break;
+            case("theHamburglar"):
+                this.addEnemy(new TheHamburglarPhase1());
+                break;
 
             // multiplayer
             case("multiplayer"):

@@ -23,6 +23,8 @@ class Enemy extends Fighter {
         if (this.regularCharges > 0 && this.godsList.length > 0 && !this.isSilenced) l.push(RegularPriestMove);
         if (this.specialCharges > 0 && this.godsList.length > 0 && !this.isSilenced) l.push(SpecialPriestMove);
 
+        if (this.standPower != null) l = l.concat(BASIC_STAND_MOVE_LIST);
+
         return l;
     }
     getRandomMove() {

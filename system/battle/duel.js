@@ -112,7 +112,7 @@ class Duel {
         // when saving waifus
         if (this.checkParam("waifuDetermination", true)) {
             for (var i in this.heroes) {
-                this.heroes[i].waifuDetermination = 5;
+                this.heroes[i].waifuDetermination += 5;
             }
         }
 
@@ -143,6 +143,7 @@ class Duel {
 
             return this.turnChangeNext();
         }
+        this.nextTurnEffects();
 
         var nb = 0;
         for (var i in this.heroes) {
@@ -189,7 +190,7 @@ class Duel {
             return;
         }
 
-        this.nextTurnEffects();
+        if (this.duelState == "victory") return;
         if (this.duelState == "defeat") return;
         this.rollEvent();
         if (this.duelState == "eventPlay") return;
@@ -260,6 +261,24 @@ class Duel {
 
         if (this.checkParam("turnCountdown", this.turnCount)) {
             this.duelState = "defeat";
+            return;
+        }
+
+        var l = this.enemies;
+        var nbActivatedLevers = 0;
+        for (var i in l) {
+            if (l[i] instanceof LeverEnemy) {
+                if (l[i].isDead()) {
+                    this.duelState = "defeat";
+                    return;
+                }
+                if (l[i].currentLeverState) nbActivatedLevers += 1;
+            }
+        }
+        if (nbActivatedLevers >= this.enemies.length) {
+            CURRENT_SCENE.playSoundConfirmation();
+            for (var i in l) l[i].destroyObjects();
+            this.enemies = [];
             return;
         }
     }
@@ -401,9 +420,11 @@ class Duel {
             this.mainFighter = f;
             if (this.mainFighter.isAlive() && this.messageList.length > 0) this.addTextSeparator();
 
+            var rolledDex = this.mainFighter.rolledDEX;
+            if (this.mainFighter.hasHeroDexBonus() && !this.mainFighter.hasBeenInterrupted) rolledDex += 30;
             if (this.mainFighter.chosenMove.newInstance().autoPass ||
                     this.mainFighter.cannotFailMove ||
-                    this.mainFighter.rolledDEX + 10 >= oppDEX ||
+                    rolledDex + 10 >= oppDEX ||
                     (this.checkParam("autoPunch", true) && this.mainFighter.chosenMove == PunchingPP)) {
                 this.launchMove(this.getAllFighters(true)[this.currentFighterIndex]);
                 this.getAllFighters(true)[this.currentFighterIndex].DEXBonus = 0;
@@ -531,7 +552,7 @@ class Duel {
         return false
     }
 
-    addAnimation(_image, _duration, _fighter, _randomized = false, _isAbove = true) {
+    addAnimation(_image, _duration, _fighter, _randomized = false, _isAbove = true, _color = "fff") {
         var dict = {};
         dict["image"] = _image;
         dict["duration"] = _duration;
@@ -539,6 +560,7 @@ class Duel {
         dict["randomized"] = _randomized;
         dict["isAbove"] = _isAbove;
         dict["animObject"] = null;
+        dict["color"] = _color;
         this.memoryAnimations.push(dict);
     }
 

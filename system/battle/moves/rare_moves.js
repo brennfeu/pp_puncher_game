@@ -26,8 +26,6 @@ class EyeOfTruth extends Move {
             }
             // sad one
             else {
-                _user.duel.memoryDialogues.push(58);
-
                 var storedMove = {};
                 storedMove["user"] = _user;
                 storedMove["move"] = MoveManager.createMove(function execute(_user, _target = null) {
@@ -83,6 +81,18 @@ class EyeOfTruth extends Move {
 
                 _user.duel.addAnimation("genderbending", 60, _user);
                 _user.duel.memorySoundEffects.push("mmh");
+                break;
+            case("Valurin"):
+                _user.duel.addMessage(_user.getName() + " summons 12 badger spirits!");
+
+                for (var i = 0; i < 12; i++) {
+                    var badger = _user.duel.fakeFighter("Badger Spirit " + (i+1), ValurinBadger);
+                    _user.duel.addMessage(badger.getName() + " attacks!");
+                    _target.damage(10+Math.floor(getRandomPercent()*_user.STR/100), "attack", badger);
+
+                    _user.duel.addAnimation("badger'ed", 40 + (10*i), _user);
+                    _user.duel.memorySoundEffects.push("punchA");
+                }
                 break;
             default:
                 _user.duel.addMessage("The Eye of Truth cannot find " + _user.getName() + "'s signature move :(");

@@ -19,12 +19,14 @@ class MoveManager {
         return l;
     }
 
-    static createMove(_function) {
+    static createMove(_function, _specificationFunction = function(){}) {
         var move = class extends Move {
             constructor() {
                 super();
 
                 this.execute = _function;
+
+                _specificationFunction(this);
             }
         };
 

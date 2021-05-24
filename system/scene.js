@@ -159,6 +159,9 @@ class Scene extends Phaser.Scene {
     playSoundOK() {
         return this.playSound("ui/ok");
     }
+    playSoundConfirmation() {
+        return this.playSound("ui/confirmation");
+    }
     playSoundError() {
         return this.playSound("ui/error");
     }
@@ -291,6 +294,17 @@ class Scene extends Phaser.Scene {
         this.loadImage("status/blueFire.png");
         this.loadImage("status/regularChargeTimer.png");
         this.loadImage("status/specialChargeTimer.png");
+        this.loadImage("status/acidDamage.png");
+        this.loadImage("status/disabled.png");
+        this.loadImage("status/gigaChad.png");
+        this.loadImage("status/noDexBonus.png");
+        this.loadImage("status/ammos.png");
+        this.loadImage("status/quickening.png");
+        this.loadImage("status/mechSkull.png");
+        this.loadImage("status/exposed.png");
+        this.loadImage("status/lostSouls.png");
+        this.loadImage("status/borealAscent.png");
+        this.loadImage("status/borealAscentCountdown.png");
 
         this.loadImage("status/other/depression.png");
         this.loadImage("status/other/fungus.png");
@@ -308,6 +322,10 @@ class Scene extends Phaser.Scene {
         this.loadImage("status/other/promotionBishop.png");
         this.loadImage("status/other/promotionKnight.png");
         this.loadImage("status/other/promotionKing.png");
+        this.loadImage("status/other/stand.png");
+        this.loadImage("status/other/starTrapped.png");
+        this.loadImage("status/other/switchOff.png");
+        this.loadImage("status/other/switchOn.png");
 
         this.loadImage("status/special/killerBlessing.png");
         this.loadImage("status/special/waifuDetermination.png");
@@ -322,10 +340,14 @@ class Scene extends Phaser.Scene {
         this.loadSound("ui/ok.ogg");
         this.loadSound("ui/select.ogg");
         this.loadSound("ui/switch.ogg");
+
+        this.loadSound("ui/blabla_short.mp3");
+        this.loadSound("ui/blabla_long.mp3");
     }
     loadBattleSounds() {
         this.loadSound("battle/event.mp3");
         this.loadSound("battle/lightning.mp3");
+        this.loadSound("battle/switch.mp3");
 
         this.loadSound("battle/heal.mp3");
         this.loadSound("battle/hurtA.mp3");
@@ -363,6 +385,8 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/acid.mp3");
         this.loadSound("battle/drink.mp3");
         this.loadSound("battle/flames.mp3");
+        this.loadSound("battle/ammo.mp3");
+        this.loadSound("battle/quickening.mp3");
 
         this.loadSound("battle/uuh.mp3");
     }
@@ -536,6 +560,12 @@ class Scene extends Phaser.Scene {
         var line = this.currentDialogue.getLine(this.currentLine);
         this.dialogueSpeakerObj.setText(line.speaker);
         this.dialogueObj.setText(line.text);
+        if (line.text.length > 10) {
+            this.playSound("ui/blabla_long");
+        }
+        else {
+            this.playSound("ui/blabla_short");
+        }
 
         if (this.sceneName == "Cutscene") this.optionBlackScreen.setAlpha(0);
 
@@ -592,6 +622,13 @@ class Scene extends Phaser.Scene {
                 this.dialogueSpeakerObj.setText(line.speaker);
             }
             this.dialogueObj.setText(line.text);
+
+            if (line.text.length > 10) {
+                this.playSound("ui/blabla_long");
+            }
+            else {
+                this.playSound("ui/blabla_short");
+            }
         }
         else if (this.justPressedControl("MENU")) {
             return this.closeDialogue();
@@ -605,8 +642,6 @@ class Scene extends Phaser.Scene {
         this.loadSound("ui/unlock.mp3")
     }
     checkUnlock() {
-        this.checkSpecialUnlocks();
-
         if (GlobalVars.get("unlocksNext").length > 0) {
             var q = QuestManager.getQuest(GlobalVars.get("unlocksNext")[0]);
             var s = q.getStep(GlobalVars.get("unlocksNext")[1]);
@@ -616,6 +651,8 @@ class Scene extends Phaser.Scene {
 
             GlobalVars.set("unlocksNext", []);
         }
+
+        this.checkSpecialUnlocks();
     }
     addUnlocksFromStep(s, _bought = false) {
         if (s.unlockGameMechanics != undefined) {
@@ -677,8 +714,21 @@ class Scene extends Phaser.Scene {
         }
         // NG+
         if (QuestManager.readyForNGP() && !ProgressManager.isStepCompleted(0, 5)) {
-            return; // REMOVE THAT FOR NG+
-            ProgressManager.unlockStep(0, 5);
+            //ProgressManager.unlockStep(0, 5);
+        }
+
+        // Stands
+        var l = ProgressManager.getUnlockedStands();
+        //console.log(l);
+        //console.log(ProgressManager.StandsUnlockCache);
+        if (ProgressManager.StandsUnlockCache.length != l.length) {
+            for (var i in l) {
+                if (ProgressManager.StandsUnlockCache.indexOf(l[i]) < 0) {
+                    this.unlockList.push(["Stand", l[i]]);
+                }
+            }
+
+            ProgressManager.StandsUnlockCache = l;
         }
 
         // Shop
@@ -775,6 +825,9 @@ class Scene extends Phaser.Scene {
             case "Relic":
                 this.unlockDesc.setText(RelicManager.getRelic(unlock).getDescription(true) + bought);
                 break;
+            case "Stand":
+                this.unlockDesc.setText(unlock.getDescription(true));
+                break;
         }
     }
 
@@ -808,7 +861,7 @@ class Scene extends Phaser.Scene {
         );
         this.cursorA.setFormula(84, 22, 84);
         this.cursorB = new CustomCursor(
-            this.addText(">", 400-20, -1000),
+            this.addText(">", 360-20, -1000),
             "vertical",
             this.bibleTextsB
         );
@@ -959,7 +1012,7 @@ class Scene extends Phaser.Scene {
             }
         }
         for (var i in l) {
-            this.bibleTextsB.push(this.addText(l[i], 400, 84+22*i))
+            this.bibleTextsB.push(this.addText(l[i], 360, 84+22*i))
         }
         this.cursorB.objList = this.bibleTextsB;
         this.cursorB.updateObjList();
@@ -987,7 +1040,7 @@ class Scene extends Phaser.Scene {
         this.bibleDescriptionTitle = this.addText("DESCRIPTION", 759, 84, {fontStyle: 'bold'});
         this.bibleDescription = this.addText("", 759, 130, {fontSize: '21px', wordWrap: {width: 400, height: 550}});
 
-        var l = ["Game Mechanics", "Moves", "Party Members", "Fighting Styles", "Events", "Gods", "Synergies", "Relics", "Stånds"];
+        var l = ["Game Mechanics", "Moves", "Party Members", "Fighting Styles", "Events", "Gods", "Synergies", "Relics", "Stands"];
         var unlocks = ProgressManager.getUnlockedGameMechanics();
         for (var i in l) {
             if (unlocks.indexOf(l[i]) < 0) continue;
@@ -1003,7 +1056,7 @@ class Scene extends Phaser.Scene {
         );
         this.cursorA.setFormula(84, 22, 84);
         this.cursorB = new CustomCursor(
-            this.addText(">", 400-20, -1000),
+            this.addText(">", 360-20, -1000),
             "vertical",
             this.bibleTextsB
         );
@@ -1018,7 +1071,7 @@ class Scene extends Phaser.Scene {
         this.bibleDescription.setText("All the game mechanics you know about!");
         l = ProgressManager.getUnlockedGameMechanics();
         for (var i in l) {
-            this.bibleTextsB.push(this.addText(ProgressManager.getUnlockedGameMechanics()[i], 400, 84+22*i))
+            this.bibleTextsB.push(this.addText(ProgressManager.getUnlockedGameMechanics()[i], 360, 84+22*i))
         }
     }
     closeBible() {
@@ -1221,11 +1274,16 @@ class Scene extends Phaser.Scene {
                 var a = ProgressManager.getUnlockedRelics();
                 for (var i in a) l[i] = a[i].name;
             }
+            else if (this.cursorA.getCurrentSelect() == 8) {
+                this.bibleDescription.setText("All the Stands you can summon!");
+                var a = ProgressManager.getUnlockedStands();
+                for (var i in a) l[i] = a[i].name;
+            }
 
             for (var i in this.bibleTextsB) this.bibleTextsB[i].destroy();
             this.bibleTextsB = [];
             for (var i in l) {
-                this.bibleTextsB.push(this.addText(l[i], 400, 84+22*i))
+                this.bibleTextsB.push(this.addText(l[i], 360, 84+22*i))
             }
 
             this.cursorB.objList = this.bibleTextsB;
@@ -1274,6 +1332,10 @@ class Scene extends Phaser.Scene {
             else if (this.cursorA.getCurrentSelect() == 7) {
                 var relic = ProgressManager.getUnlockedRelics()[this.cursorB.getCurrentSelect()];
                 this.bibleDescription.setText(relic.getDescription());
+            }
+            else if (this.cursorA.getCurrentSelect() == 8) {
+                var stand = ProgressManager.getUnlockedStands()[this.cursorB.getCurrentSelect()];
+                this.bibleDescription.setText(stand.getDescription());
             }
         }
     }
@@ -1324,7 +1386,7 @@ class Scene extends Phaser.Scene {
     optionsUpdate() {
         var texts = [];
         if (this.optionArea == "options") {
-            texts = ["Controls", "Audio", "Battle Automatic Text Flow: "];
+            texts = ["Controls", "Audio", "Battle Automatic Text Flow: ", "Text Speed: "];
             if (this.sceneName == "Battle" || this.sceneName == "MultiplayerBattle") {
                 if (this.duel.duelState == "moveChoice") {
                     texts.push("Open Bible");
@@ -1343,6 +1405,7 @@ class Scene extends Phaser.Scene {
             else {
                 texts[2] += "Disabled";
             }
+            texts[3] += TextDict.speedToText(GlobalVars.get("settings")["textSpeed"]);
             this.optionTitle.setText("Options");
 
             if (this.justPressedControl("BACK")) {
@@ -1390,6 +1453,10 @@ class Scene extends Phaser.Scene {
                     var data = {};
                     data["quest"] = this.currentQuest;
                     return this.switchScene("Battle", data);
+                }
+                else if (texts[this.optionCurrentSelect].startsWith("Text Speed")) {
+                    GlobalVars.get("settings")["textSpeed"] = TextDict.getNextSpeed(GlobalVars.get("settings")["textSpeed"]);
+                    GlobalVars.updateSettings();
                 }
             }
         }

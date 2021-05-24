@@ -9,7 +9,11 @@ class MenuScene extends Scene {
         this.textObjects = [];
         this.title = null;
 
+        ProgressManager.StandsUnlockCache = ProgressManager.getUnlockedStands();
+
         if (ProgressManager.getValue("PP_Coins") == undefined) ProgressManager.setValue("PP_Coins", 0);
+        if (GlobalVars.get("settings")["textSpeed"] == undefined) GlobalVars.get("settings")["textSpeed"] = 1;
+
         if (!MenuScene.LuckTry) {
             MenuScene.LuckTry = true;
             if (getRandomPercent() <= 1) {

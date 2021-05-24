@@ -155,7 +155,7 @@ class PPBibleMove extends Move {
         this.description = "Grants a random buff and a random debuff to every fighter on the battlefield.";
         this.autoPass = true;
         this.needsTarget = false;
-        this.type = "other";
+        this.type = "relic";
     }
 
     execute(_user, _target = null) {
@@ -168,6 +168,8 @@ class PPBibleMove extends Move {
             l[i].addRandomBuff();
             l[i].addRandomDebuff();
             _user.duel.addMessage(l[i].getName() + " gets a random buff and a random debuff!");
+            _user.duel.addAnimation("buff", 60, l[i]);
+            _user.duel.addAnimation("debuff", 60, l[i]);
         }
 
         _user.duel.memorySoundEffects.push("darkMagic");
@@ -180,7 +182,7 @@ class DrinkFromChalice extends Move {
         this.description = "Grants 5 random buffs to the user.";
         this.autoPass = true;
         this.needsTarget = false;
-        this.type = "other";
+        this.type = "relic";
     }
 
     execute(_user, _target = null) {
@@ -192,7 +194,31 @@ class DrinkFromChalice extends Move {
         _user.addRandomBuff();
         _user.addRandomBuff();
 
-        _user.duel.memorySoundEffects.push("mmh");
+        _user.duel.memorySoundEffects.push("drink");
+        _user.duel.addAnimation("milk", 60, _user);
+    }
+}
+
+// others
+class ActivateLeverMove extends Move {
+    constructor() {
+        super();
+        this.name = "Activate";
+        this.description = "Activate the targeted lever.";
+        this.priority = true;
+        this.autoPass = true;
+        this.type = "other";
+    }
+
+    execute(_user, _target = null) {
+        try {
+            _target.activateLever();
+            _user.duel.addMessage(_user.getName() + " activates " + _target.getName() + ".");
+            _user.duel.addAnimation("activated", 60, _target);
+        }
+        catch(e) {
+            _user.duel.addMessage(_target.getName() + " couldn't be activated.");
+        }
     }
 }
 
@@ -223,6 +249,17 @@ class TriggerNextPhase extends Move {
                 return;
             }
         }
+    }
+}
+class TriggerStand extends Move {
+    execute(_user, _target = null) {
+        var standId = _target; // since this is a no-target move, I use target to get the stand id instead
+
+        _user.duel.addMessage(_user.getName() + " summons " + StandManager.getStand(standId).name + "!");
+        _user.setStand(standId);
+        _user.triggerStandAbilities();
+
+        //_user.duel.memorySoundEffects.push("darkMagic");
     }
 }
 
