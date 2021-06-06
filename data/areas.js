@@ -21,6 +21,6 @@ AreaManager.loadList([
     },
     { // 5
         "name": "Opstein's Island",
-        "description": "TODO"
+        "description": "A remote private island known to be the home of a criminal. Not only was he grooming children like a popular youtuber, he was also conducting experiments regarding fighting spirits."
     }
 ]);

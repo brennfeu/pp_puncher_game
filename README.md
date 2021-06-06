@@ -12,3 +12,4 @@ Here are things that people have done that I've used:
 - sync-mysql (v3.0.1, which is the latest version - used for database interactions)
 - Web2Exe (exports the game for different OS/architectures)
 - greenworks (for the steam API)
+- moment-range js library (for special dates easter eggs)

@@ -131,6 +131,25 @@ class TextDict extends Phaser.GameObjects.Text {
         	txt = txt.split("B").join("8");
         }
 
+        // christmas
+        if (isInDates(new Date(currentyear, 12 -1, 15), new Date(currentyear+1, 1 -1, 1))) {
+            txt = txt.split("pp").join("present");
+            txt = txt.split("Pp").join("Present");
+            txt = txt.split("PP").join("Present");
+
+            txt = txt.split("Puncher").join("Gifter");
+            txt = txt.split("punche").join("gift");
+            txt = txt.split("Punch").join("Gift");
+            txt = txt.split("punch").join("gift");
+        }
+        // halloween
+        if (isInDates(new Date(currentyear, 10 -1, 20), new Date(currentyear, 11 -1, 1))) {
+            txt = txt.split("Puncher").join("Spooker");
+            txt = txt.split("punche").join("spook");
+            txt = txt.split("Punch").join("Spook");
+            txt = txt.split("punch").join("spook");
+        }
+
         // reverse texte: txt = txt.split("").reverse().join("").split(" ").reverse().join(" ")
 
         return txt.split("|").join("\n").split("`").join("'");
@@ -169,5 +188,7 @@ TextDict.addDict("Kurisu", "Rukisu");
 TextDict.addDict("Astolfo", "Astalfo");
 TextDict.addDict("Rias", "Lias");
 TextDict.addDict("Megumin", "Mugemax");
+TextDict.addDict("Roxy", "Roxi");
+TextDict.addDict("Kaguya", "Kayuga");
 
 TextDict.addDict("Mongo", "Bongo");

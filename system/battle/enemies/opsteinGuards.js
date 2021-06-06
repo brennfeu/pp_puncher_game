@@ -142,7 +142,7 @@ class JohnSoup extends SoupGuard {
 }
 
 class HamburglarBase extends Enemy {
-    constructor(_name) {
+    constructor(_name = "") {
         super("The Hamburglar" + _name);
 
         this.specialArmorValue = 5000;
@@ -201,5 +201,31 @@ class TheHamburglarPhase4 extends HamburglarBase {
         this.godsList.push(GodManager.getGod("Villager"));
         this.regularCharges = 1;
         this.reducedGodhood = true;
+    }
+}
+
+class CrewMate extends Enemy {
+    constructor(_name = "Crewmate") {
+        super(_name);
+        if (getRandomPercent() <= 25) this.name += " (Sus)";
+
+        this.STRValue = 90;
+        this.DEXValue = 55;
+
+        this.currentMovepool = [ Bullet ];
+    }
+}
+class ImposterBoss extends CrewMate {
+    constructor(_name = "The Imposter") {
+        super(_name);
+
+        this.STRValue = 100;
+        this.DEXValue = 55;
+
+        this.specialArmorValue = 1900;
+
+        this.currentMovepool.push( RedPill );
+
+        this.isBoss = true;
     }
 }

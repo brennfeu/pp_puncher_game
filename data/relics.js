@@ -34,5 +34,17 @@ RelicManager.loadList([
         "description": "A small kiwi fruit that gives a pretty chill vibe and smells good. It reminds you of a friend...",
         "usage": "Has 5% chance to activate every turn. Grants the 'Waifu Determination' buff for 3 turns.",
         "wielder": "Brenn"
-    }
+    },
+    { // 6
+        "name": "Amogus Plush",
+        "description": "A red plush that looks like a cosmonaut. It has some kind of suspicious look to it, and you're pretty sure you've already seen that shape somewhere...",
+        "usage": "When someone targets Valurin, the target has 50% chance to get a madness stack.",
+        "wielder": "Valurin"
+    },
+    { // 7
+        "name": "Shark Suit",
+        "description": "A blue shark suit, made by chads and for chads. After wearing it, the first thing you want to say is a simple yet perfect 'a'.",
+        "usage": "Grants +10% critical chance, +20 STR and +5 DEX.",
+        "wielder": "Valurin"
+    },
 ]);

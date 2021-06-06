@@ -314,6 +314,40 @@ class Encounter {
             case("yandereDev"):
                 this.addEnemy(new YandereDev());
                 break;
+            case("dickChariot"):
+                this.addEnemy(new DickChariot());
+                break;
+            case("shadooey"):
+                this.addEnemy(new Shadooey());
+                break;
+            case("sharpharpAndJazzy"):
+                this.addEnemy(new Sharpharp(), 100);
+                this.addEnemy(new JazzySunnyHarold(), 370);
+                break;
+            case("dog"):
+                this.addEnemy(new Dog());
+                break;
+            case("2onestarstudents"):
+                this.addEnemy(new OneStarStudent(), 190);
+                this.addEnemy(new OneStarStudent(), 450);
+                break;
+            case("3onestarstudents"):
+                this.addEnemy(new OneStarStudent(), 76);
+                this.addEnemy(new OneStarStudent());
+                this.addEnemy(new OneStarStudent(), 561);
+                break;
+            case("2twostarsstudents"):
+                this.addEnemy(new TwoStarsStudent(), 190);
+                this.addEnemy(new TwoStarsStudent(), 450);
+                break;
+            case("3twostarsstudents"):
+                this.addEnemy(new TwoStarsStudent(), 76);
+                this.addEnemy(new TwoStarsStudent());
+                this.addEnemy(new TwoStarsStudent(), 561);
+                break;
+            case("shadowAphro"):
+                this.addEnemy(new ShadowAphroPhase1(), 270);
+                break;
 
             // allfaiths temple
             case("spiritGuardians"):
@@ -430,6 +464,77 @@ class Encounter {
                 this.addEnemy(new DemonicSoul(), 76);
                 this.addEnemy(new DemonicSoul());
                 this.addEnemy(new DemonicSoul(), 561);
+                break;
+            case("3urukwomen"):
+                this.addEnemy(new UrukWoman(), 76);
+                this.addEnemy(new UrukWoman());
+                this.addEnemy(new UrukWoman(), 561);
+                break;
+            case("3urukmen"):
+                this.addEnemy(new UrukMan(), 76);
+                this.addEnemy(new UrukMan());
+                this.addEnemy(new UrukMan(), 561);
+                break;
+            case("urukMarriage"):
+                this.addEnemy(new UrukWoman(), 76);
+                this.addEnemy(new UrukBride());
+                this.addEnemy(new UrukMan(), 561);
+                break;
+            case("enkidu"):
+                this.addEnemy(new Enkidu());
+                break;
+            case("2urukelders"):
+                this.addEnemy(new UrukElder(), 180);
+                this.addEnemy(new UrukElder(), 460);
+                break;
+            case("3urukelders"):
+                this.addEnemy(new UrukElder(), 76);
+                this.addEnemy(new UrukElder());
+                this.addEnemy(new UrukElder(), 561);
+                break;
+            case("ninsun"):
+                this.addEnemy(new Ninsun());
+                break;
+            case("shamash"):
+                this.addEnemy(new Shamash());
+                break;
+            case("3bulls"):
+                this.addEnemy(new Bull(), 76);
+                this.addEnemy(new Bull());
+                this.addEnemy(new Bull(), 561);
+                break;
+            case("thunderbird"):
+                this.addEnemy(new Thunderbird());
+                break;
+            case("humbaba"):
+                this.addEnemy(new Humbaba());
+                break;
+            case("bullOfHeaven"):
+                this.addEnemy(new BullOfHeaven());
+                break;
+            case("angelOfDeath"):
+                this.addEnemy(new AngelOfDeath());
+                break;
+            case("grief"):
+                this.addEnemy(new Grief());
+                break;
+            case("3lions"):
+                this.addEnemy(new Lion(), 76);
+                this.addEnemy(new Lion());
+                this.addEnemy(new Lion(), 561);
+                break;
+            case("2scorpionMonsters"):
+                this.addEnemy(new ScorpionMonster(), 180);
+                this.addEnemy(new ScorpionMonster(), 460);
+                break;
+            case("lotsOfTrees"):
+                this.addEnemy(new LotsOfTrees());
+                break;
+            case("urukSnake"):
+                this.addEnemy(new SnakeOddity());
+                break;
+            case("gilgamesh"):
+                this.addEnemy(new Gilgamesh(), 280);
                 break;
 
             // christian settlement
@@ -806,6 +911,55 @@ class Encounter {
                 this.addEnemy(new TheHamburglarPhase1());
                 break;
 
+            case("hololive1"):
+                this.addEnemy(new EldritchGirl());
+                break;
+            case("hololive2"):
+                this.addEnemy(new GroundPounder());
+                break;
+            case("hololive3"):
+                this.addEnemy(new FieryChicken());
+                break;
+            case("hololive4"):
+                this.addEnemy(new DadReaper());
+                break;
+            case("hololive5"):
+                this.addEnemy(new CityPopShark());
+                break;
+            case("leverPuzzle3"):
+                this.addEnemy(new LeverEnemy(0, [ 1, 2 ]), 40);
+                this.addEnemy(new LeverEnemy(1, [ 2, 3 ]), 240);
+                this.addEnemy(new LeverEnemy(2, [ 0, 1 ]), 440);
+                this.addEnemy(new LeverEnemy(3, [ 1 ]), 640);
+                break;
+            case("leverPuzzle4"):
+                this.addEnemy(new LeverEnemy(0, [ 0, 1, 2, 3 ], true), 40);
+                this.addEnemy(new LeverEnemy(1, [ 0, 3 ]), 240);
+                this.addEnemy(new LeverEnemy(2, [ 3 ], true), 440);
+                this.addEnemy(new LeverEnemy(3, [ 2 ], true), 640);
+                break;
+            case("leverPuzzle5"):
+                this.addEnemy(new LeverEnemy(0, [ 0, 2, 3 ]), 40);
+                this.addEnemy(new LeverEnemy(1, [ 3 ]), 240);
+                this.addEnemy(new LeverEnemy(2, [ 2, 3 ]), 440);
+                this.addEnemy(new LeverEnemy(3, [ 1, 2, 3 ]), 640);
+                break;
+            case("2crewmates"):
+                this.addEnemy(new CrewMate(), 190);
+                this.addEnemy(new CrewMate(), 450);
+                break;
+            case("3crewmates"):
+                this.addEnemy(new CrewMate(), 76);
+                this.addEnemy(new CrewMate());
+                this.addEnemy(new CrewMate(), 561);
+                break;
+            case("imposterSusHaha"):
+                this.addEnemy(new ImposterBoss());
+                break;
+            case("godOfDiscord"):
+                this.addEnemy(new GodOfDiscord());
+                break;
+
             // multiplayer
             case("multiplayer"):
                 for (var i in _otherData) {
@@ -815,7 +969,7 @@ class Encounter {
         }
     }
 
-    addEnemy(_enemy, _x = 320, _y = 75){
+    addEnemy(_enemy, _x = 320, _y = 75) {
         _enemy.setSpriteCoordinates(_x, _y);
         this.enemyList.push(_enemy);
     }

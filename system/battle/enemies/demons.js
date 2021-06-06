@@ -46,25 +46,7 @@ class GoatDemon extends Demon {
         this.STRValue = 500;
         this.DEXValue = 45;
 
-        this.currentMovepool = [ PunchingPP, PunchingPPReallyHard, MoveManager.createMove(function execute(_user, _target = null) {
-            _user.duel.addMessage(_user.getName() + " casts a Blue Fireball!");
-
-            var l = _user.duel.getOppsOf(_user);
-            for (var i in l) {
-                var dmg = Math.floor(_user.STR/10);
-                if (l[i].rolledDEX >= _user.rolledDEX) {
-                    dmg = Math.floor(dmg/2);
-                }
-                else {
-                    _user.duel.memorySoundEffects.push("flames");
-                    _user.duel.addAnimation("fire", 60, l[i]);
-                }
-
-                if (l[i].damage(dmg, "attack", _user)) {
-                    l[i].blueFire += Math.floor(_user.DEX/3);
-                }
-            }
-        }) ];
+        this.currentMovepool = [ PunchingPP, PunchingPPReallyHard, BlueFireball ];
     }
 }
 // big demons are frightening, and can use bigsatan?
@@ -186,5 +168,16 @@ class Dokkaebi extends Demon {
             this.duel.addMessage(_opponent.getName() + " burns!");
             _opponent.blueFire += Math.floor(this.DEX/2);
         }
+    }
+}
+
+class DickChariot extends Demon {
+    constructor(_name = "Dick Chariot") {
+        super(_name);
+
+        this.STRValue = 400;
+        this.DEXValue = 40;
+
+        this.currentMovepool = [ PunchingPP ];
     }
 }

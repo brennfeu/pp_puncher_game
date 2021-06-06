@@ -3,6 +3,10 @@ var win = nw.Window.get();
 let http = require('http');
 let fs = require('fs');
 
+const Moment = require('moment');
+const MomentRange = require('moment-range');
+const moment = MomentRange.extendMoment(Moment);
+
 var GREENWORKS = require("./greenworks");
 var SHOW_STEAM_ERROR = true;
 console.log("Steam API Init: " + GREENWORKS.init());

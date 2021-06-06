@@ -7,9 +7,12 @@ class Quest {
         this.isMain = _data.isMain;
         this.areaId = _data.areaId;
 
+        this.isImportant = _data.isImportant;
+        if (this.isImportant == undefined) this.isImportant = false;
+
         this.questSteps = [];
         for (var i in _data.questSteps) {
-            this.questSteps.push(new QuestSteps(_data.questSteps[i], i))
+            this.questSteps.push(new QuestSteps(_data.questSteps[i], i, this))
         }
 
         this.ignoreMe = _data.ignoreMe;
@@ -18,7 +21,8 @@ class Quest {
 
     getName() {
         var txt = this.name;
-        if (this.isMain && !this.isCompleted()) txt += " (!)";
+        if ((this.isMain) && !this.isCompleted()) txt += " (!)";
+        else if ((this.isImportant) && !this.isCompleted()) txt += " (?)";
         return txt;
     }
     getDescription() {
@@ -60,8 +64,9 @@ class Quest {
     }
 }
 class QuestSteps {
-    constructor(_data, _id) {
+    constructor(_data, _id, _parentQuest) {
         this.id = parseInt(_id);
+        this.parentQuest = _parentQuest;
 
         this.name = _data.name;
         this.description = _data.description;

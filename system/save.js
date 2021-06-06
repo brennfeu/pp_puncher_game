@@ -97,6 +97,11 @@ class ProgressManager {
                 if (ta && !tb) return -1;
                 else if (!ta && tb) return 1;
 
+                var ia = a.isImportant
+                var ib = b.isImportant
+                if (ia && !ib) return -1;
+                else if (!ia && ib) return 1;
+
                 var na = a.name
                 var nb = b.name
                 if (na < nb) return -1;
@@ -399,20 +404,20 @@ class ProgressManager {
         return l;
     }
 
-    static getSavedWaifus() {
-        if (ProgressManager.SavedWaifusCache != null) return ProgressManager.SavedWaifusCache;
+    static getSavedWaifus(_onlyBonusWaifus = false) {
+        if (ProgressManager.SavedWaifusCache != null && !_onlyBonusWaifus) return ProgressManager.SavedWaifusCache;
 
         var l = [];
         var steps = ProgressManager.getCompletedSteps();
         for (var i in steps) {
-            if (steps[i].saveWaifu != undefined) {
-                l.push(steps[i].saveWaifu);
-            }
+            if (_onlyBonusWaifus && steps[i].parentQuest.isMain) continue;
+            if (steps[i].saveWaifu == undefined) continue;
+
+            l.push(steps[i].saveWaifu);
         }
-        ProgressManager.SavedWaifusCache = l;
+        if (!_onlyBonusWaifus) ProgressManager.SavedWaifusCache = l;
         return l;
     }
-    // TODO moves, fs, etc...
 
     static resetCache() {
         ProgressManager.CompletedStepsCache = null;

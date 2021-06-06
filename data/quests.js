@@ -21,7 +21,6 @@ QuestManager.loadList([
                 "name": "CHEATING",
                 "description": "FIRST TIME CHEATING CHECK",
                 "unlockQuests": [ 10, 15 ],
-                "unlockQuestSteps": [ [24, 1] ],
                 "unlockGameMechanics": [ "Cheating" ]
             },
             { // 2
@@ -873,6 +872,7 @@ QuestManager.loadList([
         "name": "Cheater Gate",
         "description": "The original swedish pilgrims that made the IKEA are angry about how you treat their brothers! Give them a good punch in the PP.",
         "isMain": false,
+        "isImportant": true,
         "areaId": 1,
 
         "questSteps": [
@@ -888,7 +888,8 @@ QuestManager.loadList([
                 "duelParam": {
                     "forceRootOfNuisance": true
                 },
-                "unlockFightingStyles": [ "Small PP" ]
+                "unlockFightingStyles": [ "Small PP" ],
+                "unlockQuests": [ 45 ]
             }
         ]
     },
@@ -950,7 +951,8 @@ QuestManager.loadList([
     { // 27 - Otherworlds
         "name": "Otherworlds",
         "description": "A portal appeared in the Anime Convention. It seems to lead to different alternate realities.",
-        "isMain": true,
+        "isMain": false,
+        "isImportant": true,
         "areaId": 0,
 
         "questSteps": [
@@ -1095,7 +1097,7 @@ QuestManager.loadList([
                 "unlockGameMechanics": [ "Relics" ],
                 "unlockRelics": [ 1, 2, 3 ],
                 "unlockMoves": [ PPBibleMove ],
-                "unlockQuests": [ 13, 33, 35 ],
+                "unlockQuests": [ 13, 33, 35, 42 ],
                 "unlockQuestSteps": [ [25, 3] ]
             }
         ]
@@ -1317,7 +1319,8 @@ QuestManager.loadList([
                 "description": "You stumble upon what the creature might have been seeking here. The alien should be here soon.",
                 "encounter": "familyFriendly",
                 "duelParam": { "nextEncounters": [ "pikamee" ] },
-                "unlockFightingStyles": [ "Electric PP" ]
+                "unlockFightingStyles": [ "Electric PP" ],
+                "unlockMoves": [ PPDefibrilation ]
             }
         ]
     },
@@ -1345,7 +1348,7 @@ QuestManager.loadList([
                 "description": "As you progress on the island, you suddenly get attacked by badgers! Who would train badgers to attack, and why would they be here?",
                 "encounter": "badgers",
                 "duelParam": { "nextEncounters": [ "valurin" ] },
-                "unlockQuests": [ 41, 42 ],
+                "unlockQuests": [ 41, 43 ],
                 "unlockPartyMembers": [ "Valurin" ],
                 "unlockGods": [ "The Brain", "The Brawn" ],
                 "postFightDialogue": 59
@@ -1370,13 +1373,14 @@ QuestManager.loadList([
                 "duelParam": { "nextEncounters": [ "standUsers2", "standUserBoss" ] },
                 "postFightDialogue": 60,
                 "unlockGameMechanics": [ "Stands" ],
+                "unlockQuests": [ 46 ],
                 "unlockMoves": BASIC_STAND_MOVE_LIST
             }
         ]
     },
     { // 41 - The Dungeon
         "name": "The Dungeon",
-        "description": "TODO",
+        "description": "The island has a huge dungeon in the center. As it is the only building in the whole island, this probably is where you'll find this friend of Espinoza.",
         "isMain": true,
         "areaId": 5,
 
@@ -1449,8 +1453,8 @@ QuestManager.loadList([
                 "name": "The Hamburglar",
                 "description": "Hey, is that the humburglar just here? Quick, let's catch him and make him pay! He's probably ready to fight, so let's not underestimate him.",
                 "encounter": "theHamburglar",
-                "inFightDialogue": 66,
                 "duelParam": { "waifuDetermination": true },
+                "inFightDialogue": 66,
                 "postFightCutscene": 10,
                 "saveWaifu": "Megumin"
             },
@@ -1468,9 +1472,195 @@ QuestManager.loadList([
                 "description": "Does a man have to fight all his life? Only in death to take flight to the skies. Warmongers vie to take my throne, no respect is ever shown.",
                 "encounter": "2saxonMen",
                 "duelParam": { "nextEncounters": [ "3saxonMen" ] }
-                // TODO GIVE VALURIN A RELIC
             }
         ]
     },
-    // bonus puzzle quest
+    { // 43 - Island Depot
+        "name": "Island Depot",
+        "description": "The island features a big pile of rubbish, old stuff people were too lazy to clean and just threw in here. There might be interesting things to find here!",
+        "isMain": false,
+        "areaId": 5,
+
+        "questSteps": [
+            { // 0
+                "name": "Myths and...",
+                "description": "You expected to stumble upon weird and dirty people, but instead waifu-material girls. However, you're still going to punch their PP!",
+                "encounter": "hololive1",
+                "duelParam": { "nextEncounters": [ "hololive2" ] }
+            },
+            { // 1
+                "name": "...Holograms",
+                "description": "What do you mean girls don't have PPs? Don't be so narrow-minded, PP Punching is more than just punching pp!",
+                "encounter": "hololive3",
+                "duelParam": { "nextEncounters": [ "hololive4", "hololive5" ] },
+                "unlockRelics": [ 7 ]
+            },
+            { // 2
+                "name": "Broken Levers",
+                "description": "The path is blocked by huge metal beams. Hopefully, there are old construction machines, you could use them to move the beams. Though they seem rather difficult to use.",
+                "encounter": "leverPuzzle3",
+                "duelParam": { "nextEncounters": [ "leverPuzzle4", "leverPuzzle5" ] }
+            },
+            { // 3
+                "name": "Emergency",
+                "description": "I CAN'T TAKE IT ANYMORE I CAN'T TAKE IT ANYMORE I CAN'T TAKE IT ANYMORE I CAN'T TAKE IT ANYMORE I CAN'T TAKE IT ANYMORE HELP",
+                "encounter": "2crewmates",
+                "duelParam": { "nextEncounters": [ "3crewmates", "imposterSusHaha" ] },
+                "unlockRelics": [ 6 ],
+                "unlockQuests": [ 44 ]
+            },
+        ]
+    },
+    { // 44 - King of Heroes
+        "name": "King of Heroes",
+        "description": "This is but the shadow of the epic of the king of heroes. Relive his life, and challenge him at the end of the tunnel.",
+        "isMain": false,
+        "isImportant": true,
+        "areaId": 3,
+
+        "questSteps": [
+            { // 0
+                "name": "Tablet I",
+                "description": "Story of the first tablet.",
+                "encounter": "3urukwomen",
+                "duelParam": { "nextEncounters": [ "3urukmen" ] }
+            },
+            { // 1
+                "name": "Tablet II",
+                "description": "Story of the second tablet.",
+                "encounter": "urukMarriage",
+                "duelParam": { "nextEncounters": [ "enkidu" ] }
+            },
+            { // 2
+                "name": "Tablet III",
+                "description": "Story of the third tablet.",
+                "encounter": "2urukelders",
+                "duelParam": { "nextEncounters": [ "3urukelders", "ninsun", "shamash" ] }
+            },
+            { // 3
+                "name": "Tablet IV",
+                "description": "Story of the fourth tablet.",
+                "encounter": "3bulls",
+                "duelParam": { "nextEncounters": [ "thunderbird" ] }
+            },
+            { // 4
+                "name": "Tablet V",
+                "description": "Story of the fifth tablet.",
+                "encounter": "humbaba"
+            },
+            { // 5
+                "name": "Tablet VI",
+                "description": "Story of the sixth tablet.",
+                "encounter": "bullOfHeaven"
+            },
+            { // 6
+                "name": "Tablet VII",
+                "description": "Story of the seventh tablet.",
+                "encounter": "angelOfDeath"
+            },
+            { // 7
+                "name": "Tablet VIII",
+                "description": "Story of the eigthth tablet.",
+                "encounter": "grief"
+            },
+            { // 8
+                "name": "Tablet IX",
+                "description": "Story of the ninth tablet.",
+                "encounter": "3lions",
+                "duelParam": { "nextEncounters": [ "2scorpionMonsters" ] }
+            },
+            { // 9
+                "name": "Tablet X",
+                "description": "Story of the tenth tablet.",
+                "encounter": "lotsOfTrees"
+            },
+            { // 10
+                "name": "Tablet XI",
+                "description": "Story of the eleventh tablet.",
+                "encounter": "urukSnake"
+            },
+            { // 11
+                "name": "Tablet XII",
+                "description": "Story of the twelvth tablet.",
+                "encounter": "gilgamesh",
+                "saveWaifu": "Roxy"
+            }
+        ]
+    },
+    { // 45 - Spanish Parade
+        "name": "Spanish Parade",
+        "description": "A spanish parade started in the high school! Everyone here seems surprised about it, even the students. Maybe you should investigate...",
+        "isMain": false,
+        "isImportant": true,
+        "areaId": 2,
+
+        "questSteps": [
+            { // 0
+                "name": "me no hables",
+                "description": "The easiest way to know about what's happening is to ask people. I hope they'll be friendly and not insult us for no reason!",
+                "encounter": "inquisitorArmyA",
+                "duelParam": { "nextEncounters": [ "inquisitorArmyB" ] },
+                "preFightDialogue": 72,
+                "postFightDialogue": 73
+            },
+            { // 1
+                "name": "Specialist",
+                "description": "You see a bunch of high school student hanging around. They look like anime protagonist with an interesting persona, it could be fun to fight them!",
+                "encounter": "3AnimeHighSchoolers",
+                "duelParam": { "nextEncounters": [ "dickChariot" ] }
+            },
+            { // 2
+                "name": "Cat",
+                "description": "You wouldn't attack an innocent cat, would you?",
+                "encounter": "shadooey",
+                "postFightDialogue": 74
+            },
+            { // 3
+                "name": "For your account",
+                "description": "Jazzy Sunny Harold and sharpharp, two students that were banned from this high school for their really annoying and provocative behaviour. And they are back.",
+                "encounter": "sharpharpAndJazzy",
+                "duelParam": { "nextEncounters": [ "sharpharpAndJazzy", "sharpharpAndJazzy", "sharpharpAndJazzy", "sharpharpAndJazzy" ] },
+                "inFightDialogue": 75
+            },
+            { // 4
+                "name": "Dog",
+                "description": "You can pet the dog in PP Puncher.",
+                "encounter": "dog",
+                "unlockMoves": [ PetTheDog ]
+            },
+            { // 5
+                "name": "Academy Attack",
+                "description": "An neighbour academy heard about the parade, and decided to attack the high school! That means even stronger foes!",
+                "encounter": "2onestarstudents",
+                "duelParam": { "nextEncounters": [ "3onestarstudents" ] }
+            },
+            { // 6
+                "name": "Shadow Guards",
+                "description": "You quickly realize who was the person who ordered this attack on the high school. But to get to him, you must first face his guards.",
+                "encounter": "2twostarsstudents",
+                "duelParam": { "nextEncounters": [ "3twostarsstudents" ] }
+            },
+            { // 7
+                "name": "Shadow Aphrodite",
+                "description": "You reach the boss of the academy, and witness by his side a waifu. She must have been brought here to pressure you into not fighting, but this won't work!",
+                "encounter": "shadowAphro",
+                "saveWaifu": "Kaguya"
+            }
+        ]
+    },
+    { // 46 - Scums
+        "name": "Scums",
+        "description": "This area is famous for its illegal activities regarding teenagers. It has unfortunately brought some people interested in those activities...",
+        "isMain": false,
+        "areaId": 5,
+
+        "questSteps": [
+            { // 0
+                "name": "God of Discord",
+                "description": "You may not be the good guy of the story, but you're never going to step as low as what they are doing. Espinoza, Opstein, and this guys are exemples of people even worse than you.",
+                "encounter": "godOfDiscord",
+                "unlockEvents": [ 9 ]
+            }
+        ]
+    },
 ]);

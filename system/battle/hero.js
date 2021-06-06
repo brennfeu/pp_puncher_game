@@ -8,6 +8,12 @@ class Hero extends Fighter {
         this.STRValue = 80 + waifuSaved*10;
         this.DEXValue = 20 + waifuSaved*5;
 
+        if (DEV_MODE) { // reduces stat buff of bonus waifus in dev mode
+            var bonusWaifuSaved = ProgressManager.getSavedWaifus(true).length;
+            this.STRValue -= bonusWaifuSaved*5;
+            this.DEXValue -= bonusWaifuSaved*3;
+        }
+
         this.moveFrameObject = null;
         this.moveFrameText = null;
 
@@ -18,9 +24,12 @@ class Hero extends Fighter {
         this.currentMovepool = [];
 
         var l = this.duel.getAllFighters();
+
         var hasLevers = false;
+        var hasDogs = false;
         for (var i in l) {
             if (l[i] instanceof LeverEnemy) hasLevers = true;
+            if (l[i] instanceof Dog) hasDogs = true;
         }
 
         var forcedPool = this.getForcedMovepool();
@@ -30,6 +39,9 @@ class Hero extends Fighter {
         }
         else if (hasLevers) {
             this.currentMovepool = [ ActivateLeverMove, Wait ];
+        }
+        else if (hasDogs) {
+            this.currentMovepool = [ PetTheDog ];
         }
         else if (this.kidneyCurse > 0) {
             this.currentMovepool = [ KidneyShoot, SuperKidneyShoot ];
@@ -122,6 +134,7 @@ class Hero extends Fighter {
         if (this.duel.checkParam("forceRootOfNuisance", true)) {
             return [ RootOfNuisance ];
         }
+
         return super.getForcedMovepool();
     }
 
@@ -132,6 +145,7 @@ class Hero extends Fighter {
 
     updateTextObjects() {
         super.updateTextObjects();
+
         if (this.spriteObject == null) return;
         if (this.chosenMove == null || this.isDead() || ["heroChoice", "moveChoice", "targetChoice", "movePlaying"].indexOf(this.duel.duelState) < 0) {
             this.moveFrameObject.setY(-1000);

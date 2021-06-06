@@ -375,6 +375,8 @@ class FamilyFriendly extends EnergyCreature {
             _user.duel.addMessage(_user.swornEnemy.name + " kills " + _user.getName() + "!");
             _user.damage(1000, "attack", _user.swornEnemy);
             _user.duel.addMessage(_user.getName() + " is DEAD! D.E.A.D.!");
+        }, function(_move) {
+            _move.autoPass = true;
         }) ];
 
         this.swornEnemy = new ElectricKettleAlien();

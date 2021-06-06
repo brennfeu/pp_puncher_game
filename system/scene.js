@@ -305,6 +305,9 @@ class Scene extends Phaser.Scene {
         this.loadImage("status/lostSouls.png");
         this.loadImage("status/borealAscent.png");
         this.loadImage("status/borealAscentCountdown.png");
+        this.loadImage("status/explosionMagic.png");
+        this.loadImage("status/bribe.png");
+        this.loadImage("status/inLove.png");
 
         this.loadImage("status/other/depression.png");
         this.loadImage("status/other/fungus.png");
@@ -349,10 +352,13 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/lightning.mp3");
         this.loadSound("battle/switch.mp3");
 
+        this.loadSound("battle/extraLife.mp3");
+        this.loadSound("battle/standSummon.mp3");
+
         this.loadSound("battle/heal.mp3");
         this.loadSound("battle/hurtA.mp3");
+        this.loadSound("battle/hurtA_female.mp3");
         this.loadSound("battle/hurtB.mp3");
-        this.loadSound("battle/extraLife.mp3");
         this.loadSound("battle/soul_hurt.mp3");
         this.loadSound("battle/hurtA_demon.mp3");
         this.loadSound("battle/hurtA_alien.mp3");
@@ -387,6 +393,8 @@ class Scene extends Phaser.Scene {
         this.loadSound("battle/flames.mp3");
         this.loadSound("battle/ammo.mp3");
         this.loadSound("battle/quickening.mp3");
+        this.loadSound("battle/sword.mp3");
+        this.loadSound("battle/thinks.mp3");
 
         this.loadSound("battle/uuh.mp3");
     }

@@ -29,6 +29,15 @@ class StandManager {
         return StandManager.STAND_LIST[_id];
     }
 
+    static getRandomStand() {
+        var nbTries = 0;
+        while (nbTries <= 100000) {
+            var stand = randomFromList(StandManager.STAND_LIST);
+            if (stand.summonMoves.length > 0) return stand; 
+        }
+        return null;
+    }
+
     static loadList(_list) {
         for (var i in _list) {
             StandManager.addStand(new Stand(_list[i], i));

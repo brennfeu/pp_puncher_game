@@ -1103,7 +1103,7 @@ DialogueManager.loadList([
                 "text": "He probably knows where he is hiding. I plan to get my revenge once we get all the girls back!"
             },
             {
-                "text": "And we've a got a loli to save there as well. Let's go!"
+                "text": "And we've a got an anime girl to save there as well. Let's go!"
             }
         ]
     },
@@ -1528,6 +1528,71 @@ DialogueManager.loadList([
             },
             {
                 "text": "EXPLOSION!!!"
+            }
+        ]
+    },
+    { // 72 - me no hables racist
+        "dialogueLines": [
+            {
+                "speaker": "Eldon",
+                "text": "Excuse me, what is all of this about?"
+            },
+            {
+                "speaker": "dudesup",
+                "text": "me no hables racist"
+            },
+            {
+                "speaker": "Eldon",
+                "text": "What?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "They seem up for a good fight now that you've triggered them."
+            }
+        ]
+    },
+    { // 73 - racist?
+        "dialogueLines": [
+            {
+                "speaker": "Eldon",
+                "text": "Why did they attack us and insult us for no reason?"
+            },
+            {
+                "speaker": "Brenn",
+                "text": "I have no idea, but this is a good excuse to punch pp."
+            },
+            {
+                "text": "It seems to have attracted all kinds of different people, this is going ot be fun!"
+            }
+        ]
+    },
+    { // 74 - cat
+        "dialogueLines": [
+            {
+                "speaker": "Brenn",
+                "text": "That cat had a weirdly human-like sounding voice."
+            },
+            {
+                "text": "Funny."
+            }
+        ]
+    },
+    { // 75 - You fool!
+        "dialogueLines": [
+            {
+                "speaker": "sharpharp",
+                "text": "You FOOL!"
+            },
+            {
+                "text": "You can't defeat us! We have too many alternate accounts!"
+            }
+        ]
+    },
+    { // 76 - I'm die
+        "dialogueLines": [
+            {
+                "speaker": "Dog",
+                "text": "I'm die, thank you forever."
             }
         ]
     },

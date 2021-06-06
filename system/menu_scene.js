@@ -51,7 +51,7 @@ class MenuScene extends Scene {
     } catch(e) { TRIGGER_ERROR(this, e) } }
 
     create() { try {
-        this.title = this.addText('PP PUNCHER ', 180, 40, {fontStyle: 'bold italic', fontSize: '60px'});
+        this.title = this.addText(GAME_NAME + ' ', 180, 40, {fontStyle: 'bold italic', fontSize: '60px'});
         this.addToForceTint(this.title);
         this.addText(GAME_VERSION, 1100, 650, {fontSize: '12px'});
 

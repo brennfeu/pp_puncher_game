@@ -244,6 +244,7 @@ class ChristianMaintainer extends ChristianPriest {
 class Nun extends ChristianPriest {
     constructor(_name = "Nun") {
         super(_name);
+        this.isFemale = true;
 
         this.STRValue = 150;
 
@@ -309,7 +310,7 @@ class SaxonMan extends ChristianPriest {
 
         this.STRValue = 140;
 
-        this.currentMovepool = [ Sword ];
+        this.currentMovepool = [ SwordMove ];
     }
 
     turnChange() {

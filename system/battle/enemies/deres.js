@@ -1,6 +1,7 @@
 class Dere extends Student {
     constructor(_name = "Dere") {
         super(_name);
+        this.isFemale = true;
 
         this.STRValue = 250;
         this.DEXValue = 25;

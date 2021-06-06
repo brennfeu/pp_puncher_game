@@ -456,17 +456,18 @@ class Duel {
         }
 
         // cheating
-        if (_fighter.isHero() && // only heroes cheat:
-          _fighter.currentMovepool.indexOf(_fighter.chosenMove) < 0 && // if not in movepool
-          _fighter.rollLuckPercentLow() <= _fighter.chosenMove.newInstance().getCheatProb() && // and cheating roll fail
-          !this.allowCheating) {
+        if (_fighter.isHero() && // only heroes cheat
+        _fighter.currentMovepool.indexOf(_fighter.chosenMove) < 0 && // if not in movepool
+        _fighter.rollLuckPercentLow() <= _fighter.chosenMove.newInstance().getCheatProb() && // and cheating roll fail
+        !this.allowCheating) {
             illegal = true;
         } // and cheating is forbidden
 
         // dev cheat always works
-        if (_fighter.chosenMove.newInstance().type == "Dev Test") {
-            illegal = false;
-        }
+        if (_fighter.chosenMove.newInstance().type == "Dev Test") illegal = false;
+
+        // kaguya bribe
+        if (_fighter.ppBribe > 0 && _fighter.rollLuckPercentLow() <= _fighter.ppBribe) illegal = false;
 
         if (illegal) {
             _fighter.increaseLuck();
@@ -669,6 +670,15 @@ class Duel {
     triggerVictory() {
         this.forcedState = "victory";
         this.duelState = "victory";
+        this.memoryMoves = [];
+        this.memoryAnimations = [];
+        this.memorySoundEffects = [];
+        this.memoryDialogues = [];
+        this.memoryTurnChange = [];
+    }
+    triggerDefeat() {
+        this.forcedState = "defeat";
+        this.duelState = "defeat";
         this.memoryMoves = [];
         this.memoryAnimations = [];
         this.memorySoundEffects = [];

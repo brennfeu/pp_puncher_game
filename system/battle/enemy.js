@@ -9,6 +9,8 @@ class Enemy extends Fighter {
         this.isBoss = false;
 
         this.hasSpecialLuck = false;
+
+
     }
 
     getCurrentListOfMoves() {

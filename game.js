@@ -25,7 +25,7 @@ var DREAM_LUCK = false;
 
 const FORCE_LOGS = [];
 const HIDE_LOGS = ["sceneAddStuff"];
-const LOG_TRACE = false;
+const LOG_TRACE = DEV_MODE;
 
 var CURRENT_SCENE = null; // for console debugging
 
@@ -128,3 +128,8 @@ function cloneObject(obj) {
 
 	throw new Error("Unable to copy obj! Its type isn't supported.");
 }
+
+function isInDates(_date1, _date2) {
+	return moment().range(_date1, _date2).contains(new Date());
+}
+var currentyear = new Date().getFullYear();

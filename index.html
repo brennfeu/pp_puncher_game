@@ -74,6 +74,7 @@
 		<script src="./system/battle/enemies/opsteinGuards.js"></script>
 		<script src="./system/battle/enemies/stand.js"></script>
 		<script src="./system/battle/enemies/levers.js"></script>
+		<script src="./system/battle/enemies/gilgamesh.js"></script>
 		<script src="./system/battle/enemies/multiplayer_fighter.js"></script>
 
 		<script src="./data/areas.js"></script>
@@ -87,8 +88,12 @@
 		<script src="./data/artworks.js"></script>
 		<script src="./data/stands.js"></script>
 
+		<script>
+			var GAME_NAME = "PP Puncher";
+			if (getRandomPercent() <= 1) GAME_NAME = "PIPPI Puncher";
+		</script>
 		<script>var GAME = new Phaser.Game(GAME_CONFIG);</script>
-		<script>if (getRandomPercent() <= 1) document.title = "Puncher of PPs";</script>
+		<script>document.title = GAME_NAME;</script>
 
 		<style>
 			* { margin: 0; padding: 0; }
@@ -99,7 +104,7 @@
 			}
 		</style>
 
-		<title>PP Puncher</title>
+		<title>pp?</title>
 	</head>
 
 	<body>

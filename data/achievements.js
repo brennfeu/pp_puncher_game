@@ -69,6 +69,11 @@ AchievementManager.loadList([
         "steamName": "ONLY_APATHY",
         "isHidden": true
     },
+    { // 13
+        "name": "High Five Party",
+        "description": "Have all 4 party members with the High Five Buff at the same time.",
+        "steamName": "HIGH_FIVE_PARTY"
+    },
 ]);
 AchievementManager.ACHIEVEMENT_LIST = AchievementManager.ACHIEVEMENT_LIST.sort(
     function (a, b) {

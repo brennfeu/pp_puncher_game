@@ -1,3 +1,4 @@
 [0308/183734.420:ERROR:http_transport_win.cc(175)] WinHttpCrackUrl: L’URL n’utilise pas un protocole reconnu (0x2ee6)
 [0320/184538.999:ERROR:http_transport_win.cc(175)] WinHttpCrackUrl: L’URL n’utilise pas un protocole reconnu (0x2ee6)
 [0421/222309.441:ERROR:http_transport_win.cc(175)] WinHttpCrackUrl: L’URL n’utilise pas un protocole reconnu (0x2ee6)
+[0525/220350.919:ERROR:http_transport_win.cc(175)] WinHttpCrackUrl: L’URL n’utilise pas un protocole reconnu (0x2ee6)

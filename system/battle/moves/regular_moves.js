@@ -239,6 +239,32 @@ class DeadBro extends Move {
 }
 
 // UNLOCKED
+class PPDefibrilation extends Move {
+    constructor() {
+        super();
+        this.name = "PP Defibrilation";
+        this.description = "Grants Electric PP and +10 DEX.";
+        this.autoPass = true;
+        this.needsTarget = false;
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " wants an Electric PP...");
+        if (_user.hasFightingStyle("electric")) {
+            _user.duel.addMessage("...but he already had one!");
+        }
+        else {
+            _user.duel.addMessage("...and now he got it!");
+            _user.addFightingStyle("electric");
+            _user.DEXValue += 10;
+
+            _user.duel.addAnimation("electric", 60, _user);
+            _user.duel.memorySoundEffects.push("quickening");
+        }
+    }
+}
+
+// UNLOCKED
 class EncrustPP extends Move {
     constructor() {
         super();
@@ -330,6 +356,9 @@ class HighFiveBro extends Move {
                 _user.duel.addAnimation("highfive", 60, _user);
                 _user.duel.addAnimation("highfive", 60, _user.duel.getAlliesOf(_user)[i]);
                 _user.duel.memorySoundEffects.push("ohYeahDouble");
+
+                for (var j in _user.duel.heroes) if (_user.duel.heroes[j].highFiveBuff < 0) return;
+                AchievementManager.unlockAchievement(13);
                 return;
             }
         }
@@ -383,6 +412,7 @@ class InterrogationPoint extends Move {
         _user.duel.memoryMoves.push(storedMove);
 
         _user.duel.addAnimation("?", 60, _user);
+        _user.duel.memorySoundEffects.push("thinks");
     }
 }
 
@@ -531,6 +561,7 @@ class Perhaps extends Move {
         _user.duel.addMessage("Wait he forgot about the battle!");
 
         _user.duel.addAnimation("perhaps", 60, _user);
+        _user.duel.memorySoundEffects.push("thinks");
     }
 }
 

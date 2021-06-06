@@ -199,6 +199,40 @@ class DrinkFromChalice extends Move {
     }
 }
 
+// enemies
+class BlueFireball extends Move {
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " casts a Blue Fireball!");
+
+        var l = _user.duel.getOppsOf(_user);
+        for (var i in l) {
+            var dmg = Math.floor(_user.STR/10);
+            if (l[i].rolledDEX >= _user.rolledDEX) {
+                dmg = Math.floor(dmg/2);
+            }
+            else {
+                _user.duel.memorySoundEffects.push("flames");
+                _user.duel.addAnimation("fire", 60, l[i]);
+            }
+
+            if (l[i].damage(dmg, "attack", _user)) {
+                l[i].blueFire += Math.floor(_user.DEX/3);
+            }
+        }
+    }
+}
+class BiteMove extends Move {
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " bites " + _target.getName() + "'s PP!")
+        if (_target.damage(Math.floor(_user.STR/10), "attack", _user)) {
+            _target.bleedDamage += Math.floor(_user.STR/10);
+        }
+
+        _user.duel.memorySoundEffects.push("sword");
+        _user.duel.addAnimation("bite", 60, _target, true, false);
+    }
+}
+
 // others
 class ActivateLeverMove extends Move {
     constructor() {
@@ -218,6 +252,29 @@ class ActivateLeverMove extends Move {
         }
         catch(e) {
             _user.duel.addMessage(_target.getName() + " couldn't be activated.");
+        }
+    }
+}
+class PetTheDog extends Move {
+    constructor() {
+        super();
+        this.name = "Pet";
+        this.description = "Pets the dog.";
+        this.autoPass = true;
+        this.type = "other";
+    }
+
+    execute(_user, _target = null) {
+        _user.duel.addMessage(_user.getName() + " pets " + _target.getName() + "!");
+
+        _user.duel.addAnimation("pet", 60, _target);
+
+        if (_target instanceof Dog) {
+            var storedMove = {};
+            storedMove["user"] = _user;
+            storedMove["move"] = MoveManager.createMove(function(_user) { _user.duel.triggerVictory(); });
+            storedMove["target"] = _target;
+            _user.duel.memoryMoves.push(storedMove);
         }
     }
 }
@@ -259,7 +316,7 @@ class TriggerStand extends Move {
         _user.setStand(standId);
         _user.triggerStandAbilities();
 
-        //_user.duel.memorySoundEffects.push("darkMagic");
+        _user.duel.memorySoundEffects.push("standSummon");
     }
 }
 

@@ -151,7 +151,7 @@ class SwordMove extends Move {
         }
 
         _user.duel.addAnimation("sword", 60, _target, true, false);
-        _user.duel.memorySoundEffects.push("protect");
+        _user.duel.memorySoundEffects.push("sword");
     }
 }
 

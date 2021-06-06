@@ -129,6 +129,7 @@ class CouncilPresident extends StudentCouncilMember {
 class CouncilVicePresident extends StudentCouncilMember {
     constructor(_name = "Vice-President") {
         super(_name);
+        this.isFemale = true;
 
         this.STRValue = 200;
 
@@ -150,6 +151,7 @@ class CouncilVicePresident extends StudentCouncilMember {
 class CouncilSecretary extends StudentCouncilMember {
     constructor(_name = "Secretary") {
         super(_name);
+        this.isFemale = true;
 
         this.currentMovepool.push(MoveManager.createMove(
             function execute(_user, _target = null) {
@@ -202,5 +204,37 @@ class GymClubStudent extends Tier3Student {
 class BoardGameClubStudent extends Tier2Student {
     constructor(_name = "Board Game Club Student") {
         super(_name);
+    }
+}
+
+class Sharpharp extends Tier2Student {
+    constructor(_name = "sharpharp") {
+        super(_name);
+    }
+}
+class JazzySunnyHarold extends Tier2Student {
+    constructor(_name = "Jazzy Sunny Harold") {
+        super(_name);
+    }
+}
+
+class OneStarStudent extends Student {
+    constructor(_name = "Student (☆)") {
+        super(_name);
+
+        this.STRValue = 200;
+        this.DEXValue = 30;
+
+        this.lifeFibers = 2;
+    }
+}
+class TwoStarsStudent extends OneStarStudent {
+    constructor(_name = "Student (☆☆)") {
+        super(_name);
+
+        this.STRValue = 300;
+        this.DEXValue = 35;
+
+        this.lifeFibers = 4;
     }
 }

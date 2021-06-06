@@ -368,11 +368,32 @@ GodManager.loadList([
 
     // Waifus
     new Waifu(
+        "Kaguya",
+        [
+            "You may think she is cold and manipulative, but you'd be surprised to learn that she's actually cold and manipulative.",
+            "Gets 10% chance to ignore illegality. Stacks.",
+            "Opponent has 75% chance to not play his move for 5 turns."
+        ],
+        function(_user, _target = null) { // regular move
+            _user.duel.addMessage(_user.getName() + " bribes PP Arbitrator.");
+			_user.ppBribe += 10;
+			if (_user.ppBribe > 100) {
+				_user.ppBribe = 100;
+				_user.quickeningCharges += 3;
+			}
+        },
+        function(_user, _target = null) { // special move
+            _user.duel.addMessage(_target.getName() + " just confessed his love!");
+            _user.duel.addMessage("*O Kawaii Koto.*");
+            _target.inLove = 6;
+        }
+    ), // Megumin
+    new Waifu(
         "Megumin",
         [
             "An isekai girl that got isekai-ed into the PP Punch multiverse.",
             "Grants 5 explosion magic points.",
-            "Grants 3 explosion magic points and inflicts this.STR * [magic points] / 10 damages. Has 0 DEX for the next 3 turns."
+            "Grants 3 explosion magic points and inflicts this.STR*[magic points]/10 damages. Has 0 DEX for the next 3 turns."
         ],
         function(_user, _target = null) { // regular move
             _user.duel.addMessage(_user.getName() + " adds 5 points to Explosion Magic!");
@@ -448,6 +469,40 @@ GodManager.loadList([
             _user.duel.addAnimation("summon", 60, _user);
         }
     ), // Rias
+    new Waifu(
+        "Roxy",
+        [
+            "Best girl of one of the best isekai animes. You are extremely fond of her, despite only having seen her for 2 episodes.",
+            "All allies (user not included) get +10 DEX.",
+            "Grants the waifu determination buff to every ally (user included) for 3 turns."
+        ],
+        function(_user, _target = null) { // regular move
+            _user.duel.addMessage(_user.getName() + "'s allies gets taught about by Roxy herself!");
+
+            var l = _user.duel.getAlliesOf(_user);
+            for (var i in l) {
+                if (l[i].isDead()) continue;
+
+                l[i].DEXValue += 10;
+                _user.duel.addAnimation("taught", 60, l[i]);
+            }
+
+            _user.duel.memorySoundEffects.push("thinks");
+        },
+        function(_user, _target = null) { // special move
+            _user.duel.addMessage(_user.getName() + "'s allies gets inspired by Roxy!");
+
+            var l = _user.duel.getAlliesOf(_user, true);
+            for (var i in l) {
+                if (l[i].isDead()) continue;
+
+                l[i].waifuDetermination += 4;
+                _user.duel.addAnimation("inspired", 60, l[i]);
+            }
+
+            _user.duel.memorySoundEffects.push("ohYeah");
+        }
+    ), // Roxy
     new Waifu(
         "Ryuko",
         [

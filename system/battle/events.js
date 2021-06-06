@@ -37,7 +37,7 @@ class EventManager {
 }
 EventManager.EVENT_LIST = [];
 
-EventManager.addEvent(
+EventManager.addEvent( // PP Equality - 0
     "PP Equality", // 0
     "Moves' DEX modifier have no effect for this turn.",
     function(_duel) {
@@ -45,7 +45,7 @@ EventManager.addEvent(
         _duel.noDexModifier = true;
     }
 ); // 1 (random numbers associated to the event, gotta make sure it doesn't go higher than 100)
-EventManager.addEvent(
+EventManager.addEvent( // PP Purge - 1
     "PP Purge", // 1
     "Illegal moves can be used freely for this turn.",
     function(_duel) {
@@ -54,7 +54,7 @@ EventManager.addEvent(
         _duel.illegalLegal = true;
     }
 ); // 2
-EventManager.addEvent(
+EventManager.addEvent( // Sexual Confusion - 2
     "Sexual Confusion", // 2
     "Movepool only consists of (?) for this turn.",
     function(_duel) {
@@ -62,7 +62,7 @@ EventManager.addEvent(
         _duel.forceConfusion = true;
     }
 ); // 3
-EventManager.addEvent(
+EventManager.addEvent( // PP Enlightenment - 3
     "PP Enlightenment", // 3
     "Makes cheating (using the PP Bible) allowed. Illegal moves are still illegal.",
     function(_duel) {
@@ -71,7 +71,7 @@ EventManager.addEvent(
         _duel.allowCheating = true;
     }
 ); // 4
-EventManager.addEvent(
+EventManager.addEvent( // Gods Birthday Gift - 4
     "Gods Birthday Gift", // 4
     "Grants a regular priest move charge to all fighters.",
     function(_duel) {
@@ -86,7 +86,7 @@ EventManager.addEvent(
     10,
     10
 ); // 5 - 14
-EventManager.addEvent(
+EventManager.addEvent( // Gods Christmas Gift - 5
     "Gods Christmas Gift", // 5
     "Grants a special priest move charge to all fighters.",
     function(_duel) {
@@ -101,7 +101,7 @@ EventManager.addEvent(
     3,
     25
 ); // 15 - 17
-EventManager.addEvent(
+EventManager.addEvent( // Nudist Beach - 6
     "Nudist Beach", // 6
     "All fighters gets negative effects removed.",
     function(_duel) {
@@ -114,7 +114,7 @@ EventManager.addEvent(
     },
     1
 ); // 18
-EventManager.addEvent(
+EventManager.addEvent( // PP Inquisition - 7
     "PP Inquisition", // 7
     "The fighter with the lowest STR gains the Inquisitor buff, which grants an additional STR/10 damage done to people with higher STR.",
     function(_duel) {
@@ -137,7 +137,7 @@ EventManager.addEvent(
     },
     1
 ); // 19
-EventManager.addStartEvent(
+EventManager.addStartEvent( // Christian Game - 8
     "Christian Game", // 8
     "Activates christian mode for the whole battle.",
     function(_duel) {
@@ -146,3 +146,22 @@ EventManager.addStartEvent(
     },
     5
 ); // (alt) 1 - 5
+EventManager.addEvent( // Bizarre PP Battle - 9
+    "Bizarre PP Battle", // 9
+    "Every fighter gets a random stand.",
+    function(_duel) {
+        _duel.addMessage("Everyone gets a stand!");
+
+        var l = _duel.getAllFighters();
+        for (var i in l) {
+            if (l[i].isDead()) continue;
+
+            var storedMove = {};
+            storedMove["user"] = l[i];
+            storedMove["move"] = TriggerStand;
+            storedMove["target"] = StandManager.getRandomStand().id;
+            _duel.memoryMoves.push(storedMove);
+        }
+    },
+    1
+); // 20

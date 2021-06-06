@@ -20,6 +20,11 @@ class PartyMember {
 
     getDescription(_currentSelect = null) {
         var txt = this.name;
+        var hero = new Hero(this);
+        hero.duel = new Duel([], [], AreaManager.Multiplayer_Area);
+
+        txt += "\n\nSTR: " + hero.STR;
+        txt += "\nDEX: " + hero.DEX;
 
         if (ProgressManager.getUnlockedGameMechanics().indexOf("Fighting Styles") > -1 &&
           [null, "fs"].indexOf(_currentSelect) > -1) {
@@ -48,7 +53,6 @@ class PartyMember {
         if (ProgressManager.getUnlockedGameMechanics().indexOf("Synergies") > -1 &&
           [null, "gods"].indexOf(_currentSelect) > -1) {
             txt += "\n\nSynergies:";
-            var hero = new Hero(this);
 
             var synergies = ""
             for (var i in GodManager.SYNERGY_LIST) {

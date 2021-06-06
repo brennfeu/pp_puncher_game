@@ -8,6 +8,7 @@ class Fighter {
         // stats
         this.STRValue = 0;
         this.DEXValue = 20;
+        this.AdaptiveDEXOffset = null;
         this.nbActions = 1;
 
         this.DEXBonus = 0;
@@ -54,6 +55,16 @@ class Fighter {
         }
     }
     initForDuel() {
+        // enemies adaptive dex
+        if (this.AdaptiveDEXOffset != null) {
+            var l = this.duel.getOppsOf(this);
+            var avg = 0;
+            for (var i in l) avg += l[i].DEX;
+            avg = Math.floor(avg/l.length)+1;
+
+            this.DEXValue = avg +  this.AdaptiveDEXOffset;
+        }
+
         // duel start functions
         for (var j in this.godsList) {
             if (this.godsList[j].startFunction != null) this.godsList[j].startFunction(this);
@@ -70,7 +81,7 @@ class Fighter {
         if (this.legatoActivated) return "Legato";
 
         var fullname = this.name;
-        if (this.duel.sexyTextCountdown > 0) {
+        if (this.duel != null && this.duel.sexyTextCountdown > 0) {
 			if ((this.id+this.duel.turnCount)%3 == 0) {
 				fullname = "Sexy " + fullname;
 			}
@@ -84,7 +95,7 @@ class Fighter {
         if (this.genderBender) {
             fullname += "ia";
         }
-        if (this.duel.uwuText) {
+        if (this.duel != null && this.duel.uwuText) {
 			if ((this.id+this.duel.turnCount)%4 == 0) {
 				fullname += "-Chan";
 			}
@@ -291,6 +302,12 @@ class Fighter {
             status["icon"] = "lostSouls";
             list.push(status);
         }
+        if (this.ppBribe > 0) {
+            var status = {};
+            status["display"] = " - Arbitrator Bribe: " + this.ppBribe + "%";
+            status["icon"] = "bribe";
+            list.push(status);
+        }
         if (this.blueFire > 0) {
             var status = {};
             status["display"] = " - Blue Fire: " + this.blueFire;
@@ -433,10 +450,18 @@ class Fighter {
         }
         if (this.disabled > 0) {
             var status = {};
-            status["display"] = " - Disabled (for " + this.depression + " turn";
+            status["display"] = " - Disabled (for " + this.disabled + " turn";
             if (this.disabled > 1) status["display"] += "s";
             status["display"] += ")"
             status["icon"] = "disabled";
+            list.push(status);
+        }
+        if (this.inLove > 0) {
+            var status = {};
+            status["display"] = " - In Love (for " + this.inLove + " turn";
+            if (this.inLove > 1) status["display"] += "s";
+            status["display"] += ")"
+            status["icon"] = "inLove";
             list.push(status);
         }
         if (this.killerBlessing > 0) {
@@ -652,6 +677,7 @@ class Fighter {
         this.noDexBonus = false;
         this.signpostCurse = 0;
         this.isVaccinated = false;
+        this.inLove = 0;
 
         if (_onlyBadStatus) return;
         // resets good status
@@ -691,6 +717,7 @@ class Fighter {
         this.borealAscentCountdown = -1;
         this.forcedStandSynergy = -1;
         this.explosionMagic = 0;
+        this.ppBribe = 0;
 
         // relic activation
         this.legatoActivated = false;
@@ -787,6 +814,9 @@ class Fighter {
                 case 27:
                     this.borealAscentCountdown = 11;
                     return;
+                case 28:
+                    this.ppBribe += 10;
+                    return;
             }
         }
     }
@@ -857,6 +887,9 @@ class Fighter {
                 case 19:
                     this.signpostCurse += 1;
                     return;
+                case 20:
+                    this.inLove += 4;
+                    return;
             }
         }
     }
@@ -870,6 +903,9 @@ class Fighter {
             a += 20;
         }
         if (this.hasFightingStyle("fast")) {
+            a -= 10;
+        }
+        if (this.hasFightingStyle("scarred")) {
             a -= 10;
         }
         if (this.hasFightingStyle("electric")) {
@@ -904,6 +940,10 @@ class Fighter {
         }
         if (this.borealAscentCountdown == 0) {
             a += 500;
+        }
+
+        if (this.hasRelic(7)) { // Shark Suit
+            a += 20;
         }
 
         if (this.hasStand(24)) { // Black Clouds
@@ -991,6 +1031,10 @@ class Fighter {
             a += 30;
         }
 
+        if (this.hasRelic(7)) { // Shark Suit
+            a += 5;
+        }
+
         if (this.hasStand(25)) { // Silver Lining
             a += 15;
         }
@@ -1021,24 +1065,21 @@ class Fighter {
     checkForStand(_nextMove = null) {
         if (ProgressManager.getUnlockedGameMechanics().indexOf("Stands") < 0) return false;
         //if (this.name != "Brenn") return false;
+        //if (_nextMove != null) return false;
 
         var l = StandManager.STAND_LIST;
-        var moveHistory = this.moveHistory;
+        var moveHistory = this.moveHistory.slice();
         if (_nextMove != null) moveHistory.push(_nextMove);
+
         for (var i in l) {
             if (l[i].summonMoves.length == 0 || moveHistory.length < 2) continue;
 
             var ready = true;
             for (var j in l[i].summonMoves) {
-                if (l[i].summonMoves[j] != moveHistory[moveHistory.length - (1 + parseInt(j))]) {
-                    if (ready) { // console logs
-                        //console.log(l[i].name + " " + ready);
-                        //console.log(l[i].summonMoves[j])
-                        //console.log(this.moveHistory[this.moveHistory.length - (1 + parseInt(j))]);
-                    }
+                var summonMove = l[i].summonMoves[j];
+                var historyMove = moveHistory[moveHistory.length - (1+parseInt(j))];
 
-                    ready = false;
-                }
+                if (summonMove != historyMove) { ready = false; }
             }
 
             if (ready) {
@@ -1360,6 +1401,7 @@ class Fighter {
         this.acidCover = Math.max(0, this.acidCover-1);
         this.isTrolled = Math.max(0, this.isTrolled-1);
         this.disabled = Math.max(0, this.disabled-1);
+        this.inLove = Math.max(0, this.inLove-1);
         this.possessCountdown = Math.max(0, this.possessCountdown-1); if (this.possessCountdown <= 0) this.possessedBy = null;
 
         // check max values
@@ -1620,6 +1662,9 @@ class Fighter {
         else if (_type == "attack") {
             // critical hit
             var criticalChance = 5 + _opponent.lifeFibers*5 + this.exposed*25; // %
+            if (_opponent.hasRelic(7)) { // Shark Suit
+                criticalChance += 10;
+            }
             if (_opponent.rollLuckPercentLow() <= criticalChance) {
                 this.duel.addMessage("Critical Hit!");
                 this.increaseLuck();
@@ -1709,10 +1754,14 @@ class Fighter {
                 _opponent.damage(Math.floor(this.STR/10), "inner");
             }
 
-            if (_opponent.hasRelic(4) && _opponent.bleachCountdown <= 0 && result) {
+            if (_opponent.hasRelic(4) && _opponent.bleachCountdown <= 0 && result) { // Ultimate Bleach
                 this.blindness = 2;
                 _opponent.bleachCountdown = 6;
                 this.duel.addMessage(this.getName() + " gets blinded by " + _opponent.getName() + "'s bleach!");
+            }
+            if (this.hasRelic(6) && this.rollLuckPercentLow() <= 50) { // Amogus Plush
+                this.duel.addMessage(_opponent.getName() + "'s amogus madness increases!");
+                _opponent.madnessStacks += 1;
             }
             if (_opponent.hasFightingStyle("electric") && this.rollLuckPercentHigh() <= 15) {
                 this.noDex = 2;
@@ -1898,6 +1947,7 @@ class Fighter {
 
     getHurtSound() {
         if (this.isTree) return "woodcut"
+        if (this.isFemale || this.genderBender) return "hurtA_female";
         return "hurtA";
     }
     getCorpseSound() {

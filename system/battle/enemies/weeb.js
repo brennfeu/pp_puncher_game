@@ -93,3 +93,30 @@ class BleachCoveredWeeb extends Weeb {
         return super.hasRelic(_id);
     }
 }
+
+class GodOfDiscord extends BossWeeb {
+    constructor(_name = "God of Discord") {
+        super(_name);
+
+        this.STRValue = 1000;
+        this.DEXValue = 50;
+
+        this.currentMovepool = [ PunchingPPReallyHard ];
+
+        this.nextPhase = GodOfDiscord2;
+    }
+}
+class GodOfDiscord2 extends BossWeeb {
+    constructor(_name = "God of Discord") {
+        super(_name);
+
+        this.STRValue = 2000;
+        this.DEXValue = 50;
+
+        this.currentMovepool = [ PunchingPPReallyHard ];
+    }
+
+    hasStand(_id) {
+        return true;
+    }
+}
