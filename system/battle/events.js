@@ -156,11 +156,7 @@ EventManager.addEvent( // Bizarre PP Battle - 9
         for (var i in l) {
             if (l[i].isDead()) continue;
 
-            var storedMove = {};
-            storedMove["user"] = l[i];
-            storedMove["move"] = TriggerStand;
-            storedMove["target"] = StandManager.getRandomStand().id;
-            _duel.memoryMoves.push(storedMove);
+            TriggerStand.newInstance().execute(l[i], StandManager.getRandomStand().id);
         }
     },
     1

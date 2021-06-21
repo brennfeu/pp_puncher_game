@@ -1754,7 +1754,7 @@ class Fighter {
                 _opponent.damage(Math.floor(this.STR/10), "inner");
             }
 
-            if (_opponent.hasRelic(4) && _opponent.bleachCountdown <= 0 && result) { // Ultimate Bleach
+            if (_opponent.hasRelic(4) && _opponent.bleachCountdown <= 0) { // Ultimate Bleach
                 this.blindness = 2;
                 _opponent.bleachCountdown = 6;
                 this.duel.addMessage(this.getName() + " gets blinded by " + _opponent.getName() + "'s bleach!");

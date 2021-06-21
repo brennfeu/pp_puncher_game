@@ -311,6 +311,7 @@ class TriggerNextPhase extends Move {
 class TriggerStand extends Move {
     execute(_user, _target = null) {
         var standId = _target; // since this is a no-target move, I use target to get the stand id instead
+        console.log(standId);
 
         _user.duel.addMessage(_user.getName() + " summons " + StandManager.getStand(standId).name + "!");
         _user.setStand(standId);

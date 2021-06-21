@@ -82,7 +82,6 @@ const CUTSCENE_LIST = [
         "areaName": "Christian Settlement's Outside",
         "music": "ChristianSettlement_area",
         "distantMusic": true,
-        "nextSceneKey": "Cutscene",
         "nextSceneKey": "Map",
         "nextSceneData": {
             "areaSelect": 4
